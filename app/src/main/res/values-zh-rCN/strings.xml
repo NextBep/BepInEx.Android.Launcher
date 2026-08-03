@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">BepInEx Launcher</string>
+    <string name="app_tagline">BepInEx 启动器</string>
+
+    <!-- Navigation -->
+    <string name="nav_games">游戏</string>
+    <string name="nav_modpacks">整合包</string>
+    <string name="nav_settings">设置</string>
+    <string name="nav_about">关于</string>
+
+    <!-- Game Detection -->
+    <string name="scan_title">已检测到的游戏</string>
+    <string name="scanning">正在扫描 Unity IL2CPP 游戏…</string>
+    <string name="no_games_found">未找到 Unity IL2CPP 游戏</string>
+    <string name="no_games_hint">安装一个 Unity IL2CPP 游戏即可开始</string>
+    <string name="scan_again">重新扫描</string>
+    <string name="rescan">刷新</string>
+
+    <!-- Framework Status -->
+    <string name="framework_ready">BepInEx 就绪</string>
+    <string name="framework_setting_up">正在设置…</string>
+    <string name="extracting">正在解压 BepInEx…</string>
+    <string name="mod_count">%d 个模组</string>
+
+    <!-- Actions -->
+    <string name="import_mod">导入模组</string>
+    <string name="launch">启动</string>
+    <string name="refresh">刷新</string>
+    <string name="delete">删除</string>
+
+    <!-- Mods -->
+    <string name="installed_mods">已安装的模组</string>
+    <string name="no_mods_installed">暂无模组</string>
+    <string name="no_mods_hint">点击"导入模组"添加 .dll 文件</string>
+    <string name="mod_deleted">已删除: %s</string>
+    <string name="mod_imported">已导入: %s</string>
+    <string name="import_failed">导入失败</string>
+
+    <!-- Modpacks -->
+    <string name="modpack_title">整合包</string>
+    <string name="modpack_create">创建整合包</string>
+    <string name="modpack_delete">删除整合包</string>
+    <string name="modpack_rename">重命名</string>
+    <string name="modpack_export">导出</string>
+    <string name="modpack_import">导入整合包</string>
+    <string name="modpack_select_active">激活</string>
+    <string name="modpack_vanilla">纯净模式（无模组）</string>
+    <string name="modpack_name_hint">整合包名称</string>
+    <string name="modpack_confirm_delete_title">删除整合包</string>
+    <string name="modpack_confirm_delete_msg">确定要删除"%s"及其所有模组吗？此操作不可撤销。</string>
+    <string name="modpack_created">已创建整合包: %s</string>
+    <string name="modpack_deleted">已删除整合包: %s</string>
+    <string name="modpack_exported">已导出: %s</string>
+    <string name="modpack_imported">已导入: %s</string>
+    <string name="modpack_no_mods">此整合包中暂无模组</string>
+    <string name="modpack_add_mod">添加模组</string>
+    <string name="modpack_target_game">目标游戏：%s</string>
+    <string name="modpack_mod_count">%d 个模组</string>
+    <string name="modpack_active">已激活</string>
+
+    <!-- Config Editor -->
+    <string name="config_editor_title">配置编辑器</string>
+    <string name="config_editor_save">保存</string>
+    <string name="config_editor_unsaved">有未保存的更改</string>
+    <string name="config_editor_discard_title">放弃更改？</string>
+    <string name="config_editor_discard_msg">您有未保存的更改，确定要放弃吗？</string>
+    <string name="config_editor_no_configs">无配置文件</string>
+
+    <!-- Settings -->
+    <string name="settings_title">设置</string>
+    <string name="settings_clear_bepinex">清除 BepInEx 文件</string>
+    <string name="settings_clear_bepinex_desc">删除所有 BepInEx 文件和 interop 程序集。下次启动需要重新解压。</string>
+    <string name="settings_clear_dotnet">清空 .NET 数据</string>
+    <string name="settings_clear_dotnet_desc">删除 .NET 运行时和复制的游戏数据。下次启动将重新解压。</string>
+    <string name="settings_copy_resources">复制游戏资源库</string>
+    <string name="settings_copy_resources_desc">将游戏的资源数据从 APK 复制到本地存储，用于 interop 生成。</string>
+    <string name="settings_theme">主题</string>
+    <string name="settings_language">语言</string>
+    <string name="settings_about">关于</string>
+
+    <!-- Confirm Dialogs -->
+    <string name="confirm_clear_bepinex_title">清除 BepInEx 文件？</string>
+    <string name="confirm_clear_bepinex_msg">这将删除此游戏的所有 BepInEx 文件和 interop 程序集。下次启动需要重新解压。</string>
+    <string name="confirm_clear_dotnet_title">清空 .NET 数据？</string>
+    <string name="confirm_clear_dotnet_msg">这将删除此游戏的 .NET 运行时和复制的游戏数据。下次启动将重新解压。</string>
+    <string name="confirm_copy_resources_title">复制游戏资源？</string>
+    <string name="confirm_copy_resources_msg">将游戏 APK 中的资源数据复制到本地存储。</string>
+    <string name="confirm_yes">确定</string>
+    <string name="confirm_no">取消</string>
+    <string name="confirm_cancel">取消</string>
+    <string name="confirm_delete">删除</string>
+
+    <!-- Theme -->
+    <string name="theme_dark">深色</string>
+    <string name="theme_light">浅色</string>
+    <string name="theme_system">跟随系统</string>
+
+    <!-- Language -->
+    <string name="lang_english">English</string>
+    <string name="lang_chinese">简体中文</string>
+    <string name="lang_system">跟随系统</string>
+
+    <!-- About -->
+    <string name="about_title">BepInEx Launcher</string>
+    <string name="about_description">一个支持 Android 的 BepInEx 加载器</string>
+    <string name="about_version">版本 %1$s (Build %2$d)</string>
+    <string name="about_disclaimer">⚠ BepInEx Launcher 未获得 BepInEx 项目的官方支持。</string>
+    <string name="about_projects_section">本项目使用 / 借鉴的项目</string>
+    <string name="about_project_bepinex_name">BepInEx</string>
+    <string name="about_project_bepinex_desc">Unity IL2CPP 模组框架 — 核心插件加载器。BepInEx 6.0.0-pre.2，由 BepInEx 团队开发。</string>
+    <string name="about_project_fusioncore_name">FusionCore</string>
+    <string name="about_project_fusioncore_desc">Starlight 团队的 Android Unity IL2CPP 运行时容器。注入链、Pine Hook 和 NativeLoader 架构的主要参考。</string>
+    <string name="about_project_nextbep_name">NextBep (BepInEx.Android)</string>
+    <string name="about_project_nextbep_desc">我们定制的 Android BepInEx 分支。将 BepInEx 6 适配到嵌入式 CoreCLR + IL2CPP interop。</string>
+    <string name="about_project_dotnet_name">dotnet/runtime</string>
+    <string name="about_project_dotnet_desc">Microsoft .NET 运行时 v10.0.5。从源码构建，使用 OpenSSL 加密后端修复 Android 16 / 小米 HyperOS 上的 BoringSSL SIGSEGV 崩溃。</string>
+    <string name="about_project_openssl_name">OpenSSL</string>
+    <string name="about_project_openssl_desc">OpenSSL 3.4.0 — 替换 BoringSSL 用于 ARM64 Android 加密。提供 libcrypto.so + libssl.so。</string>
+    <string name="about_project_pine_name">Pine</string>
+    <string name="about_project_pine_desc">ART Java 方法 Hook 框架 (top.canyie.pine:core:0.3.0)。用于 ClassLoader、PackageManager 和 UnityPlayer hook。</string>
+    <string name="about_project_dobby_name">Dobby</string>
+    <string name="about_project_dobby_desc">ARM64 原生 Hook 框架。用于 libfusion 中的 il2cpp_init hook。</string>
+    <string name="about_project_cpp2il_name">Cpp2IL</string>
+    <string name="about_project_cpp2il_desc">IL2CPP 逆向工程工具。用于 interop 程序集生成。</string>
+    <string name="about_dev_section">主要开发者</string>
+    <string name="about_dev_names">HayashiUme · HexCat · Celestynka</string>
+    <string name="about_footer">©2026 NextBep</string>
+
+    <!-- Log -->
+    <string name="log_title">BepInEx 日志</string>
+    <string name="log_copy">复制</string>
+    <string name="log_clear">清除</string>
+    <string name="log_empty">暂无日志。启动游戏后可查看 BepInEx 日志。</string>
+    <string name="log_copied">日志已复制到剪贴板</string>
+    <string name="log_filter_all">全部</string>
+    <string name="log_filter_errors">错误</string>
+    <string name="log_filter_warnings">警告</string>
+    <string name="log_auto_scroll">自动滚动</string>
+
+    <!-- Storage Permission -->
+    <string name="storage_permission_title">需要存储权限</string>
+    <string name="storage_permission_message">BepInEx Launcher 需要访问所有文件以解压 BepInEx 和管理模组。</string>
+    <string name="storage_permission_grant">授予权限</string>
+
+    <!-- In-Game Settings -->
+    <string name="settings_ingame_section">游戏内</string>
+    <string name="settings_floating_log">游戏内悬浮日志</string>
+    <string name="settings_floating_log_desc">在游戏画面上显示一个悬浮日志按钮。点击可查看实时 BepInEx 日志。</string>
+
+    <!-- Launch -->
+    <string name="launch_failed">启动失败</string>
+    <string name="launch_wait_extraction">请等待 — BepInEx 正在解压中</string>
+    <string name="launch_no_game">未选择游戏</string>
+
+    <!-- Generic -->
+    <string name="ok">确定</string>
+    <string name="back">返回</string>
+    <string name="close">关闭</string>
+    <string name="loading">加载中…</string>
+    <string name="error">错误</string>
+    <string name="done">完成</string>
+    <string name="share_saved">消息已保存，切回游戏继续</string>
+</resources>

@@ -1,0 +1,55 @@
+# Gradle
+.gradle/
+build/
+*/build/
+
+# IDE
+.idea/
+*.iml
+.vs/
+
+# Android
+local.properties
+*.apk
+*.aab
+*.ap_
+*.dex
+app/.cxx/
+
+# Signing
+*.keystore
+*.jks
+!bepinex.keystore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs & temp
+*.log
+logcat*.txt
+*.tmp
+.cache/
+innersloth_blog_raw.html
+
+# AuthFix build artifacts
+AuthFixPlugin/bin/
+AuthFixPlugin/obj/
+
+# TestPlugin build artifacts
+TestPlugin/bin/
+TestPlugin/obj/
+
+# Build assets (generated)
+build_assets/BepInEx.Core.Android.zip
+*.old.zip
+
+# Temp
+app/src/main/assets/temp_ms/
+
+# Local config
+app/src/main/assets/game_config.json
+
+# Claude Code
+CLAUDE.md
+.claude/
