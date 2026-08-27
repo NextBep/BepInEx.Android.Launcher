@@ -1,4 +1,4 @@
-﻿﻿﻿package com.bepinex.android
+package com.bepinex.android
 
 import java.io.File
 import java.io.FileOutputStream

@@ -1,4 +1,4 @@
-﻿﻿/*
+/*
  * BepInEx.Android 鈥?IL2CPP initialization and hooking
  *
  * Ported from FusionCore main branch (fusion/src/hooking/il2cpp.cpp).

@@ -1,4 +1,4 @@
-﻿﻿﻿package com.bepinex.android.fusion
+package com.bepinex.android.fusion
 
 import android.content.Context
 import android.content.ContextWrapper

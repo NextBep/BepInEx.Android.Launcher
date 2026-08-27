@@ -1,4 +1,4 @@
-﻿﻿/*
+/*
  * BepInEx.Android 鈥?Dobby SafeHook wrapper
  *
  * Ported from FusionCore main branch (fusion/src/hooking/safehook.cpp).

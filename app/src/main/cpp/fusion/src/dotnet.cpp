@@ -1,4 +1,4 @@
-﻿﻿/*
+/*
  * BepInEx.Android 鈥?.NET CoreCLR bootstrap
  *
  * Starts the .NET CoreCLR runtime and calls BepInEx entry points.

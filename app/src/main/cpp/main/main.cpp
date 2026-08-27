@@ -1,4 +1,4 @@
-﻿﻿/*
+/*
  * BepInEx.Android 鈥?libmain.so (FusionCore main branch pattern)
  *
  * This is a CUSTOM libmain.so that replaces the game's original libmain.so.

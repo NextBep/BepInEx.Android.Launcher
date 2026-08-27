@@ -39,8 +39,30 @@ object BepInExPaths {
     fun getLogFile(packageName: String): File =
         File(getBepInExDir(packageName), "LogOutput.log")
 
+    fun getLogsDir(packageName: String): File =
+        File(getBepInExDir(packageName), "logs")
+
     fun getUnityLibsDir(packageName: String): File =
         File(getBepInExDir(packageName), "unity-libs")
+
+    fun getVanillaStateDir(packageName: String): File =
+        File(getGameRootDir(packageName), "vanilla")
+
+    fun getModpackDir(packageName: String, modpackName: String): File =
+        File(getGameRootDir(packageName), "modpacks/$modpackName")
+
+    fun getModpackConfigDir(packageName: String, modpackName: String): File =
+        File(getModpackDir(packageName, modpackName), "config")
+
+    fun getModpackLogsDir(packageName: String, modpackName: String): File =
+        File(getModpackDir(packageName, modpackName), "logs")
+
+    fun getModpackLogFile(packageName: String, modpackName: String?): File =
+        if (modpackName.isNullOrEmpty()) {
+            File(getVanillaStateDir(packageName), "logs/LogOutput.log")
+        } else {
+            File(getModpackLogsDir(packageName, modpackName), "LogOutput.log")
+        }
 
     /** Internal app-private data directory for a game */
     fun getAppDataDir(filesDir: File, packageName: String): File =

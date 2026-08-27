@@ -1,4 +1,4 @@
-﻿﻿﻿package com.bepinex.android.modpack
+package com.bepinex.android.modpack
 
 import android.content.Context
 import android.net.Uri
@@ -40,13 +40,16 @@ class ModpackManager {
         File(BepInExPaths.getGameRootDir(packageName), "modpacks")
 
     private fun getModpackDir(packageName: String, name: String): File =
-        File(getModpacksDir(packageName), name)
+        BepInExPaths.getModpackDir(packageName, name)
 
     private fun getModpackPluginsDir(packageName: String, name: String): File =
         File(getModpackDir(packageName, name), "plugins")
 
     private fun getModpackConfigDir(packageName: String, name: String): File =
-        File(getModpackDir(packageName, name), "config")
+        BepInExPaths.getModpackConfigDir(packageName, name)
+
+    private fun getModpackLogsDir(packageName: String, name: String): File =
+        BepInExPaths.getModpackLogsDir(packageName, name)
 
     private fun getMetaFile(packageName: String, name: String): File =
         File(getModpackDir(packageName, name), "modpack.json")
@@ -75,6 +78,7 @@ class ModpackManager {
             modpackDir.mkdirs()
             getModpackPluginsDir(packageName, safeName).mkdirs()
             getModpackConfigDir(packageName, safeName).mkdirs()
+            getModpackLogsDir(packageName, safeName).mkdirs()
 
             val meta = ModpackMeta(name = safeName, packageName = packageName)
             writeMeta(meta)
@@ -208,46 +212,86 @@ class ModpackManager {
     // Activate / Apply
 
     /**
-     * Copy the modpack's plugins and configs to the active BepInEx directory.
+     * Copy the modpack's plugins, configs, and logs to the active BepInEx directory.
+     * Runtime writes stay in BepInEx/; persistRuntimeState() copies them back later.
      */
     fun applyModpack(packageName: String, modpackName: String): Boolean {
-        try {
-            val pluginsDir = BepInExPaths.getPluginsDir(packageName)
-            val configDir = BepInExPaths.getConfigDir(packageName)
-
-            // Clear existing
-            pluginsDir.deleteRecursively()
-            configDir.deleteRecursively()
-            pluginsDir.mkdirs()
-            configDir.mkdirs()
-
-            // Copy modpack plugins
-            val modpackPlugins = getModpackPluginsDir(packageName, modpackName)
-            modpackPlugins.listFiles()?.forEach { plugin ->
-                plugin.copyTo(File(pluginsDir, plugin.name), overwrite = true)
-            }
-
-            // Copy modpack configs
-            val modpackConfig = getModpackConfigDir(packageName, modpackName)
-            modpackConfig.listFiles()?.forEach { cfg ->
-                cfg.copyTo(File(configDir, cfg.name), overwrite = true)
-            }
-
+        return try {
+            restoreRuntimeState(packageName, modpackName)
             BepInExLog.i("Applied modpack: $modpackName  -> active")
-            return true
+            true
         } catch (e: Exception) {
             BepInExLog.e("Failed to apply modpack", e)
-            return false
+            false
         }
     }
 
     /** Clear active mods (vanilla mode) */
     fun clearActiveMods(packageName: String) {
-        BepInExPaths.getPluginsDir(packageName).deleteRecursively()
-        BepInExPaths.getConfigDir(packageName).deleteRecursively()
-        BepInExPaths.getPluginsDir(packageName).mkdirs()
-        BepInExPaths.getConfigDir(packageName).mkdirs()
+        restoreRuntimeState(packageName, null)
         BepInExLog.i("Cleared active mods (vanilla mode)")
+    }
+
+    fun persistRuntimeState(packageName: String, modpackName: String?) {
+        val destRoot = stateRoot(packageName, modpackName)
+        destRoot.mkdirs()
+        copyDirContents(BepInExPaths.getConfigDir(packageName), File(destRoot, "config"))
+        copyRuntimeLogs(packageName, File(destRoot, "logs"))
+        BepInExLog.i("Persisted runtime cfg/logs -> ${destRoot.absolutePath}")
+    }
+
+    fun restoreRuntimeState(packageName: String, modpackName: String?) {
+        val srcRoot = stateRoot(packageName, modpackName)
+        val pluginsDir = BepInExPaths.getPluginsDir(packageName)
+        val configDir = BepInExPaths.getConfigDir(packageName)
+        val logsDir = BepInExPaths.getLogsDir(packageName)
+        val logFile = BepInExPaths.getLogFile(packageName)
+
+        replaceDir(pluginsDir)
+        replaceDir(configDir)
+        replaceDir(logsDir)
+        if (logFile.exists()) logFile.delete()
+
+        if (!modpackName.isNullOrEmpty()) {
+            copyDirContents(getModpackPluginsDir(packageName, modpackName), pluginsDir)
+        }
+        copyDirContents(File(srcRoot, "config"), configDir)
+        copyDirContents(File(srcRoot, "logs"), logsDir)
+        File(srcRoot, "logs/LogOutput.log").takeIf { it.isFile }?.copyTo(logFile, overwrite = true)
+        BepInExLog.i("Restored runtime cfg/logs from ${srcRoot.absolutePath}")
+    }
+
+    private fun stateRoot(packageName: String, modpackName: String?): File =
+        if (modpackName.isNullOrEmpty()) {
+            BepInExPaths.getVanillaStateDir(packageName)
+        } else {
+            getModpackDir(packageName, modpackName)
+        }
+
+    private fun copyRuntimeLogs(packageName: String, destLogs: File) {
+        destLogs.mkdirs()
+        BepInExPaths.getLogFile(packageName).takeIf { it.isFile }?.copyTo(
+            File(destLogs, "LogOutput.log"), overwrite = true
+        )
+        copyDirContents(BepInExPaths.getLogsDir(packageName), destLogs)
+    }
+
+    private fun replaceDir(dir: File) {
+        dir.deleteRecursively()
+        dir.mkdirs()
+    }
+
+    private fun copyDirContents(source: File, dest: File) {
+        dest.mkdirs()
+        if (!source.isDirectory) return
+        source.listFiles()?.forEach { child ->
+            val target = File(dest, child.name)
+            if (child.isDirectory) {
+                child.copyRecursively(target, overwrite = true)
+            } else {
+                child.copyTo(target, overwrite = true)
+            }
+        }
     }
 
     // Export / Import
@@ -312,9 +356,9 @@ class ModpackManager {
             sourceDir.copyRecursively(modpackDir, overwrite = true)
             tempDir.deleteRecursively()
 
-            // Ensure proper structure
             getModpackPluginsDir(packageName, resolvedName).mkdirs()
             getModpackConfigDir(packageName, resolvedName).mkdirs()
+            getModpackLogsDir(packageName, resolvedName).mkdirs()
 
             val meta = ModpackMeta(name = resolvedName, packageName = packageName,
                 modCount = getModCount(packageName, resolvedName))

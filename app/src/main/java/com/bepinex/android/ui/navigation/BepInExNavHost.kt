@@ -22,6 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.bepinex.android.BepInExPaths
 import com.bepinex.android.GameDetector
 import com.bepinex.android.R
 import com.bepinex.android.log.BepInExLogReader
@@ -72,6 +73,13 @@ fun BepInExNavHost(
     var modpacks by remember { mutableStateOf<List<ModpackMeta>>(emptyList()) }
     var activeModpackName by remember { mutableStateOf<String?>(null) }
     var modpackRefreshKey by remember { mutableStateOf(0) }
+
+    // Load active modpack on game selection
+    LaunchedEffect(selectedGame?.packageName) {
+        selectedGame?.let { game ->
+            activeModpackName = AppSettings.getActiveModpack(context, game.packageName)
+        }
+    }
 
     // Refresh modpack list when game changes or refresh key bumps
     LaunchedEffect(selectedGame?.packageName, modpackRefreshKey) {
@@ -135,10 +143,18 @@ fun BepInExNavHost(
         }
     }
 
-    // Start watching BepInEx log when game is selected
-    LaunchedEffect(selectedGame?.packageName) {
+    // Start watching BepInEx log when game or active modpack changes
+    LaunchedEffect(selectedGame?.packageName, activeModpackName) {
         selectedGame?.let { game ->
-            BepInExLogReader.startWatching(game.packageName, scope)
+            val active = AppSettings.getActiveModpack(context, game.packageName)
+            val logFile = if (active.isNullOrEmpty()) {
+                BepInExPaths.getLogFile(game.packageName)
+            } else {
+                BepInExPaths.getModpackLogFile(game.packageName, active)
+            }
+            // If active modpack log doesn't exist yet, fall back to active runtime log
+            val targetLog = if (logFile.exists()) logFile else BepInExPaths.getLogFile(game.packageName)
+            BepInExLogReader.startWatchingFile(targetLog, scope)
         }
     }
 
@@ -267,7 +283,18 @@ fun BepInExNavHost(
                             modpacks = modpackManager.listModpacks(packageName)
                         },
                         onSelectModpack = { name ->
-                            activeModpackName = name
+                            val previous = activeModpackName
+                            if (previous != name) {
+                                modpackManager.persistRuntimeState(packageName, previous)
+                                if (name == null) {
+                                    modpackManager.clearActiveMods(packageName)
+                                } else {
+                                    modpackManager.applyModpack(packageName, name)
+                                }
+                                AppSettings.setActiveModpack(context, packageName, name)
+                                activeModpackName = name
+                                modpackRefreshKey++
+                            }
                         },
                         onOpenModpack = { name ->
                             navController.navigate(NavRoutes.modpackDetail(packageName, name))
@@ -332,10 +359,29 @@ fun BepInExNavHost(
 
                     // Log overlay for this modpack
                     if (showModLog) {
+                        val modpackLogFile = BepInExPaths.getModpackLogFile(packageName, modpackName)
+                        val activeRuntimeLog = BepInExPaths.getLogFile(packageName)
+                        val logFileToUse = if (activeModpackName == modpackName && activeRuntimeLog.exists()) {
+                            activeRuntimeLog
+                        } else {
+                            modpackLogFile
+                        }
+                        LaunchedEffect(logFileToUse.absolutePath) {
+                            BepInExLogReader.startWatchingFile(logFileToUse, scope)
+                        }
                         com.bepinex.android.ui.components.LogOverlay(
                             logLines = logLines,
                             showOverlay = true,
-                            onDismiss = { showModLog = false }
+                            onDismiss = {
+                                showModLog = false
+                                // Restore watching active modpack log
+                                selectedGame?.let { game ->
+                                    val active = AppSettings.getActiveModpack(context, game.packageName)
+                                    val fallback = if (active.isNullOrEmpty()) BepInExPaths.getLogFile(game.packageName)
+                                    else BepInExPaths.getModpackLogFile(game.packageName, active)
+                                    BepInExLogReader.startWatchingFile(fallback, scope)
+                                }
+                            }
                         )
                     }
 

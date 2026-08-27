@@ -1,4 +1,4 @@
-﻿﻿/*
+/*
  * BepInEx.Android 鈥?P/Invoke exports for BepInExFusion managed code
  *
  * BepInExFusion's FusionInterop.cs P/Invokes these functions from libfusion.so:

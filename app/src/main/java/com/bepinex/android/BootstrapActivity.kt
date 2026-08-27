@@ -1,8 +1,11 @@
-﻿﻿﻿package com.bepinex.android
+package com.bepinex.android
 
 import android.app.Activity
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Environment
 import android.os.Looper
@@ -83,6 +86,7 @@ class BootstrapActivity : Activity() {
             ?: throw IllegalStateException("Cannot resolve launcher for $targetPackage")
 
         BepInExLog.i("Game launcher: ${launcher.className}")
+        val targetOrientation = resolveTargetOrientation(launcher)
 
         // 2. Create game context (with DEX access)
         val gameContext: Context = try {
@@ -103,27 +107,34 @@ class BootstrapActivity : Activity() {
         try {
             ClassLoaderHooks.installHooks(gameContext.classLoader)
             PackageManagerHooks.installHooks(packageManager)
+            InstrumentationHooks.install()
             UnityPlayerHooks.installHooks(gameContext)
             BepInExLog.i("Base hooks installed")
         } catch (e: Exception) {
             throw IllegalStateException("Failed to install base hooks", e)
         }
 
-        // 5. Hook game launcher's onCreate
+        // 5. Hook game launcher's onCreate (optional — some launchers inherit it)
         val launcherClassName = launcher.className
-        if (!installLauncherOnCreateHook(gameContext, gameContext.classLoader, launcherClassName)) {
-            throw IllegalStateException("Failed to install launcher onCreate hook!")
-        }
+        installLauncherOnCreateHook(gameContext, gameContext.classLoader, launcherClassName)
 
-        // 6. Start game launcher Activity
+        // 6. Start game launcher Activity via StubActivity
         try {
             val launcherClass = gameContext.classLoader.loadClass(launcherClassName)
             BepInExLog.i("Starting game launcher: ${launcherClass.name}")
+            initializeFusion(null, null)
 
             runOnMainThread {
                 try {
-                    val intent = Intent(this, launcherClass)
-                    startActivity(intent)
+                    val intent = Intent(this, launcherClass).apply {
+                        putExtra(InstrumentationHooks.EXTRA_TARGET_ORIENTATION, targetOrientation)
+                    }
+                    val intentWrapped = Intent(this, StubActivity::class.java).apply {
+                        putExtra(InstrumentationHooks.EXTRA_IS_DYNAMIC_ACTIVITY, true)
+                        putExtra(InstrumentationHooks.EXTRA_ORIGINAL_INTENT, intent)
+                        putExtra(InstrumentationHooks.EXTRA_TARGET_ORIENTATION, targetOrientation)
+                    }
+                    startActivity(intentWrapped)
                     finish()
                 } catch (t: Throwable) {
                     failAndFinish("Failed to start game: ${t.message}")
@@ -191,13 +202,14 @@ class BootstrapActivity : Activity() {
 
     // Initialize Fusion
 
-    private fun initializeFusion(launcherActivity: Activity, bundle: Bundle?) {
+    private fun initializeFusion(launcherActivity: Activity?, bundle: Bundle?) {
         if (!fusionInitialized.compareAndSet(false, true)) return
 
         val config = preparedConfig
             ?: throw IllegalStateException("Fusion config was not prepared!")
 
-        BepInExLog.i("=== initializeFusion for ${launcherActivity.javaClass.name} ===")
+        val launcherName = launcherActivity?.javaClass?.name ?: "pre-launch"
+        BepInExLog.i("=== initializeFusion for $launcherName ===")
 
         try {
             NativeLibraryManager.addFusionLibrary("main")
@@ -303,18 +315,22 @@ class BootstrapActivity : Activity() {
             patchBepInExConfigDisableDownload(bepInExDir)
         }
 
-        // Apply active modpack (or clear for vanilla mode)
+        // Apply active modpack (or clear for vanilla mode) with per-modpack state persistence
         val activeModpack = intent.getStringExtra(EXTRA_ACTIVE_MODPACK)
         val modpackManager = com.bepinex.android.modpack.ModpackManager()
+        val previousActive = com.bepinex.android.settings.AppSettings.getActiveModpack(this, targetPackage)
+
+        // Save whatever runtime generated from previous run back to its owner
+        modpackManager.persistRuntimeState(targetPackage, previousActive)
+
         if (activeModpack.isNullOrEmpty()) {
-            // Vanilla mode: clear all mods
-            BepInExLog.i("Vanilla mode  -- clearing active mods")
+            BepInExLog.i("Vanilla mode  -- restoring vanilla cfg/logs")
             modpackManager.clearActiveMods(targetPackage)
         } else {
-            // Apply selected modpack
             BepInExLog.i("Applying modpack: $activeModpack")
             modpackManager.applyModpack(targetPackage, activeModpack)
         }
+        com.bepinex.android.settings.AppSettings.setActiveModpack(this, targetPackage, activeModpack)
 
         // Register game native libraries (match FusionCore: no exclusions)
         File(gameLibDir).listFiles()?.forEach { file ->
@@ -444,6 +460,20 @@ class BootstrapActivity : Activity() {
     }
 
     // UI helpers
+
+    private fun resolveTargetOrientation(launcher: ComponentName): Int {
+        return try {
+            val info = packageManager.getActivityInfo(launcher, 0)
+            if (info.screenOrientation == ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
+                BepInExLog.i("Target orientation unspecified; defaulting to landscape")
+                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            } else {
+                info.screenOrientation
+            }
+        } catch (e: PackageManager.NameNotFoundException) {
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
+    }
 
     private fun failAndFinish(message: String, error: Throwable? = null) {
         if (error != null) BepInExLog.e(message, error) else BepInExLog.e(message)

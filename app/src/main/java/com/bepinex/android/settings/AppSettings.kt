@@ -1,4 +1,4 @@
-﻿﻿﻿package com.bepinex.android.settings
+package com.bepinex.android.settings
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -15,6 +15,7 @@ object AppSettings {
     private const val KEY_THEME_MODE = "theme_mode"
     private const val KEY_LANGUAGE = "language"
     private const val KEY_FLOATING_LOG_IN_GAME = "floating_log_in_game"
+    private const val KEY_ACTIVE_MODPACK_PREFIX = "active_modpack_"
 
     enum class ThemeMode {
         SYSTEM, DARK, LIGHT;
@@ -80,6 +81,13 @@ object AppSettings {
 
     fun setFloatingLogInGameEnabled(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_FLOATING_LOG_IN_GAME, enabled).apply()
+    }
+
+    fun getActiveModpack(context: Context, packageName: String): String? =
+        prefs(context).getString(KEY_ACTIVE_MODPACK_PREFIX + packageName, null)?.ifEmpty { null }
+
+    fun setActiveModpack(context: Context, packageName: String, modpackName: String?) {
+        prefs(context).edit().putString(KEY_ACTIVE_MODPACK_PREFIX + packageName, modpackName ?: "").apply()
     }
 
     // Initialize on startup

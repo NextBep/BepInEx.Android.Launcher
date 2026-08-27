@@ -1,4 +1,4 @@
-﻿﻿﻿package com.bepinex.android.ui.theme
+package com.bepinex.android.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

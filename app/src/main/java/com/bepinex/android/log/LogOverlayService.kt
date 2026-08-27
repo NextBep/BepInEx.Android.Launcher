@@ -1,4 +1,4 @@
-﻿﻿﻿package com.bepinex.android.log
+package com.bepinex.android.log
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -233,7 +233,7 @@ class LogOverlayService : Service() {
                             Text("Close", color = Color(0xFFF38BA8), fontSize = 12.sp)
                         }
                         TextButton(onClick = { expanded = false }) {
-                            Text(" -- , color = Color(0xFF89B4FA), fontSize = 16.sp)
+                            Text("--", color = Color(0xFF89B4FA), fontSize = 16.sp)
                         }
                     }
                     HorizontalDivider(color = Color.White.copy(alpha = 0.1f))

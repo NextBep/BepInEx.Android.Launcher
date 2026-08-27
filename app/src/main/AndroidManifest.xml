@@ -75,36 +75,16 @@
             </intent-filter>
         </activity>
 
-        <!-- ── Game launcher activities ────────────────────────────── -->
-        <!-- These are the REAL game launcher activities declared in OUR manifest
-             so they run in OUR process where Pine hooks are installed.
-             Without this, intent resolution fails for games with custom launchers. -->
-
-        <!-- Among Us -->
+        <!-- Placeholder for unregistered game launcher activities.
+             InstrumentationHooks rewrites startActivity to this stub, then
+             restores the real game Activity in Instrumentation.newActivity. -->
         <activity
-            android:name="com.innersloth.spacemafia.EosUnityPlayerActivity"
+            android:name="com.bepinex.android.StubActivity"
             android:theme="@style/UnityThemeSelector"
-            android:screenOrientation="sensorLandscape"
-            android:launchMode="singleTask"
-            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale|layoutDirection|density"
-            android:resizeableActivity="false"
-            android:hardwareAccelerated="false"
-            android:windowLayoutInDisplayCutoutMode="shortEdges"
-            android:exported="true">
-            <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
-            <meta-data android:name="notch_support" android:value="true" />
-        </activity>
-
-        <!-- Honkai: Star Rail / Genshin Impact (miHoYo SDK) -->
-        <activity
-            android:name="com.mihoyo.combosdk.ComboSDKActivity"
-            android:theme="@style/UnityThemeSelector"
-            android:launchMode="singleTask"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale|layoutDirection|density"
             android:hardwareAccelerated="true"
-            android:exported="true">
-            <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
-        </activity>
+            android:launchMode="singleTask"
+            android:exported="false" />
 
         <!-- Log overlay service (floating log in-game) -->
         <service

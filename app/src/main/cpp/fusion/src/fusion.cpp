@@ -1,4 +1,4 @@
-﻿﻿/*
+/*
  * BepInEx.Android 鈥?libfusion.so core
  *
  * Ported from FusionCore main branch (fusion/src/fusion.cpp).

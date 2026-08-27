@@ -52,23 +52,25 @@ object BepInExLogReader {
 
     private var pollingJob: Job? = null
     private var lastFileSize = 0L
-    private var currentPackage: String? = null
+    private var currentLogFile: File? = null
 
-    fun startWatching(packageName: String, scope: CoroutineScope) {
-        if (currentPackage == packageName) return
+    fun startWatching(packageName: String, scope: CoroutineScope, modpackName: String? = null) {
+        startWatchingFile(BepInExPaths.getModpackLogFile(packageName, modpackName), scope)
+    }
+
+    fun startWatchingFile(logFile: File, scope: CoroutineScope) {
+        if (currentLogFile?.absolutePath == logFile.absolutePath) return
         stopWatching()
-        currentPackage = packageName
+        currentLogFile = logFile
         lastFileSize = 0L
         _lines.value = emptyList()
 
-        // Initial read
-        readNewLines(packageName)
+        readNewLines()
 
-        // Poll every 500ms for new content
         pollingJob = scope.launch(Dispatchers.IO) {
             while (isActive) {
                 delay(500)
-                readNewLines(packageName)
+                readNewLines()
             }
         }
     }
@@ -76,7 +78,7 @@ object BepInExLogReader {
     fun stopWatching() {
         pollingJob?.cancel()
         pollingJob = null
-        currentPackage = null
+        currentLogFile = null
         lastFileSize = 0L
     }
 
@@ -85,9 +87,9 @@ object BepInExLogReader {
         lastFileSize = 0L
     }
 
-    private fun readNewLines(packageName: String) {
+    private fun readNewLines() {
         try {
-            val logFile = BepInExPaths.getLogFile(packageName)
+            val logFile = currentLogFile ?: return
             if (!logFile.exists()) return
 
             val currentSize = logFile.length()

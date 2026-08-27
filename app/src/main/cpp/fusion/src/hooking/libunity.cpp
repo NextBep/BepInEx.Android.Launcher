@@ -1,4 +1,4 @@
-﻿﻿/*
+/*
  * BepInEx.Android 鈥?libunity.so hooks
  *
  * Ported from FusionCore main branch (fusion/src/hooking/libunity.cpp).

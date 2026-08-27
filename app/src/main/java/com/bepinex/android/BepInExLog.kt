@@ -1,4 +1,4 @@
-﻿﻿package com.bepinex.android
+package com.bepinex.android
 
 import android.content.Context
 import kotlinx.coroutines.flow.MutableStateFlow
