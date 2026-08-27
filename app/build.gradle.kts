@@ -4,6 +4,19 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
+// Increment once for an assemble/build invocation, not for help or clean-only
+// commands, and persist the CI number beside the project.
+val ciVersionFile = rootProject.file("ci-version.txt")
+val isBuildInvocation = gradle.startParameter.taskNames.any {
+    it.contains("assemble", ignoreCase = true) || it.contains("build", ignoreCase = true)
+}
+val storedCiBuildNumber = ciVersionFile.takeIf { it.isFile }?.readText()?.trim()?.toIntOrNull() ?: 1
+val ciBuildNumber = if (isBuildInvocation) {
+    (storedCiBuildNumber + 1).also { ciVersionFile.writeText(it.toString()) }
+} else {
+    storedCiBuildNumber
+}
+
 android {
     namespace = "com.bepinex.android"
     compileSdk = 35
@@ -12,8 +25,8 @@ android {
         applicationId = "com.bepinex.android"
         minSdk = 28
         targetSdk = 35
-        versionCode = 181
-        versionName = "0.181"
+        versionCode = ciBuildNumber
+        versionName = "1.0.0-ci.$ciBuildNumber"
 
         ndk {
             abiFilters += "arm64-v8a"

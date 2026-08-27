@@ -213,17 +213,16 @@ fun BepInExNavHost(
                 }
             }
         }
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier.padding(innerPadding)
-        ) {
+    ) {
             NavHost(
                 navController = navController,
                 startDestination = NavRoutes.GAMES
             ) {
                 // Main game screen
                 composable(
-                    route = NavRoutes.GAMES
+                    route = NavRoutes.GAMES,
+                    enterTransition = { slideInHorizontally(tween(300)) { it } + fadeIn(tween(300)) },
+                    exitTransition = { slideOutHorizontally(tween(300)) { it } + fadeOut(tween(300)) }
                 ) {
                     GameScreen(
                         detectedGames = detectedGames,
@@ -407,7 +406,9 @@ fun BepInExNavHost(
                 ) { backStackEntry ->
                     val packageName = backStackEntry.arguments?.getString("packageName") ?: return@composable
                     val settingsContext = LocalContext.current
-                    val floatingLogInGame = AppSettings.isFloatingLogInGameEnabled(settingsContext)
+                    var floatingLogInGame by remember {
+                        mutableStateOf(AppSettings.isFloatingLogInGameEnabled(settingsContext))
+                    }
                     SettingsScreen(
                         packageName = packageName,
                         themeMode = themeMode,
@@ -419,6 +420,7 @@ fun BepInExNavHost(
                         onLanguageChanged = onLanguageChanged,
                         onFloatingLogInGameChanged = { enabled ->
                             AppSettings.setFloatingLogInGameEnabled(settingsContext, enabled)
+                            floatingLogInGame = enabled
                         },
                         onClearBepInEx = { onClearBepInEx(packageName) },
                         onClearDotnet = { onClearDotnet(packageName) },
@@ -442,7 +444,5 @@ fun BepInExNavHost(
                     )
                 }
             }
-
-        }
     }
 }

@@ -70,6 +70,10 @@
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>
+    <string name="settings_section_appearance">Appearance</string>
+    <string name="settings_section_ingame">In-Game</string>
+    <string name="settings_section_maintenance">Maintenance</string>
+    <string name="settings_section_config">Config Files</string>
     <string name="settings_clear_bepinex">Clear BepInEx Files</string>
     <string name="settings_clear_bepinex_desc">Delete all BepInEx files and interop assemblies. Required for re-extraction on next launch.</string>
     <string name="settings_clear_dotnet">Clear .NET Data</string>

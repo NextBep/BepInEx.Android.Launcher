@@ -62,6 +62,7 @@ bld/
 [Oo]bj/
 [Oo]ut/
 [Ll]og/
+!app/src/main/java/com/bepinex/android/log/
 [Ll]ogs/
 
 # Build results on 'Bin' directories

@@ -136,7 +136,7 @@ fun ModpackDetailScreen(
                 item {
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        "Config Files",
+                        stringResource(R.string.settings_section_config),
                         style = MaterialTheme.typography.titleMedium
                     )
                 }

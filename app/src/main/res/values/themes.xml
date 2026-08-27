@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Base launcher theme — follows system DayNight by default -->
-    <style name="Theme.BepInEx.Launcher" parent="android:Theme.Material.NoActionBar">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar">false</item>
-    </style>
+    <style name="Theme.BepInEx.Launcher" parent="android:Theme.Material.Light.NoActionBar" />
+
 
     <!-- FusionCore-compatible Unity theme (matches their UnityThemeSelector) -->
     <style name="UnityThemeSelector" parent="BaseUnityTheme">

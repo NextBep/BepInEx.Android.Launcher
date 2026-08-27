@@ -70,6 +70,10 @@
 
     <!-- Settings -->
     <string name="settings_title">设置</string>
+    <string name="settings_section_appearance">外观</string>
+    <string name="settings_section_ingame">游戏内</string>
+    <string name="settings_section_maintenance">维护</string>
+    <string name="settings_section_config">配置文件</string>
     <string name="settings_clear_bepinex">清除 BepInEx 文件</string>
     <string name="settings_clear_bepinex_desc">删除所有 BepInEx 文件和 interop 程序集。下次启动需要重新解压。</string>
     <string name="settings_clear_dotnet">清空 .NET 数据</string>

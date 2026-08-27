@@ -257,7 +257,6 @@ class ModpackManager {
         }
         copyDirContents(File(srcRoot, "config"), configDir)
         copyDirContents(File(srcRoot, "logs"), logsDir)
-        File(srcRoot, "logs/LogOutput.log").takeIf { it.isFile }?.copyTo(logFile, overwrite = true)
         BepInExLog.i("Restored runtime cfg/logs from ${srcRoot.absolutePath}")
     }
 

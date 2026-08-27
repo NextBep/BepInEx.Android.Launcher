@@ -86,16 +86,6 @@
             android:launchMode="singleTask"
             android:exported="false" />
 
-        <!-- Log overlay service (floating log in-game) -->
-        <service
-            android:name="com.bepinex.android.log.LogOverlayService"
-            android:exported="false"
-            android:foregroundServiceType="specialUse">
-            <property
-                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="floating_log_overlay_for_debugging" />
-        </service>
-
         <!-- File provider for DLL sharing -->
         <provider
             android:name="androidx.core.content.FileProvider"
