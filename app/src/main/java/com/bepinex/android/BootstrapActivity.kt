@@ -34,9 +34,9 @@ class BootstrapActivity : Activity() {
         private const val BACKUP_UNITY_VERSION = "2017.0.0"
         private const val GLOBAL_METADATA_FILE = "global-metadata.dat"
 
-        // Unity version pattern: X.Y.Z[abcfp]N or X.Y.ZrcN
+        // Unity version pattern: X.Y.Z[abcfp]N... optionally with suffix
         private val UNITY_VERSION_PATTERN =
-            Pattern.compile("^\\d+\\.\\d+\\.\\d+(?:[abcfp]\\d+|rc\\d+)?$")
+            Pattern.compile("^\\d+\\.\\d+\\.\\d+(?:[abcfp]\\d+.*|rc\\d+.*)?$")
 
         // Known offsets in Unity data files where version strings appear
         private val VERSION_LOOKUP_MAP = mapOf(
@@ -102,7 +102,17 @@ class BootstrapActivity : Activity() {
         val useOriginalLibUnity = intent.getBooleanExtra(EXTRA_USE_ORIGINAL_LIBUNITY, true)
         preparedConfig = prepareFusionState(targetPackage, gameContext, useOriginalLibUnity)
 
-        // 4. Install base Pine hooks
+        // 4. Register game native libraries (match FusionCore: no exclusions)
+        val gameLibDir = gameContext.applicationInfo.nativeLibraryDir
+        File(gameLibDir).listFiles()?.forEach { file ->
+            val name = file.name
+            if (name.startsWith("lib") && name.endsWith(".so") && name.length > 6) {
+                val libName = name.substring(3, name.length - 3)
+                NativeLibraryManager.addGameLibrary(libName)
+            }
+        }
+
+        // 5. Install base Pine hooks
         BepInExLog.i("Installing Pine hooks...")
         try {
             ClassLoaderHooks.installHooks(gameContext.classLoader)
@@ -273,7 +283,8 @@ class BootstrapActivity : Activity() {
 
         // Copy Unity Data files from game APK to internal storage
         val copiedData = BepInExPaths.getCopiedDataDir(filesDir, targetPackage)
-        if (!copiedData.exists() || copiedData.list()?.isEmpty() != false) {
+        val dataUnity3d = File(copiedData, "data.unity3d")
+        if (!copiedData.exists() || copiedData.list()?.isEmpty() != false || !dataUnity3d.exists()) {
             BepInExLog.i("Copying game assets/bin/Data  -> ${copiedData.absolutePath}")
             try {
                 copyGameDataAssets(gameContext, copiedData)

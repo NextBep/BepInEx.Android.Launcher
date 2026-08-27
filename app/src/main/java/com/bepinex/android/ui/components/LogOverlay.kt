@@ -121,8 +121,8 @@ fun LogOverlay(
                             modifier = Modifier.fillMaxSize().padding(horizontal = 8.dp),
                             contentPadding = PaddingValues(vertical = 4.dp)
                         ) {
-                            items(logLines, key = { "${it.message.hashCode()}_${logLines.indexOf(it)}" }) { line ->
-                                LogLineItem(line)
+                            items(logLines.size) { idx ->
+                                LogLineItem(logLines[idx])
                             }
                         }
                     }

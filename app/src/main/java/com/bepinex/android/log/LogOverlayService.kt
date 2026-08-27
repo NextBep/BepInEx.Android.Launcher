@@ -156,8 +156,11 @@ class LogOverlayService : Service() {
         // Setup lifecycle for ComposeView
         val lifecycleOwner = FakeLifecycleOwner()
         lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
+        val savedStateOwner = FakeSavedStateRegistryOwner(lifecycleOwner)
+        savedStateOwner.performRestore(null)
+
         composeView.setViewTreeLifecycleOwner(lifecycleOwner)
-        composeView.setViewTreeSavedStateRegistryOwner(FakeSavedStateRegistryOwner())
+        composeView.setViewTreeSavedStateRegistryOwner(savedStateOwner)
 
         val params = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -297,8 +300,13 @@ private class FakeLifecycleOwner : LifecycleOwner {
 /**
  * Minimal SavedStateRegistryOwner for ComposeView.
  */
-private class FakeSavedStateRegistryOwner : SavedStateRegistryOwner {
+private class FakeSavedStateRegistryOwner(
+    private val lifecycleOwner: LifecycleOwner
+) : SavedStateRegistryOwner {
     private val controller = SavedStateRegistryController.create(this)
     override val savedStateRegistry: SavedStateRegistry get() = controller.savedStateRegistry
-    override val lifecycle: Lifecycle get() = throw UnsupportedOperationException()
+    override val lifecycle: Lifecycle get() = lifecycleOwner.lifecycle
+    fun performRestore(savedState: android.os.Bundle?) {
+        controller.performRestore(savedState)
+    }
 }
