@@ -230,13 +230,6 @@ class BootstrapActivity : Activity() {
 
             val stagedFile = FusionConfigStore.write(this, config)
             BepInExLog.i("Fusion config staged: ${stagedFile.absolutePath}")
-
-            // Start floating log overlay if enabled in settings
-            if (AppSettings.isFloatingLogInGameEnabled(this@BootstrapActivity)) {
-                val pkg = this.targetPackage ?: "unknown"
-                LogOverlayService.start(this@BootstrapActivity, pkg)
-                BepInExLog.i("Started floating log overlay service")
-            }
         } catch (t: Throwable) {
             BepInExLog.e("Failed to initialize Fusion", t)
         }

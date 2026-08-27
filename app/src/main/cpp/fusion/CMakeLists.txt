@@ -29,6 +29,10 @@ add_library(fusion SHARED
     src/utilities/library.cpp
 )
 
+# fusion is loaded manually from libmain through the game's linker namespace.
+# That namespace cannot resolve libc++_shared.so from the launcher APK.
+target_link_options(fusion PRIVATE -static-libstdc++)
+
 # Include directories: fusion headers + parent cpp dir (for dobby.h)
 target_include_directories(fusion PUBLIC include ${CMAKE_SOURCE_DIR})
 

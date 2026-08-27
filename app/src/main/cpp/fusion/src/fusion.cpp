@@ -158,26 +158,24 @@ static bool stage_fusion_config(const FusionConfig &config)
     std::string patchedIl2CppPath = config.appDataDir + "/libil2cpp.so";
     LOGI("Patching il2cpp: %s -> %s (1MB pool)", gameIl2cppPath.c_str(), patchedIl2CppPath.c_str());
 
-    void *poolHandle = allocate_setup_injected(
+    void *poolHandle = allocate_setup_injected_noload(
         gameIl2cppPath.c_str(),
         patchedIl2CppPath.c_str(),
-        1024 * 1024);  // 1 MB code cave
+        1024 * 1024);  // 1 MB code cave, load AFTER libunity
     if (!poolHandle) {
-        LOGE("allocate_setup_injected failed 鈥?falling back to original il2cpp path");
+        LOGE("allocate_setup_injected_noload failed — falling back to original il2cpp path");
         il2cppPath = gameIl2cppPath;
     } else {
         il2cppPath = patchedIl2CppPath;
-        LOGI("Code cave injected successfully");
+        LOGI("Patched il2cpp ELF written (load deferred until after libunity)");
     }
 
     LOGI("  unityPath:  %s", unityPath.c_str());
     LOGI("  il2cppPath: %s", il2cppPath.c_str());
 
-    /* Hook libunity (non-fatal: symbol may not exist on newer Unity versions) */
-    std::string fallbackUnityPath = config.gameLibraryDir + "/libunity.so";
-    try_hook_libunity(unityPath.c_str(), fallbackUnityPath.c_str());
-
-    /* Tell libmain where to find the libraries */
+    /* Tell libmain where to find the libraries.
+     * Do NOT dlopen/hook libunity here — UnityPlayer is still constructing
+     * and loading libunity too early crashes some games (PVZ). */
     libmain_set_override_unity_path(unityPath.c_str());
     libmain_set_override_il2cpp_path(il2cppPath.c_str());
 
@@ -299,6 +297,7 @@ bool fusion_bootstrap_from_libmain(JNIEnv *env)
         LOGE("il2cpp_initialize failed");
         return false;
     }
+    allocate_bind_loaded(il2cpp_get_handle());
 
     /* 3. Initialize SafeHook with injected code cave allocator */
     void *il2cppHandle = il2cpp_get_handle();

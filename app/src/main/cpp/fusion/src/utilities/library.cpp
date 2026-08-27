@@ -33,9 +33,10 @@ struct PaddedOpenResult {
     size_t pool_size;
 };
 
-PaddedOpenResult padded_dlopen(const char *library_name,
-                               const char *temp_path,
-                               size_t pool_size)
+static PaddedOpenResult padded_write_elf_impl(const char *library_name,
+                                              const char *temp_path,
+                                              size_t pool_size,
+                                              bool load_now)
 {
     auto page_size = sysconf(_SC_PAGESIZE);
 
@@ -119,6 +120,12 @@ PaddedOpenResult padded_dlopen(const char *library_name,
     temp_file.close();
     file.close();
 
+    if (!load_now) {
+        LOGI("Patched ELF written to %s (deferred load), pool_offset=0x%zx size=%zu",
+             temp_path, (size_t)pool_offset, new_pool_size);
+        return {nullptr, nullptr, (size_t)pool_offset, new_pool_size};
+    }
+
     // Load the patched ELF
     void *handle = dlopen(temp_path, RTLD_GLOBAL | RTLD_NOW);
     if (!handle) {
@@ -127,8 +134,12 @@ PaddedOpenResult padded_dlopen(const char *library_name,
     }
 
     // Resolve base address via dladdr
-    Dl_info info;
-    dladdr(dlsym(handle, "il2cpp_init"), &info);
+    Dl_info info{};
+    void *sym = dlsym(handle, "il2cpp_init");
+    if (!sym || !dladdr(sym, &info) || !info.dli_fbase) {
+        LOGE("dladdr(il2cpp_init) failed for %s", temp_path);
+        return {nullptr, nullptr, 0, 0};
+    }
     size_t trampoline_base =
         reinterpret_cast<uintptr_t>(info.dli_fbase) + pool_offset;
 
@@ -136,4 +147,18 @@ PaddedOpenResult padded_dlopen(const char *library_name,
          trampoline_base, new_pool_size);
 
     return {handle, info.dli_fbase, trampoline_base, new_pool_size};
+}
+
+PaddedOpenResult padded_write_elf(const char *library_name,
+                                  const char *temp_path,
+                                  size_t pool_size)
+{
+    return padded_write_elf_impl(library_name, temp_path, pool_size, false);
+}
+
+PaddedOpenResult padded_dlopen(const char *library_name,
+                               const char *temp_path,
+                               size_t pool_size)
+{
+    return padded_write_elf_impl(library_name, temp_path, pool_size, true);
 }

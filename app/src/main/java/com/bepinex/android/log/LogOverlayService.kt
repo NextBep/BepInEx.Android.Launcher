@@ -10,6 +10,7 @@ import android.content.Intent
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.IBinder
+import android.provider.Settings
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
@@ -66,13 +67,19 @@ class LogOverlayService : Service() {
         private const val CHANNEL_ID = "bepinex_log_overlay"
 
         fun start(context: Context, packageName: String) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(context)) {
+                return
+            }
             val intent = Intent(context, LogOverlayService::class.java).apply {
                 putExtra("packageName", packageName)
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context.startForegroundService(intent)
-            } else {
-                context.startService(intent)
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.startForegroundService(intent)
+                } else {
+                    context.startService(intent)
+                }
+            } catch (_: Exception) {
             }
         }
 
@@ -147,42 +154,49 @@ class LogOverlayService : Service() {
     // Overlay
 
     private fun createOverlay() {
-        windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
-
-        val composeView = ComposeView(this).apply {
-            setContent { OverlayContent { removeOverlay() } }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+            stopSelf()
+            return
         }
 
-        // Setup lifecycle for ComposeView
-        val lifecycleOwner = FakeLifecycleOwner()
-        lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
-        val savedStateOwner = FakeSavedStateRegistryOwner(lifecycleOwner)
-        savedStateOwner.performRestore(null)
+        try {
+            windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
-        composeView.setViewTreeLifecycleOwner(lifecycleOwner)
-        composeView.setViewTreeSavedStateRegistryOwner(savedStateOwner)
+            val lifecycleOwner = FakeLifecycleOwner()
+            lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
+            val savedStateOwner = FakeSavedStateRegistryOwner(lifecycleOwner)
+            savedStateOwner.performRestore(null)
 
-        val params = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-            else
-                @Suppress("DEPRECATION")
-                WindowManager.LayoutParams.TYPE_PHONE,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-            PixelFormat.TRANSLUCENT
-        ).apply {
-            gravity = Gravity.TOP or Gravity.START
-            x = 100
-            y = 300
+            val composeView = ComposeView(this)
+            composeView.setViewTreeLifecycleOwner(lifecycleOwner)
+            composeView.setViewTreeSavedStateRegistryOwner(savedStateOwner)
+            composeView.setContent { OverlayContent { removeOverlay() } }
+
+            val params = WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                    WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+                else
+                    @Suppress("DEPRECATION")
+                    WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT
+            ).apply {
+                gravity = Gravity.TOP or Gravity.START
+                x = 100
+                y = 300
+            }
+
+            overlayView = composeView
+            windowManager?.addView(overlayView, params)
+
+            lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_START)
+            lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
+        } catch (_: Exception) {
+            overlayView = null
+            stopSelf()
         }
-
-        overlayView = composeView
-        windowManager?.addView(overlayView, params)
-
-        lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_START)
-        lifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
     }
 
     private fun removeOverlay() {

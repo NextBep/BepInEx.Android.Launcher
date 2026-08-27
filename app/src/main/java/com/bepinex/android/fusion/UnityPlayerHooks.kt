@@ -12,6 +12,8 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.bepinex.android.BepInExLog
+import com.bepinex.android.log.LogOverlayService
+import com.bepinex.android.settings.AppSettings
 import top.canyie.pine.Pine
 import top.canyie.pine.callback.MethodHook
 import java.lang.reflect.Constructor
@@ -116,6 +118,13 @@ object UnityPlayerHooks {
 
                     // Hide loading overlay
                     hideLoadingOverlay(act, loadingOverlay)
+
+                    if (AppSettings.isFloatingLogInGameEnabled(act)) {
+                        try {
+                            LogOverlayService.start(act, gameContext.packageName)
+                        } catch (_: Exception) {
+                        }
+                    }
 
                     // Set activity field on UnityPlayer instance
                     for (field in activityFields) {

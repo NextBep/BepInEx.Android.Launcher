@@ -17,6 +17,9 @@
 #include <jni.h>
 #include <dlfcn.h>
 #include <string>
+#include <vector>
+#include <fstream>
+#include <cstring>
 #include <android/log.h>
 
 #define LOG_TAG "LibMain"
@@ -35,6 +38,7 @@ static std::string override_il2cpp_path;
 
 static void *unityLibHandle = nullptr;
 static void *il2cppLibHandle = nullptr;
+static void *originalMainHandle = nullptr;
 
 static void nlog(const char *msg) {
     __android_log_write(ANDROID_LOG_ERROR, "LibMainN", msg);
@@ -200,6 +204,81 @@ static std::string resolve_staged_config_path(JNIEnv *env)
     return filesDir + "/bootstrap/active.cfg";
 }
 
+static std::string read_config_value(const std::string &path, const char *key)
+{
+    FILE *file = fopen(path.c_str(), "r");
+    if (!file) return {};
+    char line[4096];
+    const size_t keyLength = strlen(key);
+    std::string value;
+    while (fgets(line, sizeof(line), file)) {
+        if (strncmp(line, key, keyLength) == 0 && line[keyLength] == '=') {
+            value.assign(line + keyLength + 1);
+            while (!value.empty() && (value.back() == '\n' || value.back() == '\r')) value.pop_back();
+            break;
+        }
+    }
+    fclose(file);
+    return value;
+}
+
+static void load_original_game_main(JNIEnv *env, const std::string &configPath)
+{
+    if (originalMainHandle) return;
+    const std::string gameLibDir = read_config_value(configPath, "gameLibraryDirectory");
+    if (gameLibDir.empty()) return;
+
+    const std::string sourcePath = gameLibDir + "/libmain.so";
+    const std::string copyPath = configPath + ".original_main.so";
+
+    /* Both libraries have SONAME libmain.so. Loading the original by its
+     * absolute path would therefore resolve to this replacement. Make a
+     * private copy with a different SONAME so Android's linker creates a
+     * second link-map entry and runs the original JNI_OnLoad. */
+    std::ifstream source(sourcePath, std::ios::binary);
+    std::ofstream copy(copyPath, std::ios::binary | std::ios::trunc);
+    if (!source || !copy) {
+        LOGE("load_original_main: cannot copy %s", sourcePath.c_str());
+        return;
+    }
+    std::vector<char> image((std::istreambuf_iterator<char>(source)),
+                            std::istreambuf_iterator<char>());
+    const char oldSoname[] = "libmain.so";
+    const char newSoname[] = "liborig.so";
+    bool renamed = false;
+    for (size_t i = 0; i + sizeof(oldSoname) <= image.size(); ++i) {
+        if (memcmp(image.data() + i, oldSoname, sizeof(oldSoname)) == 0) {
+            memcpy(image.data() + i, newSoname, sizeof(newSoname));
+            renamed = true;
+            break;
+        }
+    }
+    if (!renamed) {
+        LOGE("load_original_main: SONAME libmain.so not found");
+        return;
+    }
+    copy.write(image.data(), static_cast<std::streamsize>(image.size()));
+    copy.close();
+
+    dlerror();
+    void *handle = dlopen(copyPath.c_str(), RTLD_NOW | RTLD_GLOBAL);
+    if (!handle) {
+        LOGE("original libmain load failed (%s): %s", copyPath.c_str(), dlerror());
+        return;
+    }
+
+    auto originalOnLoad = reinterpret_cast<JNI_OnLoad_t>(dlsym(handle, "JNI_OnLoad"));
+    if (originalOnLoad) {
+        JavaVM *vm = nullptr;
+        if (env->GetJavaVM(&vm) != JNI_OK || originalOnLoad(vm, nullptr) < JNI_VERSION_1_6) {
+            LOGE("original libmain JNI_OnLoad failed");
+            return;
+        }
+    }
+    originalMainHandle = handle;
+    LOGI("original game libmain JNI registered");
+}
+
 // Library load/unload helpers
 
 jboolean internal_load(JNIEnv *env, const char *libraryPath, void **libHandle)
@@ -298,9 +377,10 @@ void libmain_set_log_path(const char *path)
 // NativeLoader.load / unload replacement
 
 JNIEXPORT jboolean JNICALL
-load(JNIEnv *env, jobject activityObject, jstring path)
+load(JNIEnv *env, jclass clazz, jstring path)
 {
     nlog("load() called");
+    (void)clazz;
     (void)path;
 
     /* 1. Resolve libfusion symbols */
@@ -330,7 +410,9 @@ load(JNIEnv *env, jobject activityObject, jstring path)
     }
     nlog("load: fusion staged OK");
 
-    /* 4. Load Unity + IL2CPP */
+    /* 4. Load Unity first, THEN IL2CPP.
+     * Loading patched libil2cpp with RTLD_NOW before libunity runs IL2CPP
+     * constructors too early and crashes some Unity Android forks (PVZ). */
     nlog("load: loading libunity");
     if (!internal_load(env, override_unity_path.c_str(), &unityLibHandle)) {
         nlog("load: FAILED to load libunity.so");
@@ -338,6 +420,7 @@ load(JNIEnv *env, jobject activityObject, jstring path)
     }
     nlog("load: libunity OK");
 
+    nlog("load: loading libil2cpp");
     if (!internal_load(env, override_il2cpp_path.c_str(), &il2cppLibHandle)) {
         internal_unload(env, &unityLibHandle);
         nlog("load: FAILED to load libil2cpp.so");

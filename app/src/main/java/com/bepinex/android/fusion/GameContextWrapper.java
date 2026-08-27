@@ -22,11 +22,12 @@ public class GameContextWrapper extends ContextWrapper {
         super(gameContext);
         this.fusionContext = fusionContext;
         this.getApplicationInfo().dataDir = appContext.getApplicationInfo().dataDir;
-        // Prevents the game from resolving its own libraries
+        // Keep the generic FusionCore behavior: hide the game's native
+        // directory so System.loadLibrary is routed through findLibrary.
+        // Do not replace it with the launcher directory; that changes the
+        // game's native namespace and breaks Unity's own JNI registration.
         this.getApplicationInfo().nativeLibraryDir = "";
-        this.appContext = appContext != fusionContext
-                ? new GameContextWrapper(this, appContext, appContext)
-                : fusionContext;
+        this.appContext = fusionContext;
     }
 
     @Override

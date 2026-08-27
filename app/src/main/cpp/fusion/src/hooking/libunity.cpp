@@ -47,8 +47,18 @@ bool try_hook_libunity(const char *libUnityPath, const char *fallbackLibUnityPat
 {
     LOGI("try_hook_libunity: %s", libUnityPath);
 
-    /* dlopen the libunity to ensure it's loaded */
-    void *handle = dlopen(libUnityPath, RTLD_NOW | RTLD_GLOBAL);
+    /* Prefer an already-loaded libunity (loaded by NativeLoader). Extra
+     * RTLD_NOW dlopen during UnityPlayer construction crashes some games. */
+    void *handle = dlopen(libUnityPath, RTLD_NOW | RTLD_NOLOAD);
+    if (!handle) {
+        handle = dlopen(libUnityPath, RTLD_LAZY | RTLD_GLOBAL);
+    }
+    if (!handle && fallbackLibUnityPath) {
+        handle = dlopen(fallbackLibUnityPath, RTLD_NOW | RTLD_NOLOAD);
+        if (!handle) {
+            handle = dlopen(fallbackLibUnityPath, RTLD_LAZY | RTLD_GLOBAL);
+        }
+    }
     if (!handle) {
         LOGE("Failed to dlopen libunity.so: %s", dlerror());
         return false;

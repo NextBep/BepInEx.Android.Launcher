@@ -8,6 +8,7 @@
  */
 
 #include <cstdint>
+#include <dlfcn.h>
 #include <android/log.h>
 
 #define TAG "Allocator"
@@ -21,6 +22,8 @@ struct PaddedOpenResult {
     size_t pool_base;
     size_t pool_size;
 };
+PaddedOpenResult padded_write_elf(const char *library_name,
+                                  const char *temp_path, size_t pool_size);
 PaddedOpenResult padded_dlopen(const char *library_name,
                                const char *temp_path, size_t pool_size);
 
@@ -42,6 +45,42 @@ void *allocate_setup_injected(const char *library, const char *output_path,
     LOGI("Pool base: 0x%zx, size: %zu",
          g_padded.pool_base, g_padded.pool_size);
     return g_padded.handle;
+}
+
+void *allocate_setup_injected_noload(const char *library, const char *output_path,
+                                     size_t pool_size)
+{
+    LOGI("allocate_setup_injected_noload: %s -> %s, pool=%zu",
+         library, output_path, pool_size);
+    g_padded = padded_write_elf(library, output_path, pool_size);
+    if (!g_padded.pool_size) {
+        LOGE("padded_write_elf failed!");
+        return nullptr;
+    }
+    LOGI("Patched ELF written, pool size %zu (load deferred)", g_padded.pool_size);
+    return reinterpret_cast<void *>(1);
+}
+
+void *allocate_bind_loaded(void *handle)
+{
+    if (!handle) return nullptr;
+    g_padded.handle = handle;
+    void *sym = dlsym(handle, "il2cpp_init");
+    if (!sym) {
+        LOGE("allocate_bind_loaded: il2cpp_init not found");
+        return nullptr;
+    }
+    Dl_info info{};
+    if (!dladdr(sym, &info) || !info.dli_fbase) {
+        LOGE("allocate_bind_loaded: dladdr failed");
+        return nullptr;
+    }
+    g_padded.base = info.dli_fbase;
+    const size_t pool_offset = g_padded.pool_base;
+    g_padded.pool_base = reinterpret_cast<uintptr_t>(info.dli_fbase) + pool_offset;
+    LOGI("Bound loaded il2cpp: base=%p pool=0x%zx size=%zu",
+         g_padded.base, g_padded.pool_base, g_padded.pool_size);
+    return handle;
 }
 
 void *allocate_injected(void *target, void *library_base, size_t size)

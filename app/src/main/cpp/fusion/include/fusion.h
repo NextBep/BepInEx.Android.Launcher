@@ -84,6 +84,8 @@ bool libunity_initialize(const char *unityPath);
 
 /* Code cave injection (allocator.cpp) */
 void *allocate_setup_injected(const char *library, const char *output_path, size_t pool_size);
+void *allocate_setup_injected_noload(const char *library, const char *output_path, size_t pool_size);
+void *allocate_bind_loaded(void *handle);
 void *allocate_injected(void *target, void *library_base, size_t size);
 
 #ifdef __cplusplus
