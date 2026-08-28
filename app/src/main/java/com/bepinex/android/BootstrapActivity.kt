@@ -96,7 +96,7 @@ class BootstrapActivity : Activity() {
         val targetPackage = packageName
 
         // 1. Resolve game launcher
-        updateProgress("Resolving game launcher...", "", 5)
+        updateProgress(getString(R.string.bootstrap_resolving), "", 5)
         val launchIntent = packageManager.getLaunchIntentForPackage(targetPackage)
             ?: throw IllegalStateException("No launch intent for $targetPackage")
 
@@ -108,7 +108,7 @@ class BootstrapActivity : Activity() {
         val targetOrientation = resolveTargetOrientation(launcher)
 
         // 2. Create game context (with DEX access)
-        updateProgress("Creating game context...", "", 10)
+        updateProgress(getString(R.string.bootstrap_creating_context), "", 10)
         val gameContext: Context = try {
             createPackageContext(targetPackage,
                 Context.CONTEXT_IGNORE_SECURITY or Context.CONTEXT_INCLUDE_CODE)
@@ -123,7 +123,7 @@ class BootstrapActivity : Activity() {
         preparedConfig = prepareFusionState(targetPackage, gameContext, useOriginalLibUnity)
 
         // 4. Register game native libraries (match FusionCore: no exclusions)
-        updateProgress("Registering native libraries...", "", 60)
+        updateProgress(getString(R.string.bootstrap_registering_native), "", 60)
         val gameLibDir = gameContext.applicationInfo.nativeLibraryDir
         File(gameLibDir).listFiles()?.forEach { file ->
             val name = file.name
@@ -134,7 +134,7 @@ class BootstrapActivity : Activity() {
         }
 
         // 5. Install base Pine hooks
-        updateProgress("Installing Pine hooks...", "", 70)
+        updateProgress(getString(R.string.bootstrap_installing_hooks), "", 70)
         BepInExLog.i("Installing Pine hooks...")
         try {
             ClassLoaderHooks.installHooks(gameContext.classLoader)
@@ -147,14 +147,14 @@ class BootstrapActivity : Activity() {
         }
 
         // 5. Hook game launcher's onCreate (optional — some launchers inherit it)
-        updateProgress("Hooking game launcher...", "", 85)
+        updateProgress(getString(R.string.bootstrap_hooking_launcher), "", 85)
         val launcherClassName = launcher.className
         installLauncherOnCreateHook(gameContext, gameContext.classLoader, launcherClassName)
 
         // 6. Start the registered stub. InstrumentationHooks restores the
         // target class in this process and UnityPlayerHooks supplies its
         // game-resource/Fusion storage context.
-        updateProgress("Starting game...", "", 95)
+        updateProgress(getString(R.string.bootstrap_starting_game), "", 95)
         try {
             val launcherClass = gameContext.classLoader.loadClass(launcherClassName)
             BepInExLog.i("Starting game launcher: ${launcherClass.name}")
@@ -287,14 +287,14 @@ class BootstrapActivity : Activity() {
         dataOnSdCard.mkdirs()
 
         // Extract BepInEx to external storage
-        updateProgress("Extracting BepInEx...", "Preparing mod framework", 15)
+        updateProgress(getString(R.string.bootstrap_extracting_bepinex), "Preparing mod framework", 15)
         val fileExtractor = FileExtractor(this)
         fileExtractor.extractBepInExIfNeeded(targetPackage) { status ->
             BepInExLog.i(status)
         }
 
         // Extract dotnet to internal storage
-        updateProgress("Extracting .NET runtime...", "", 25)
+        updateProgress(getString(R.string.bootstrap_extracting_dotnet), "", 25)
         fileExtractor.extractDotnetIfNeeded(targetPackage) { status ->
             BepInExLog.i(status)
         }
@@ -309,7 +309,7 @@ class BootstrapActivity : Activity() {
             BepInExLog.i("Copying game assets/bin/Data  -> ${copiedData.absolutePath}")
             try {
                 copyGameDataAssets(gameContext, copiedData) { step, detail ->
-                    updateProgress(step, detail, 35)
+                    updateProgress(getString(R.string.bootstrap_copying_data), detail, 35)
                 }
             } catch (e: Exception) {
                 BepInExLog.e("Failed to copy Data assets (non-fatal)", e)
@@ -340,11 +340,11 @@ class BootstrapActivity : Activity() {
         // .NET's HttpClient crashes on Android 16 with SIGSEGV in
         // AndroidCryptoNative_SSLStreamCreate. FusionCore mirrors this pattern
         // in LibUnityDownloader.java for libunity.so.
-        updateProgress("Downloading Unity libraries...", "", 50)
+        updateProgress(getString(R.string.bootstrap_downloading_unity), "", 50)
         val unityLibsDir = File(bepInExDir, "unity-libs")
         BepInExLog.i("Ensuring unity base libraries for Unity $unityVersion...")
         val unityLibsReady = UnityLibsDownloader.ensureLibraries(unityLibsDir, unityVersion) { detail ->
-            updateProgress("Downloading Unity libraries...", detail, 50)
+            updateProgress(getString(R.string.bootstrap_downloading_unity), detail, 50)
         }
         if (!unityLibsReady) {
             BepInExLog.w("Failed to download unity base libraries  -- disabling auto-download in BepInEx.cfg")
@@ -353,7 +353,7 @@ class BootstrapActivity : Activity() {
         }
 
         // Apply active modpack (or clear for vanilla mode) with per-modpack state persistence
-        updateProgress("Applying modpack...", "", 55)
+        updateProgress(getString(R.string.bootstrap_applying_modpack), "", 55)
         val activeModpack = intent.getStringExtra(EXTRA_ACTIVE_MODPACK)
         val modpackManager = com.bepinex.android.modpack.ModpackManager()
         val previousActive = com.bepinex.android.settings.AppSettings.getActiveModpack(this, targetPackage)

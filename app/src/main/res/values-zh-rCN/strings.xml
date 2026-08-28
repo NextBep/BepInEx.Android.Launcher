@@ -179,4 +179,18 @@
     <string name="error">错误</string>
     <string name="done">完成</string>
     <string name="share_saved">消息已保存，切回游戏继续</string>
+
+    <!-- Bootstrap Loading -->
+    <string name="bootstrap_title">BepInEx Launcher</string>
+    <string name="bootstrap_resolving">正在解析游戏启动器…</string>
+    <string name="bootstrap_creating_context">正在创建游戏上下文…</string>
+    <string name="bootstrap_extracting_bepinex">正在解压 BepInEx…</string>
+    <string name="bootstrap_extracting_dotnet">正在解压 .NET 运行时…</string>
+    <string name="bootstrap_copying_data">正在复制游戏数据…</string>
+    <string name="bootstrap_downloading_unity">正在下载 Unity 库…</string>
+    <string name="bootstrap_applying_modpack">正在应用整合包…</string>
+    <string name="bootstrap_registering_native">正在注册原生库…</string>
+    <string name="bootstrap_installing_hooks">正在安装 Pine Hook…</string>
+    <string name="bootstrap_hooking_launcher">正在 Hook 游戏启动器…</string>
+    <string name="bootstrap_starting_game">正在启动游戏…</string>
 </resources>

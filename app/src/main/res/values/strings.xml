@@ -179,4 +179,18 @@
     <string name="error">Error</string>
     <string name="done">Done</string>
     <string name="share_saved">Message saved, switch back to game</string>
+
+    <!-- Bootstrap Loading -->
+    <string name="bootstrap_title">BepInEx Launcher</string>
+    <string name="bootstrap_resolving">Resolving game launcher…</string>
+    <string name="bootstrap_creating_context">Creating game context…</string>
+    <string name="bootstrap_extracting_bepinex">Extracting BepInEx…</string>
+    <string name="bootstrap_extracting_dotnet">Extracting .NET runtime…</string>
+    <string name="bootstrap_copying_data">Copying game data…</string>
+    <string name="bootstrap_downloading_unity">Downloading Unity libraries…</string>
+    <string name="bootstrap_applying_modpack">Applying modpack…</string>
+    <string name="bootstrap_registering_native">Registering native libraries…</string>
+    <string name="bootstrap_installing_hooks">Installing Pine hooks…</string>
+    <string name="bootstrap_hooking_launcher">Hooking game launcher…</string>
+    <string name="bootstrap_starting_game">Starting game…</string>
 </resources>
