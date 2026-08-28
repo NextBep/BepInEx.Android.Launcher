@@ -181,16 +181,15 @@
     <string name="share_saved">消息已保存，切回游戏继续</string>
 
     <!-- Bootstrap Loading -->
-    <string name="bootstrap_title">BepInEx Launcher</string>
-    <string name="bootstrap_resolving">正在解析游戏启动器…</string>
-    <string name="bootstrap_creating_context">正在创建游戏上下文…</string>
-    <string name="bootstrap_extracting_bepinex">正在解压 BepInEx…</string>
-    <string name="bootstrap_extracting_dotnet">正在解压 .NET 运行时…</string>
-    <string name="bootstrap_copying_data">正在复制游戏数据…</string>
-    <string name="bootstrap_downloading_unity">正在下载 Unity 库…</string>
-    <string name="bootstrap_applying_modpack">正在应用整合包…</string>
-    <string name="bootstrap_registering_native">正在注册原生库…</string>
-    <string name="bootstrap_installing_hooks">正在安装 Pine Hook…</string>
-    <string name="bootstrap_hooking_launcher">正在 Hook 游戏启动器…</string>
-    <string name="bootstrap_starting_game">正在启动游戏…</string>
+    <string name="bootstrap_title">正在启动游戏</string>
+    <string name="bootstrap_status_preparing">正在准备目标包…</string>
+    <string name="bootstrap_status_copy_assets">正在复制 Unity 数据…</string>
+    <string name="bootstrap_status_detecting_version">正在检测 Unity 版本…</string>
+    <string name="bootstrap_status_downloading_libunity">正在下载未裁剪的 libunity…</string>
+    <string name="bootstrap_status_extracting_runtime">正在解压运行时文件…</string>
+    <string name="bootstrap_status_registering_libraries">正在注册原生库…</string>
+    <string name="bootstrap_status_installing_hooks">正在安装 Hook…</string>
+    <string name="bootstrap_status_launching">正在启动游戏…</string>
+    <string name="bootstrap_status_error">启动失败</string>
+    <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
 </resources>
