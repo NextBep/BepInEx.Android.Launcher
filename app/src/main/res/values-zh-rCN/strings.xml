@@ -126,14 +126,27 @@
     <string name="about_project_pine_desc">ART Java 方法 Hook 框架 (top.canyie.pine:core:0.3.0)。用于 ClassLoader、PackageManager 和 UnityPlayer hook。</string>
     <string name="about_project_dobby_name">Dobby</string>
     <string name="about_project_dobby_desc">ARM64 原生 Hook 框架。用于 libfusion 中的 il2cpp_init hook。</string>
+    <string name="about_project_bepinexandroid_name">BepInEx.Android.Launcher</string>
+    <string name="about_project_bepinexandroid_desc">通用 BepInEx Android 启动器 — 支持多游戏整合包管理。</string>
     <string name="about_project_cpp2il_name">Cpp2IL</string>
     <string name="about_project_cpp2il_desc">IL2CPP 逆向工程工具。用于 interop 程序集生成。</string>
     <string name="about_dev_section">主要开发者</string>
     <string name="about_dev_names">HayashiUme · HexCat · Celestynka</string>
     <string name="about_footer">©2026 NextBep</string>
 
+    <string name="about_url_bepinex">https://github.com/BepInEx/BepInEx</string>
+    <string name="about_url_fusioncore">https://github.com/All-Of-Us-Mods/FusionCore</string>
+    <string name="about_url_nextbep">https://github.com/NextBep/BepInEx.Android</string>
+    <string name="about_url_bepinexandroid">https://github.com/NextBep/BepInEx.Android.Launcher</string>
+    <string name="about_url_dotnet">https://github.com/dotnet/runtime</string>
+    <string name="about_url_openssl">https://github.com/openssl/openssl</string>
+    <string name="about_url_pine">https://github.com/canyie/Pine</string>
+    <string name="about_url_dobby">https://github.com/jmpews/Dobby</string>
+    <string name="about_url_cpp2il">https://github.com/SamboyCoding/Cpp2IL</string>
+
     <!-- Log -->
     <string name="log_title">BepInEx 日志</string>
+    <string name="log_share">分享</string>
     <string name="log_copy">复制</string>
     <string name="log_clear">清除</string>
     <string name="log_empty">暂无日志。启动游戏后可查看 BepInEx 日志。</string>

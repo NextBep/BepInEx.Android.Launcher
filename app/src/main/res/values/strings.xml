@@ -126,14 +126,27 @@
     <string name="about_project_pine_desc">ART Java method hook framework (top.canyie.pine:core:0.3.0). Used for ClassLoader, PackageManager, and UnityPlayer hooks.</string>
     <string name="about_project_dobby_name">Dobby</string>
     <string name="about_project_dobby_desc">Native hook framework for ARM64. Used for il2cpp_init hook in libfusion.</string>
+    <string name="about_project_bepinexandroid_name">BepInEx.Android.Launcher</string>
+    <string name="about_project_bepinexandroid_desc">Generic BepInEx Android launcher — supports multiple games with modpack management.</string>
     <string name="about_project_cpp2il_name">Cpp2IL</string>
     <string name="about_project_cpp2il_desc">IL2CPP reverse engineering tool. Used for interop assembly generation.</string>
     <string name="about_dev_section">Lead Developers</string>
     <string name="about_dev_names">HayashiUme · HexCat · Celestynka</string>
     <string name="about_footer">©2026 NextBep</string>
 
+    <string name="about_url_bepinex">https://github.com/BepInEx/BepInEx</string>
+    <string name="about_url_fusioncore">https://github.com/All-Of-Us-Mods/FusionCore</string>
+    <string name="about_url_nextbep">https://github.com/NextBep/BepInEx.Android</string>
+    <string name="about_url_bepinexandroid">https://github.com/NextBep/BepInEx.Android.Launcher</string>
+    <string name="about_url_dotnet">https://github.com/dotnet/runtime</string>
+    <string name="about_url_openssl">https://github.com/openssl/openssl</string>
+    <string name="about_url_pine">https://github.com/canyie/Pine</string>
+    <string name="about_url_dobby">https://github.com/jmpews/Dobby</string>
+    <string name="about_url_cpp2il">https://github.com/SamboyCoding/Cpp2IL</string>
+
     <!-- Log -->
     <string name="log_title">BepInEx Log</string>
+    <string name="log_share">Share</string>
     <string name="log_copy">Copy</string>
     <string name="log_clear">Clear</string>
     <string name="log_empty">No log entries yet. Launch a game to see BepInEx logs.</string>

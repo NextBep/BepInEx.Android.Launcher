@@ -46,7 +46,7 @@ object UnityLibsDownloader {
      * @param version    Unity version string, e.g. `2022.3.62`
      * @return true if the ZIP is ready (cached or freshly downloaded)
      */
-    fun ensureLibraries(outputDir: File, version: String): Boolean {
+    fun ensureLibraries(outputDir: File, version: String, onProgress: (String) -> Unit = {}): Boolean {
         if (!outputDir.exists() && !outputDir.mkdirs()) {
             BepInExLog.e("$TAG: Failed to create unity-libs directory: ${outputDir.absolutePath}")
             return false
@@ -61,13 +61,14 @@ object UnityLibsDownloader {
         val zipFile = File(outputDir, "$downloadVersion.zip")
         if (zipFile.exists() && zipFile.length() > 0) {
             BepInExLog.i("$TAG: Unity base libraries already cached (${formatSize(zipFile.length())})")
+            onProgress("Unity libraries cached")
             return true
         }
 
         // Remove any partial download before starting
         zipFile.delete()
 
-        return downloadZip(zipFile, downloadVersion)
+        return downloadZip(zipFile, downloadVersion, onProgress)
     }
 
     /**
@@ -85,9 +86,10 @@ object UnityLibsDownloader {
 
     // Download
 
-    private fun downloadZip(destFile: File, version: String): Boolean {
+    private fun downloadZip(destFile: File, version: String, onProgress: (String) -> Unit = {}): Boolean {
         val url = BASE_URL + "$version.zip"
         BepInExLog.i("$TAG: Downloading $url")
+        onProgress("Connecting to server...")
 
         var connection: HttpURLConnection? = null
         try {
@@ -101,11 +103,14 @@ object UnityLibsDownloader {
             val status = connection.responseCode
             if (status !in 200..299) {
                 BepInExLog.e("$TAG: HTTP $status  -- cannot download unity base libraries")
+                onProgress("Download failed (HTTP $status)")
                 return false
             }
 
             val totalBytes = connection.contentLengthLong
-            BepInExLog.i("$TAG: Downloading ${formatSize(totalBytes)}...")
+            val totalStr = formatSize(totalBytes)
+            BepInExLog.i("$TAG: Downloading $totalStr...")
+            onProgress("0 / $totalStr")
 
             // Download to temp file, then rename atomically
             val tempFile = File(destFile.parentFile, "${destFile.name}.download")
@@ -113,15 +118,16 @@ object UnityLibsDownloader {
                 FileOutputStream(tempFile).use { output ->
                     val buffer = ByteArray(8192)
                     var downloaded = 0L
-                    var lastLog = 0L
+                    var lastProgress = 0L
                     var bytes: Int
                     while (input.read(buffer).also { bytes = it } != -1) {
                         output.write(buffer, 0, bytes)
                         downloaded += bytes
                         val now = System.currentTimeMillis()
-                        if (now - lastLog > 5000) {
-                            BepInExLog.i("$TAG: ${formatSize(downloaded)} / ${formatSize(totalBytes)}")
-                            lastLog = now
+                        if (now - lastProgress > 500) {
+                            val pct = if (totalBytes > 0) (downloaded * 100 / totalBytes).toInt() else 0
+                            onProgress("$pct%  ${formatSize(downloaded)} / $totalStr")
+                            lastProgress = now
                         }
                     }
                 }

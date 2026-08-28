@@ -9,9 +9,10 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Environment
 import android.os.Looper
+import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import com.bepinex.android.fusion.*
-import com.bepinex.android.log.LogOverlayService
 import com.bepinex.android.settings.AppSettings
 import top.canyie.pine.Pine
 import top.canyie.pine.callback.MethodHook
@@ -51,13 +52,30 @@ class BootstrapActivity : Activity() {
     private var preparedConfig: FusionConfig? = null
     private var targetPackage: String? = null
 
+    private var tvStep: TextView? = null
+    private var tvDetail: TextView? = null
+    private var progressBar: ProgressBar? = null
+
+    private fun updateProgress(step: String, detail: String = "", percent: Int = -1) {
+        runOnUiThread {
+            tvStep?.text = step
+            tvDetail?.text = detail
+            if (percent >= 0) progressBar?.progress = percent
+        }
+    }
+
     // Lifecycle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(android.R.layout.activity_list_item)
+        setContentView(R.layout.activity_bootstrap)
+
+        tvStep = findViewById(R.id.tvStep)
+        tvDetail = findViewById(R.id.tvDetail)
+        progressBar = findViewById(R.id.progressBar)
 
         val targetPackage = intent.getStringExtra(EXTRA_TARGET_PACKAGE)
+        tvDetail?.text = targetPackage
         if (targetPackage.isNullOrEmpty()) {
             failAndFinish("No target package specified!")
             return
@@ -78,6 +96,7 @@ class BootstrapActivity : Activity() {
         val targetPackage = packageName
 
         // 1. Resolve game launcher
+        updateProgress("Resolving game launcher...", "", 5)
         val launchIntent = packageManager.getLaunchIntentForPackage(targetPackage)
             ?: throw IllegalStateException("No launch intent for $targetPackage")
 
@@ -89,6 +108,7 @@ class BootstrapActivity : Activity() {
         val targetOrientation = resolveTargetOrientation(launcher)
 
         // 2. Create game context (with DEX access)
+        updateProgress("Creating game context...", "", 10)
         val gameContext: Context = try {
             createPackageContext(targetPackage,
                 Context.CONTEXT_IGNORE_SECURITY or Context.CONTEXT_INCLUDE_CODE)
@@ -103,6 +123,7 @@ class BootstrapActivity : Activity() {
         preparedConfig = prepareFusionState(targetPackage, gameContext, useOriginalLibUnity)
 
         // 4. Register game native libraries (match FusionCore: no exclusions)
+        updateProgress("Registering native libraries...", "", 60)
         val gameLibDir = gameContext.applicationInfo.nativeLibraryDir
         File(gameLibDir).listFiles()?.forEach { file ->
             val name = file.name
@@ -113,6 +134,7 @@ class BootstrapActivity : Activity() {
         }
 
         // 5. Install base Pine hooks
+        updateProgress("Installing Pine hooks...", "", 70)
         BepInExLog.i("Installing Pine hooks...")
         try {
             ClassLoaderHooks.installHooks(gameContext.classLoader)
@@ -125,10 +147,14 @@ class BootstrapActivity : Activity() {
         }
 
         // 5. Hook game launcher's onCreate (optional — some launchers inherit it)
+        updateProgress("Hooking game launcher...", "", 85)
         val launcherClassName = launcher.className
         installLauncherOnCreateHook(gameContext, gameContext.classLoader, launcherClassName)
 
-        // 6. Start game launcher Activity via StubActivity
+        // 6. Start the registered stub. InstrumentationHooks restores the
+        // target class in this process and UnityPlayerHooks supplies its
+        // game-resource/Fusion storage context.
+        updateProgress("Starting game...", "", 95)
         try {
             val launcherClass = gameContext.classLoader.loadClass(launcherClassName)
             BepInExLog.i("Starting game launcher: ${launcherClass.name}")
@@ -139,12 +165,12 @@ class BootstrapActivity : Activity() {
                     val intent = Intent(this, launcherClass).apply {
                         putExtra(InstrumentationHooks.EXTRA_TARGET_ORIENTATION, targetOrientation)
                     }
-                    val intentWrapped = Intent(this, StubActivity::class.java).apply {
+                    val wrapped = Intent(this, StubActivity::class.java).apply {
                         putExtra(InstrumentationHooks.EXTRA_IS_DYNAMIC_ACTIVITY, true)
                         putExtra(InstrumentationHooks.EXTRA_ORIGINAL_INTENT, intent)
                         putExtra(InstrumentationHooks.EXTRA_TARGET_ORIENTATION, targetOrientation)
                     }
-                    startActivity(intentWrapped)
+                    startActivity(wrapped)
                     finish()
                 } catch (t: Throwable) {
                     failAndFinish("Failed to start game: ${t.message}")
@@ -261,12 +287,14 @@ class BootstrapActivity : Activity() {
         dataOnSdCard.mkdirs()
 
         // Extract BepInEx to external storage
+        updateProgress("Extracting BepInEx...", "Preparing mod framework", 15)
         val fileExtractor = FileExtractor(this)
         fileExtractor.extractBepInExIfNeeded(targetPackage) { status ->
             BepInExLog.i(status)
         }
 
         // Extract dotnet to internal storage
+        updateProgress("Extracting .NET runtime...", "", 25)
         fileExtractor.extractDotnetIfNeeded(targetPackage) { status ->
             BepInExLog.i(status)
         }
@@ -280,7 +308,9 @@ class BootstrapActivity : Activity() {
         if (!copiedData.exists() || copiedData.list()?.isEmpty() != false || !dataUnity3d.exists()) {
             BepInExLog.i("Copying game assets/bin/Data  -> ${copiedData.absolutePath}")
             try {
-                copyGameDataAssets(gameContext, copiedData)
+                copyGameDataAssets(gameContext, copiedData) { step, detail ->
+                    updateProgress(step, detail, 35)
+                }
             } catch (e: Exception) {
                 BepInExLog.e("Failed to copy Data assets (non-fatal)", e)
             }
@@ -310,9 +340,12 @@ class BootstrapActivity : Activity() {
         // .NET's HttpClient crashes on Android 16 with SIGSEGV in
         // AndroidCryptoNative_SSLStreamCreate. FusionCore mirrors this pattern
         // in LibUnityDownloader.java for libunity.so.
+        updateProgress("Downloading Unity libraries...", "", 50)
         val unityLibsDir = File(bepInExDir, "unity-libs")
         BepInExLog.i("Ensuring unity base libraries for Unity $unityVersion...")
-        val unityLibsReady = UnityLibsDownloader.ensureLibraries(unityLibsDir, unityVersion)
+        val unityLibsReady = UnityLibsDownloader.ensureLibraries(unityLibsDir, unityVersion) { detail ->
+            updateProgress("Downloading Unity libraries...", detail, 50)
+        }
         if (!unityLibsReady) {
             BepInExLog.w("Failed to download unity base libraries  -- disabling auto-download in BepInEx.cfg")
             // Prevent BepInEx from attempting to download via .NET HttpClient (which crashes)
@@ -320,6 +353,7 @@ class BootstrapActivity : Activity() {
         }
 
         // Apply active modpack (or clear for vanilla mode) with per-modpack state persistence
+        updateProgress("Applying modpack...", "", 55)
         val activeModpack = intent.getStringExtra(EXTRA_ACTIVE_MODPACK)
         val modpackManager = com.bepinex.android.modpack.ModpackManager()
         val previousActive = com.bepinex.android.settings.AppSettings.getActiveModpack(this, targetPackage)
@@ -399,21 +433,42 @@ class BootstrapActivity : Activity() {
 
     // Asset copying
 
-    private fun copyGameDataAssets(gameContext: Context, destDir: File) {
+    private fun copyGameDataAssets(gameContext: Context, destDir: File, onProgress: (String, String) -> Unit = { _, _ -> }) {
         destDir.mkdirs()
         try {
-            copyAssetsRecursive(gameContext.assets, "bin/Data", destDir)
-            val fileCount = destDir.walkTopDown().count { it.isFile }
-            BepInExLog.i("Copied $fileCount Data files (recursive)")
+            // Count files first for progress
+            val totalCount = countAssets(gameContext.assets, "bin/Data")
+            var copiedCount = 0
+            onProgress("Copying game data...", "0 / $totalCount files")
+            copyAssetsRecursive(gameContext.assets, "bin/Data", destDir) {
+                copiedCount++
+                onProgress("Copying game data...", "$copiedCount / $totalCount files")
+            }
+            BepInExLog.i("Copied $copiedCount Data files (recursive)")
         } catch (e: Exception) {
             BepInExLog.w("Game has no bin/Data assets: ${e.message}")
         }
     }
 
+    private fun countAssets(am: android.content.res.AssetManager, assetPath: String): Int {
+        val entries = try { am.list(assetPath) } catch (e: Exception) { null } ?: return 0
+        var count = 0
+        for (entry in entries) {
+            val childPath = "$assetPath/$entry"
+            try {
+                am.open(childPath).use { count++ }
+            } catch (e: java.io.FileNotFoundException) {
+                count += countAssets(am, childPath)
+            }
+        }
+        return count
+    }
+
     private fun copyAssetsRecursive(
         am: android.content.res.AssetManager,
         assetPath: String,
-        destDir: File
+        destDir: File,
+        onFileCopied: () -> Unit = {}
     ) {
         destDir.mkdirs()
         val entries = try { am.list(assetPath) } catch (e: Exception) { null } ?: return
@@ -425,9 +480,10 @@ class BootstrapActivity : Activity() {
                     val outFile = File(destDir, entry)
                     outFile.parentFile?.mkdirs()
                     outFile.outputStream().use { output -> input.copyTo(output) }
+                    onFileCopied()
                 }
             } catch (e: java.io.FileNotFoundException) {
-                copyAssetsRecursive(am, childPath, File(destDir, entry))
+                copyAssetsRecursive(am, childPath, File(destDir, entry), onFileCopied)
             } catch (e: Exception) {
                 BepInExLog.w("Copy asset $childPath: ${e.message}")
             }

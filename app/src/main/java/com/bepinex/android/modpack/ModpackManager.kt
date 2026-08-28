@@ -256,7 +256,6 @@ class ModpackManager {
             copyDirContents(getModpackPluginsDir(packageName, modpackName), pluginsDir)
         }
         copyDirContents(File(srcRoot, "config"), configDir)
-        copyDirContents(File(srcRoot, "logs"), logsDir)
         BepInExLog.i("Restored runtime cfg/logs from ${srcRoot.absolutePath}")
     }
 
@@ -302,7 +301,7 @@ class ModpackManager {
         return try {
             ZipOutputStream(FileOutputStream(outputFile)).use { zos ->
                 modpackDir.walkTopDown().filter { it.isFile }.forEach { file ->
-                    val entryName = file.relativeTo(modpackDir).path.replace('\\', '/')
+                    val entryName = "$modpackName/${file.relativeTo(modpackDir).path.replace('\\', '/')}"
                     zos.putNextEntry(ZipEntry(entryName))
                     file.inputStream().use { it.copyTo(zos) }
                     zos.closeEntry()
@@ -316,10 +315,8 @@ class ModpackManager {
         }
     }
 
-    fun importModpack(packageName: String, uri: Uri, context: Context): ModpackMeta? {
+    fun importModpack(packageName: String, uri: Uri, context: Context, zipName: String? = null): ModpackMeta? {
         try {
-            // Read ZIP entries to determine modpack name
-            var modpackName: String? = null
             val tempDir = File(context.cacheDir, "modpack_import_${System.currentTimeMillis()}")
             tempDir.mkdirs()
 
@@ -328,10 +325,6 @@ class ModpackManager {
                     var entry = zis.nextEntry
                     while (entry != null) {
                         val name = entry.name.trim('/')
-                        // First top-level directory is the modpack name
-                        if (!name.contains("/") && modpackName == null) {
-                            modpackName = name
-                        }
                         val outFile = File(tempDir, name)
                         if (entry.isDirectory) {
                             outFile.mkdirs()
@@ -346,12 +339,13 @@ class ModpackManager {
                 }
             }
 
-            val resolvedName = modpackName ?: "imported_${System.currentTimeMillis()}"
+            val resolvedName = zipName ?: "imported_${System.currentTimeMillis()}"
             val modpackDir = getModpackDir(packageName, resolvedName)
             if (modpackDir.exists()) modpackDir.deleteRecursively()
 
-            // Move from temp to modpacks directory
-            val sourceDir = if (modpackName != null) File(tempDir, modpackName) else tempDir
+            // Find the actual content directory inside temp (skip top-level dir if present)
+            val topDirs = tempDir.listFiles()?.filter { it.isDirectory } ?: emptyList()
+            val sourceDir = if (topDirs.size == 1) topDirs[0] else tempDir
             sourceDir.copyRecursively(modpackDir, overwrite = true)
             tempDir.deleteRecursively()
 

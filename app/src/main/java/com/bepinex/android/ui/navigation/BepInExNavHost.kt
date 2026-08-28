@@ -67,8 +67,6 @@ fun BepInExNavHost(
     val modpackManager = remember { ModpackManager() }
     val context = LocalContext.current
 
-    val logLines by BepInExLogReader.lines.collectAsState()
-
     // State for modpack list
     var modpacks by remember { mutableStateOf<List<ModpackMeta>>(emptyList()) }
     var activeModpackName by remember { mutableStateOf<String?>(null) }
@@ -100,8 +98,12 @@ fun BepInExNavHost(
             val game = selectedGame
             if (game != null) {
                 kotlinx.coroutines.MainScope().launch(kotlinx.coroutines.Dispatchers.IO) {
-                    // Must use Activity context, not applicationContext — URI permission is on the Activity
-                    modpackManager.importModpack(game.packageName, uri, context)
+                    val cursor = context.contentResolver.query(uri, null, null, null, null)
+                    val displayName = cursor?.use {
+                        if (it.moveToFirst()) it.getString(it.getColumnIndexOrThrow(android.provider.OpenableColumns.DISPLAY_NAME)) else null
+                    }
+                    val zipName = displayName?.removeSuffix(".zip")?.removeSuffix(".ZIP")
+                    modpackManager.importModpack(game.packageName, uri, context, zipName)
                     kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
                         modpackRefreshKey++
                     }
@@ -214,7 +216,7 @@ fun BepInExNavHost(
             }
         }
     ) {
-            NavHost(
+        NavHost(
                 navController = navController,
                 startDestination = NavRoutes.GAMES
             ) {
@@ -301,7 +303,7 @@ fun BepInExNavHost(
                         onExportModpack = { name ->
                             val outputFile = java.io.File(
                                 android.os.Environment.getExternalStorageDirectory(),
-                                "BepInEx_Android/export/${name}.zip"
+                        "BepInEx_Android/export/${name}.zip"
                             )
                             outputFile.parentFile?.mkdirs()
                             modpackManager.exportModpack(packageName, name, outputFile)
@@ -329,8 +331,6 @@ fun BepInExNavHost(
                     val configFiles = remember(packageName, modpackName, modpackRefreshKey) {
                         modpackManager.listConfigs(packageName, modpackName)
                     }
-                    var editingConfig by remember { mutableStateOf<File?>(null) }
-                    var showModLog by remember { mutableStateOf(false) }
 
                     ModpackDetailScreen(
                         modpackName = modpackName,
@@ -343,58 +343,37 @@ fun BepInExNavHost(
                             mods = modpackManager.listMods(packageName, modpackName)
                         },
                         onOpenConfig = { configFile ->
-                            editingConfig = configFile
+                            navController.navigate(NavRoutes.configEditor(configFile.absolutePath))
                         },
-                        onViewLog = { showModLog = true },
+                        onViewLog = {
+                            navController.navigate(NavRoutes.logViewer(packageName, modpackName))
+                        },
                         onExportModpack = {
                             val outputFile = java.io.File(
-                                android.os.Environment.getExternalStorageDirectory(),
-                                "BepInEx_Android/export/${modpackName}.zip"
+                                context.cacheDir,
+                                "${modpackName}.zip"
                             )
                             outputFile.parentFile?.mkdirs()
-                            modpackManager.exportModpack(packageName, modpackName, outputFile)
+                            val success = modpackManager.exportModpack(packageName, modpackName, outputFile)
+                            if (success) {
+                                val uri = androidx.core.content.FileProvider.getUriForFile(
+                                    context,
+                                    "${context.packageName}.provider",
+                                    outputFile
+                                )
+                                val shareIntent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+                                    type = "application/zip"
+                                    putExtra(android.content.Intent.EXTRA_STREAM, uri)
+                                    putExtra(android.content.Intent.EXTRA_SUBJECT, modpackName)
+                                    addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                }
+                                context.startActivity(android.content.Intent.createChooser(shareIntent, "Share Modpack"))
+                            } else {
+                                android.widget.Toast.makeText(context, "Export failed", android.widget.Toast.LENGTH_SHORT).show()
+                            }
                         }
                     )
 
-                    // Log overlay for this modpack
-                    if (showModLog) {
-                        val modpackLogFile = BepInExPaths.getModpackLogFile(packageName, modpackName)
-                        val activeRuntimeLog = BepInExPaths.getLogFile(packageName)
-                        val logFileToUse = if (activeModpackName == modpackName && activeRuntimeLog.exists()) {
-                            activeRuntimeLog
-                        } else {
-                            modpackLogFile
-                        }
-                        LaunchedEffect(logFileToUse.absolutePath) {
-                            BepInExLogReader.startWatchingFile(logFileToUse, scope)
-                        }
-                        com.bepinex.android.ui.components.LogOverlay(
-                            logLines = logLines,
-                            showOverlay = true,
-                            onDismiss = {
-                                showModLog = false
-                                // Restore watching active modpack log
-                                selectedGame?.let { game ->
-                                    val active = AppSettings.getActiveModpack(context, game.packageName)
-                                    val fallback = if (active.isNullOrEmpty()) BepInExPaths.getLogFile(game.packageName)
-                                    else BepInExPaths.getModpackLogFile(game.packageName, active)
-                                    BepInExLogReader.startWatchingFile(fallback, scope)
-                                }
-                            }
-                        )
-                    }
-
-                    // Config editor
-                    editingConfig?.let { file ->
-                        ConfigEditorDialog(
-                            configFile = file,
-                            onDismiss = { editingConfig = null },
-                            onSave = { f, content ->
-                                f.writeText(content)
-                                editingConfig = null
-                            }
-                        )
-                    }
                 }
 
                 // Settings
@@ -425,6 +404,45 @@ fun BepInExNavHost(
                         onClearBepInEx = { onClearBepInEx(packageName) },
                         onClearDotnet = { onClearDotnet(packageName) },
                         onCopyGameResources = { onCopyGameResources(packageName) }
+                    )
+                }
+
+                // Log Viewer
+                composable(
+                    route = NavRoutes.LOG_VIEWER,
+                    arguments = listOf(
+                        navArgument("packageName") { type = NavType.StringType },
+                        navArgument("modpackName") { type = NavType.StringType }
+                    ),
+                    enterTransition = { slideInHorizontally(tween(300)) { it } + fadeIn(tween(300)) },
+                    popExitTransition = { slideOutHorizontally(tween(300)) { it } + fadeOut(tween(300)) }
+                ) { backStackEntry ->
+                    val pkg = backStackEntry.arguments?.getString("packageName") ?: return@composable
+                    val mpName = backStackEntry.arguments?.getString("modpackName") ?: return@composable
+                    val logFile = com.bepinex.android.BepInExPaths.getModpackLogFile(pkg, mpName)
+                    LogViewerScreen(
+                        logFilePath = logFile.absolutePath,
+                        onNavigateBack = { navController.popBackStack() }
+                    )
+                }
+
+                // Config Editor
+                composable(
+                    route = NavRoutes.CONFIG_EDITOR,
+                    arguments = listOf(navArgument("filePath") { type = NavType.StringType }),
+                    enterTransition = { slideInHorizontally(tween(300)) { it } + fadeIn(tween(300)) },
+                    popExitTransition = { slideOutHorizontally(tween(300)) { it } + fadeOut(tween(300)) }
+                ) { backStackEntry ->
+                    val encodedPath = backStackEntry.arguments?.getString("filePath") ?: return@composable
+                    val filePath = java.net.URLDecoder.decode(encodedPath, "UTF-8")
+                    val file = java.io.File(filePath)
+                    ConfigEditorDialog(
+                        configFile = file,
+                        onDismiss = { navController.popBackStack() },
+                        onSave = { f, content ->
+                            f.writeText(content)
+                            navController.popBackStack()
+                        }
                     )
                 }
 

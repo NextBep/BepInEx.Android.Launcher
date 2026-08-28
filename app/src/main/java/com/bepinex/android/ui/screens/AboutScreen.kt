@@ -1,5 +1,8 @@
 package com.bepinex.android.ui.screens
 
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,6 +14,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,6 +46,7 @@ fun AboutScreen(
             )
         }
     ) { padding ->
+        val context = LocalContext.current
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -130,35 +135,57 @@ fun AboutScreen(
             // Project cards
             ProjectCard(
                 name = stringResource(R.string.about_project_bepinex_name),
-                desc = stringResource(R.string.about_project_bepinex_desc)
+                desc = stringResource(R.string.about_project_bepinex_desc),
+                url = stringResource(R.string.about_url_bepinex),
+                context = context
             )
             ProjectCard(
                 name = stringResource(R.string.about_project_fusioncore_name),
-                desc = stringResource(R.string.about_project_fusioncore_desc)
+                desc = stringResource(R.string.about_project_fusioncore_desc),
+                url = stringResource(R.string.about_url_fusioncore),
+                context = context
             )
             ProjectCard(
                 name = stringResource(R.string.about_project_nextbep_name),
-                desc = stringResource(R.string.about_project_nextbep_desc)
+                desc = stringResource(R.string.about_project_nextbep_desc),
+                url = stringResource(R.string.about_url_nextbep),
+                context = context
+            )
+            ProjectCard(
+                name = stringResource(R.string.about_project_bepinexandroid_name),
+                desc = stringResource(R.string.about_project_bepinexandroid_desc),
+                url = stringResource(R.string.about_url_bepinexandroid),
+                context = context
             )
             ProjectCard(
                 name = stringResource(R.string.about_project_dotnet_name),
-                desc = stringResource(R.string.about_project_dotnet_desc)
+                desc = stringResource(R.string.about_project_dotnet_desc),
+                url = stringResource(R.string.about_url_dotnet),
+                context = context
             )
             ProjectCard(
                 name = stringResource(R.string.about_project_openssl_name),
-                desc = stringResource(R.string.about_project_openssl_desc)
+                desc = stringResource(R.string.about_project_openssl_desc),
+                url = stringResource(R.string.about_url_openssl),
+                context = context
             )
             ProjectCard(
                 name = stringResource(R.string.about_project_pine_name),
-                desc = stringResource(R.string.about_project_pine_desc)
+                desc = stringResource(R.string.about_project_pine_desc),
+                url = stringResource(R.string.about_url_pine),
+                context = context
             )
             ProjectCard(
                 name = stringResource(R.string.about_project_dobby_name),
-                desc = stringResource(R.string.about_project_dobby_desc)
+                desc = stringResource(R.string.about_project_dobby_desc),
+                url = stringResource(R.string.about_url_dobby),
+                context = context
             )
             ProjectCard(
                 name = stringResource(R.string.about_project_cpp2il_name),
-                desc = stringResource(R.string.about_project_cpp2il_desc)
+                desc = stringResource(R.string.about_project_cpp2il_desc),
+                url = stringResource(R.string.about_url_cpp2il),
+                context = context
             )
 
             Spacer(Modifier.height(24.dp))
@@ -194,13 +221,18 @@ fun AboutScreen(
 }
 
 @Composable
-private fun ProjectCard(name: String, desc: String) {
+private fun ProjectCard(name: String, desc: String, url: String, context: android.content.Context) {
     Card(
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
         ),
-        modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 3.dp)
+            .clickable {
+                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+            }
     ) {
         Column(Modifier.padding(horizontal = 14.dp, vertical = 10.dp)) {
             Text(

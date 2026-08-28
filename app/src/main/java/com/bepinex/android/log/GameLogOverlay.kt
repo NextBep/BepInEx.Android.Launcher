@@ -4,13 +4,16 @@ import android.app.Activity
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.HorizontalScrollView
 import android.widget.ScrollView
 import android.widget.TextView
 import com.bepinex.android.BepInExPaths
@@ -29,9 +32,9 @@ object GameLogOverlay {
     private var panelVisible = false
     private var pollJob: Runnable? = null
 
-    fun show(activity: Activity, packageName: String) {
+    fun show(activity: Activity, packageName: String, logFile: File? = null, showPanel: Boolean = false, showFab: Boolean = true) {
         val decorView = activity.window?.decorView as? ViewGroup ?: return
-        val logFile = BepInExPaths.getLogFile(packageName)
+        val resolvedLogFile = logFile ?: BepInExPaths.getLogFile(packageName)
 
         // Remove old if any
         remove(decorView)
@@ -94,26 +97,30 @@ object GameLogOverlay {
             typeface = Typeface.DEFAULT_BOLD
             setPadding((8 * density).toInt(), (6 * density).toInt(), 0, (4 * density).toInt())
         }
+        val shareBtn = TextView(activity).apply {
+            text = "\u2922"
+            setTextColor(Color.parseColor("#A6E3A1"))
+            textSize = 14f
+            gravity = Gravity.CENTER
+            setPadding((8 * density).toInt(), (4 * density).toInt(),
+                (4 * density).toInt(), (4 * density).toInt())
+        }
         val closeBtn = TextView(activity).apply {
             text = "\u2715"
             setTextColor(Color.parseColor("#F38BA8"))
             textSize = 14f
             gravity = Gravity.CENTER
-            setPadding((8 * density).toInt(), (4 * density).toInt(),
+            setPadding((4 * density).toInt(), (4 * density).toInt(),
                 (8 * density).toInt(), (4 * density).toInt())
         }
 
-        val header = FrameLayout(activity).apply {
-            addView(headerText, FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT,
-                Gravity.START or Gravity.CENTER_VERTICAL
+        val header = android.widget.LinearLayout(activity).apply {
+            orientation = android.widget.LinearLayout.HORIZONTAL
+            addView(headerText, android.widget.LinearLayout.LayoutParams(
+                0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f
             ))
-            addView(closeBtn, FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT,
-                Gravity.END or Gravity.CENTER_VERTICAL
-            ))
+            addView(shareBtn)
+            addView(closeBtn)
         }
 
         val panelLayout = android.widget.LinearLayout(activity).apply {
@@ -134,6 +141,7 @@ object GameLogOverlay {
             gravity = Gravity.CENTER_VERTICAL or Gravity.END
             setMargins(0, 0, margin, 0)
         }
+        panelParams.width = panelWidth
 
         val panelContainer = FrameLayout(activity).apply {
             addView(panelLayout, FrameLayout.LayoutParams(
@@ -167,6 +175,7 @@ object GameLogOverlay {
                         isDragging = true
                     }
                     if (isDragging) {
+                        // Move via margins
                         val newLeft = (downFabX + dx).toInt().coerceIn(0,
                             decorView.width - fabSize)
                         val newBottom = (downFabY - dy).toInt().coerceIn(0,
@@ -194,23 +203,46 @@ object GameLogOverlay {
             panelContainer.visibility = View.GONE
         }
 
+        shareBtn.setOnClickListener {
+            if (!resolvedLogFile.exists()) return@setOnClickListener
+            val uri = androidx.core.content.FileProvider.getUriForFile(
+                activity,
+                "${activity.packageName}.provider",
+                resolvedLogFile
+            )
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_STREAM, uri)
+                putExtra(Intent.EXTRA_SUBJECT, "BepInEx Log - $packageName")
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            activity.startActivity(Intent.createChooser(shareIntent, "Share Log"))
+        }
+
         // Add to DecorView
         decorView.addView(panelContainer, FrameLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT
         ))
-        decorView.addView(fabView, fabParams)
-
-        this.fab = fabView
+        if (showFab) {
+            decorView.addView(fabView, fabParams)
+            this.fab = fabView
+        }
         this.panel = panelContainer
+
+        // Show panel immediately if requested (e.g. from modpack log button)
+        if (showPanel) {
+            panelVisible = true
+            panelContainer.visibility = View.VISIBLE
+        }
 
         // Poll log
         var lastSize = 0L
         pollJob = object : Runnable {
             override fun run() {
                 try {
-                    if (logFile.exists() && logFile.length() > lastSize) {
-                        RandomAccessFile(logFile, "r").use { raf ->
+                    if (resolvedLogFile.exists() && resolvedLogFile.length() > lastSize) {
+                        RandomAccessFile(resolvedLogFile, "r").use { raf ->
                             raf.seek(lastSize)
                             val buf = ByteArray((raf.length() - lastSize).toInt())
                             raf.readFully(buf)
@@ -222,6 +254,7 @@ object GameLogOverlay {
                                 for (line in newLines) {
                                     sb.appendLine(line)
                                 }
+                                // Keep last 5000 chars
                                 val full = sb.toString()
                                 if (full.length > 5000) {
                                     logTextView.text = full.substring(full.length - 5000)
@@ -229,7 +262,7 @@ object GameLogOverlay {
                                     logTextView.text = full
                                 }
                             }
-                            lastSize = logFile.length()
+                            lastSize = resolvedLogFile.length()
                         }
                     }
                 } catch (_: Exception) { }
