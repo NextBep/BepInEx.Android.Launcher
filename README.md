@@ -8,7 +8,6 @@ Android launcher app for running BepInEx mods in Unity IL2CPP games.
 - Modpack manager: create, import/export, enable/disable mod sets
 - Config file editor with syntax highlighting
 - Game-side log viewer (logcat integration)
-- Google OAuth login support for Among Us (AuthFix plugin)
 
 ## How it works
 
