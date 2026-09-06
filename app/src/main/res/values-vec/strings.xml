@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App -->
     <string name="app_name">BepInEx Launcher</string>
@@ -12,48 +12,48 @@
 
     <!-- Game Detection -->
     <string name="scan_title">Giochi rilevai</string>
-    <string name="scanning">Ricerca de giochi Unity IL2CPP鈥?/string>
-    <string name="no_games_found">Nesun gioco Unity IL2CCC trov脿</string>
+    <string name="scanning">Ricerca de giochi Unity IL2CPP…</string>
+    <string name="no_games_found">Nesun gioco Unity IL2CCC trovà</string>
     <string name="no_games_hint">Instala un gioco Unity IL2CPP par beginar</string>
-    <string name="scan_again">Scansiona anc贸o</string>
+    <string name="scan_again">Scansiona ancóo</string>
     <string name="rescan">Nova scansion</string>
 
     <!-- Framework Status -->
     <string name="framework_ready">BepInEx pronto</string>
-    <string name="framework_setting_up">Configurazion in corso鈥?/string>
-    <string name="extracting">Estrassion de BepInEx鈥?/string>
+    <string name="framework_setting_up">Configurazion in corso…</string>
+    <string name="extracting">Estrassion de BepInEx…</string>
     <string name="mod_count">%d mod</string>
 
     <!-- Actions -->
     <string name="import_mod">Importa mod</string>
-    <string name="launch">Av矛a</string>
+    <string name="launch">Avìa</string>
     <string name="refresh">Agorna</string>
-    <string name="delete">Canc猫艂a</string>
+    <string name="delete">Cancéla</string>
 
     <!-- Mods -->
     <string name="installed_mods">Mod instalai</string>
-    <string name="no_mods_installed">Nesun mod instal脿</string>
-    <string name="no_mods_hint">Toca Importa mod par zacontar un fi艂o .dll</string>
-    <string name="mod_deleted">Cancer脿: %s</string>
-    <string name="mod_imported">Import脿: %s</string>
-    <string name="import_failed">Importassion fai脿</string>
+    <string name="no_mods_installed">Nesun mod instalà</string>
+    <string name="no_mods_hint">Toca Importa mod par zacontar un filo .dll</string>
+    <string name="mod_deleted">Cancerà: %s</string>
+    <string name="mod_imported">Importà: %s</string>
+    <string name="import_failed">Importassion faià</string>
 
     <!-- Modpacks -->
     <string name="modpack_title">Modpack</string>
     <string name="modpack_create">Crea modpack</string>
-    <string name="modpack_delete">Canc猫艂a modpack</string>
+    <string name="modpack_delete">Cancéla modpack</string>
     <string name="modpack_rename">Rinomina</string>
     <string name="modpack_export">Esporta</string>
     <string name="modpack_import">Importa modpack</string>
-    <string name="modpack_select_active">At矛va</string>
-    <string name="modpack_vanilla">Van矛艂a (senza mod)</string>
+    <string name="modpack_select_active">Atìva</string>
+    <string name="modpack_vanilla">Vanìla (senza mod)</string>
     <string name="modpack_name_hint">NOME modpack</string>
-    <string name="modpack_confirm_delete_title">Canc猫艂a modpack</string>
-    <string name="modpack_confirm_delete_msg">Canc猫lar \"%s\" e tuto i soi mod?_sta peraci贸n no se pol anul脿r.</string>
-    <string name="modpack_created">Modpack cre脿: %s</string>
-    <string name="modpack_deleted">Modpack cancell脿: %s</string>
-    <string name="modpack_exported">Esport脿: %s</string>
-    <string name="modpack_imported">Import脿: %s</string>
+    <string name="modpack_confirm_delete_title">Cancéla modpack</string>
+    <string name="modpack_confirm_delete_msg">Cancélar \"%s\" e tuto i soi mod?_sta peración no se pol anulàr.</string>
+    <string name="modpack_created">Modpack creà: %s</string>
+    <string name="modpack_deleted">Modpack cancellà: %s</string>
+    <string name="modpack_exported">Esportà: %s</string>
+    <string name="modpack_imported">Importà: %s</string>
     <string name="modpack_no_mods">Nesun mod in sto modpack</string>
     <string name="modpack_add_mod">Zonta mod</string>
     <string name="modpack_target_game">Par: %s</string>
@@ -63,77 +63,77 @@
     <!-- Config Editor -->
     <string name="config_editor_title">Editor de configurazion</string>
     <string name="config_editor_save">Salva</string>
-    <string name="config_editor_save_failed">Salvajament fi艂o fai脿</string>
+    <string name="config_editor_save_failed">Salvajament filo faià</string>
     <string name="config_editor_unsaved">Variazion no salvai</string>
     <string name="config_editor_discard_title">Scartar le variazioni?</string>
-    <string name="config_editor_discard_msg">T猫 variazion no salvai. Scartarle?</string>
-    <string name="config_editor_no_configs">Nesun fi艂o de configurazion</string>
+    <string name="config_editor_discard_msg">Té variazion no salvai. Scartarle?</string>
+    <string name="config_editor_no_configs">Nesun filo de configurazion</string>
 
     <!-- Mod File Browser -->
-    <string name="mod_file_browser_title">Fi艂i mod</string>
-    <string name="mod_file_browser_empty">Sto directory l\'猫 vodo</string>
+    <string name="mod_file_browser_title">Fili mod</string>
+    <string name="mod_file_browser_empty">Sto directory l\'é vodo</string>
     <string name="mod_file_browser_missing">El directory del modpack no exista</string>
     <string name="mod_file_browser_directory">Directory</string>
-    <string name="mod_file_browser_editable_file">%1$s 路 Toca par v茅dar o modificar</string>
-    <string name="mod_file_browser_unsupported_file">%1$s 路 Anteprima no support脿</string>
-    <string name="mod_file_browser_edit_file">V茅dar o modificar fi艂o</string>
-    <string name="mod_file_browser_delete_file">Canc猫艂a fi艂o</string>
-    <string name="mod_file_browser_delete_title">Canc猫lar el fi艂o?</string>
-    <string name="mod_file_browser_delete_message">Canc猫lar \"%1$s\"? Sta peraci贸n no se pol anul脿r.</string>
-    <string name="mod_file_browser_delete_failed">Canc猫lajament fi艂o fai脿</string>
-    <string name="mod_file_browser_protected">Fi艂o protej霉</string>
-    <string name="mod_file_browser_protected_file">Metadati del modpack protejai 路 No se pol modificar o cancellar</string>
+    <string name="mod_file_browser_editable_file">%1$s · Toca par védar o modificar</string>
+    <string name="mod_file_browser_unsupported_file">%1$s · Anteprima no supportà</string>
+    <string name="mod_file_browser_edit_file">Védar o modificar filo</string>
+    <string name="mod_file_browser_delete_file">Cancéla filo</string>
+    <string name="mod_file_browser_delete_title">Cancélar el filo?</string>
+    <string name="mod_file_browser_delete_message">Cancélar \"%1$s\"? Sta peración no se pol anulàr.</string>
+    <string name="mod_file_browser_delete_failed">Cancélajament filo faià</string>
+    <string name="mod_file_browser_protected">Filo protejt</string>
+    <string name="mod_file_browser_protected_file">Metadati del modpack protejai · No se pol modificar o cancellar</string>
 
     <!-- Settings -->
     <string name="settings_title">Impostassioni</string>
-    <string name="settings_section_appearance">Asp猫to</string>
+    <string name="settings_section_appearance">Aspéto</string>
     <string name="settings_section_ingame">Dento el gioco</string>
     <string name="settings_section_maintenance">Manutenscion</string>
-    <string name="settings_section_config">Fi艂i de configurazion</string>
-    <string name="settings_clear_bepinex">Net猫艂a fi艂i BepInEx</string>
-    <string name="settings_clear_bepinex_desc">Canc猫艂a tuto i fi艂i BepInEx e le assembly interop. Ndov茅 re-estrar al prossimo av矛o.</string>
-    <string name="settings_clear_dotnet">Net猫艂a dati .NET</string>
-    <string name="settings_clear_dotnet_desc">Canc猫艂a el runtime .NET e i dati de gioco copi脿i. I fi艂i sar脿 re-estrar al prossimo av矛o.</string>
-    <string name="settings_copy_resources">C貌pia risorse de gioco</string>
-    <string name="settings_copy_resources_desc">C貌pia i dati de risorse de gioco par艂a瀛樺偍鏈湴 par la generazion interop.</string>
+    <string name="settings_section_config">Fili de configurazion</string>
+    <string name="settings_clear_bepinex">Netéla fili BepInEx</string>
+    <string name="settings_clear_bepinex_desc">Cancéla tuto i fili BepInEx e le assembly interop. Ndové re-estrar al prossimo avìo.</string>
+    <string name="settings_clear_dotnet">Netéla dati .NET</string>
+    <string name="settings_clear_dotnet_desc">Cancéla el runtime .NET e i dati de gioco copiài. I fili sarà re-estrar al prossimo avìo.</string>
+    <string name="settings_copy_resources">Cópia risorse de gioco</string>
+    <string name="settings_copy_resources_desc">Cópia i dati de risorse de gioco par l'archivio local par la generazion interop.</string>
     <string name="settings_theme">Tema</string>
-    <string name="settings_language">L矛ngoa</string>
-    <string name="settings_dynamic_color">Col貌r dinamico</string>
-    <string name="settings_dynamic_color_desc">T貌sa i col貌ri Android Monet quand\'available.</string>
+    <string name="settings_language">Lìngoa</string>
+    <string name="settings_dynamic_color">Colór dinamico</string>
+    <string name="settings_dynamic_color_desc">Tósa i colóri Android Monet quand\'available.</string>
     <string name="settings_animation_disabled">Disativa le animazion</string>
-    <string name="settings_animation_disabled_desc">Disativa le animazion de navigazion e de trasission de p谩jine.</string>
+    <string name="settings_animation_disabled_desc">Disativa le animazion de navigazion e de trasission de pájine.</string>
     <string name="settings_about">Info</string>
 
     <!-- Confirm Dialogs -->
-    <string name="confirm_clear_bepinex_title">Net猫艂a fi艂i BepInEx?</string>
-    <string name="confirm_clear_bepinex_msg">Sto canc猫lar脿 tuto i fi艂i BepInEx e le assembly interop par sto gioco. Ndov茅 re-estrar al prossimo av矛o.</string>
-    <string name="confirm_clear_dotnet_title">Net猫艂a dati .NET?</string>
-    <string name="confirm_clear_dotnet_msg">Sto canc猫lar脿 el runtime .NET e i dati de gioco copi脿i par sto gioco. I fi艂i sar脿 re-estrar al prossimo av矛o.</string>
-    <string name="confirm_copy_resources_title">C貌pia risorse de gioco?</string>
-    <string name="confirm_copy_resources_msg">Sto c貌pier脿 i dati de risorse de gioco da el APK par艂a瀛樺偍鏈湴.</string>
-    <string name="confirm_yes">S矛</string>
+    <string name="confirm_clear_bepinex_title">Netéla fili BepInEx?</string>
+    <string name="confirm_clear_bepinex_msg">Sto cancélarà tuto i fili BepInEx e le assembly interop par sto gioco. Ndové re-estrar al prossimo avìo.</string>
+    <string name="confirm_clear_dotnet_title">Netéla dati .NET?</string>
+    <string name="confirm_clear_dotnet_msg">Sto cancélarà el runtime .NET e i dati de gioco copiài par sto gioco. I fili sarà re-estrar al prossimo avìo.</string>
+    <string name="confirm_copy_resources_title">Cópia risorse de gioco?</string>
+    <string name="confirm_copy_resources_msg">Sto cópierà i dati de risorse de gioco da el APK par l'archivio local.</string>
+    <string name="confirm_yes">Sì</string>
     <string name="confirm_no">No</string>
     <string name="confirm_cancel">Anula</string>
-    <string name="confirm_delete">Canc猫la</string>
+    <string name="confirm_delete">Cancéla</string>
 
     <!-- Theme -->
     <string name="theme_dark">Scur</string>
     <string name="theme_light">艁ooso</string>
-    <string name="theme_system">Predefin矛o de BrowserAnimationsModule</string>
+    <string name="theme_system">Predefinìo de BrowserAnimationsModule</string>
 
     <!-- Language -->
     <string name="lang_english">English</string>
-    <string name="lang_chinese">绠€浣撲腑鏂?/string>
-    <string name="lang_system">Predefin矛o de BrowserAnimationsModule</string>
+    <string name="lang_chinese">简体中文</string>
+    <string name="lang_system">Predefinìo de BrowserAnimationsModule</string>
 
     <!-- About -->
     <string name="about_title">BepInEx Launcher</string>
     <string name="about_description">Un loader BepInEx con suport Android</string>
     <string name="about_version">Varsion %1$s (Costrussion %2$d)</string>
-    <string name="about_disclaimer">鈿?BepInEx Launcher no l\'猫 suport脿 ofissalmente dal proget BepInEx.</string>
+    <string name="about_disclaimer">⚠ BepInEx Launcher no l\'é suportà ofissalmente dal proget BepInEx.</string>
     <string name="about_projects_section">Progeti doparai &amp; referensai</string>
     <string name="about_project_bepinex_name">BepInEx</string>
-    <string name="about_project_bepinex_desc">Unity IL2CPP modding framework 鈥?the core plugin loader. BepInEx 6.0.0-pre.2 by BepInEx team.</string>
+    <string name="about_project_bepinex_desc">Unity IL2CPP modding framework …the core plugin loader. BepInEx 6.0.0-pre.2 by BepInEx team.</string>
     <string name="about_project_fusioncore_name">FusionCore</string>
     <string name="about_project_fusioncore_desc">Starlight team\'s Android Unity IL2CPP Runtime Container. Main reference for injection chain, Pine hooks, and NativeLoader architecture.</string>
     <string name="about_project_nextbep_name">NextBep (BepInEx.Android)</string>
@@ -141,18 +141,18 @@
     <string name="about_project_dotnet_name">dotnet/runtime</string>
     <string name="about_project_dotnet_desc">Microsoft .NET Runtime v10.0.5. Built from source with OpenSSL crypto backend to fix BoringSSL SIGSEGV on Android 16 / Xiaomi HyperOS.</string>
     <string name="about_project_openssl_name">OpenSSL</string>
-    <string name="about_project_openssl_desc">OpenSSL 3.4.0 鈥?replacing BoringSSL for ARM64 Android crypto. libcrypto.so + libssl.so.</string>
+    <string name="about_project_openssl_desc">OpenSSL 3.4.0 …replacing BoringSSL for ARM64 Android crypto. libcrypto.so + libssl.so.</string>
     <string name="about_project_pine_name">Pine</string>
     <string name="about_project_pine_desc">ART Java method hook framework (top.canyie.pine:core:0.3.0). Used for ClassLoader, PackageManager, and UnityPlayer hooks.</string>
     <string name="about_project_dobby_name">Dobby</string>
     <string name="about_project_dobby_desc">Native hook framework for ARM64. Used for il2cpp_init hook in libfusion.</string>
     <string name="about_project_bepinexandroid_name">BepInEx.Android.Launcher</string>
-    <string name="about_project_bepinexandroid_desc">Generic BepInEx Android launcher 鈥?supports multiple games with modpack management.</string>
+    <string name="about_project_bepinexandroid_desc">Generic BepInEx Android launcher …supports multiple games with modpack management.</string>
     <string name="about_project_cpp2il_name">Cpp2IL</string>
     <string name="about_project_cpp2il_desc">IL2CPP reverse engineering tool. Used for interop assembly generation.</string>
     <string name="about_dev_section">Sviluppari principali</string>
-    <string name="about_dev_names">HayashiUme 路 HexCat 路 Celestynka</string>
-    <string name="about_footer">漏2026 NextBep</string>
+    <string name="about_dev_names">HayashiUme · HexCat · Celestynka</string>
+    <string name="about_footer">©2026 NextBep</string>
 
     <string name="about_url_bepinex">https://github.com/BepInEx/BepInEx</string>
     <string name="about_url_fusioncore">https://github.com/All-Of-Us-Mods/FusionCore</string>
@@ -167,56 +167,56 @@
     <!-- Log -->
     <string name="log_title">Register BepInEx</string>
     <string name="log_share">Condividi</string>
-    <string name="log_copy">C貌pia</string>
-    <string name="log_clear">Net猫艂a</string>
-    <string name="log_empty">Anc贸no nesuna vo艂se de register. Av矛a un gioco par v茅dar i register BepInEx.</string>
-    <string name="log_copied">Register c貌pi脿 in cacola</string>
+    <string name="log_copy">Cópia</string>
+    <string name="log_clear">Netéla</string>
+    <string name="log_empty">Ancóno nesuna volse de register. Avìa un gioco par védar i register BepInEx.</string>
+    <string name="log_copied">Register cópià in cacola</string>
     <string name="log_filter_all">Tuti</string>
     <string name="log_filter_errors">Erori</string>
-    <string name="log_filter_warnings">Av矛si</string>
-    <string name="log_auto_scroll">Scorimento autom脿tico</string>
+    <string name="log_filter_warnings">Avìsi</string>
+    <string name="log_auto_scroll">Scorimento automàtico</string>
 
     <!-- Storage Permission -->
-    <string name="storage_permission_title">Permessi de archivio ndov茅</string>
-    <string name="storage_permission_message">BepInEx Launcher ndov茅 l\'acesso a tuto i fi艂i par estrar BepInEx e gestir i mod.</string>
-    <string name="storage_permission_grant">Conc猫di el permesso</string>
+    <string name="storage_permission_title">Permessi de archivio ndové</string>
+    <string name="storage_permission_message">BepInEx Launcher ndové l\'acesso a tuto i fili par estrar BepInEx e gestir i mod.</string>
+    <string name="storage_permission_grant">Concédi el permesso</string>
 
     <!-- In-Game Settings -->
     <string name="settings_ingame_section">Dento el gioco</string>
     <string name="settings_floating_log">Register flotante dento el gioco</string>
-    <string name="settings_floating_log_desc">Mostra un but贸n de register flotante sora el gioco. Toca par v茅dar i register BepInEx in tiempo re脿l.</string>
-    <string name="settings_block_unity_kill">Bloca la sortida de av矛o Unity</string>
-    <string name="settings_block_unity_kill_desc">Bloca UnityPlayer.kill() brevemente duranto l\'av矛o. At矛va so艂a par i giochi che sortisso duranto l\'injesscion.</string>
+    <string name="settings_floating_log_desc">Mostra un butón de register flotante sora el gioco. Toca par védar i register BepInEx in tiempo reàl.</string>
+    <string name="settings_block_unity_kill">Bloca la sortida de avìo Unity</string>
+    <string name="settings_block_unity_kill_desc">Bloca UnityPlayer.kill() brevemente duranto l\'avìo. Atìva sola par i giochi che sortisso duranto l\'injesscion.</string>
 
     <!-- Launch -->
-    <string name="launch_failed">Av矛o fai脿</string>
-    <string name="launch_wait_extraction">Pati猫nssa 鈥?BepInEx anc贸o l\'猫 estrando</string>
-    <string name="launch_no_game">Nesun gioco zont脿</string>
+    <string name="launch_failed">Avìo faià</string>
+    <string name="launch_wait_extraction">Patiénssa …BepInEx ancóo l\'é estrando</string>
+    <string name="launch_no_game">Nesun gioco zontà</string>
 
     <!-- Generic -->
     <string name="ok">OK</string>
-    <string name="back">Indr矛o</string>
-    <string name="close">S猫ra</string>
-    <string name="loading">Caricamento鈥?/string>
+    <string name="back">Indrìo</string>
+    <string name="close">Séra</string>
+    <string name="loading">Caricamento…</string>
     <string name="error">Eror</string>
-    <string name="done">F脿to</string>
-    <string name="share_saved">Mesajo salv脿, torna al gioco</string>
-    <string name="crash_detected_title">L\'av矛o preaviodo del gioco no l\'猫 torn脿</string>
-    <string name="crash_detected_message">L\'av矛o preaviodo de %1$s p貌sariva av茅r cr茅p脿. P貌s-esportar i diagnostici par la risolussion deproblemi.</string>
+    <string name="done">Fàto</string>
+    <string name="share_saved">Mesajo salvà, torna al gioco</string>
+    <string name="crash_detected_title">L\'avìo preaviodo del gioco no l\'é tornà</string>
+    <string name="crash_detected_message">L\'avìo preaviodo de %1$s pósariva avér crépà. Pós-esportar i diagnostici par la risolussion deproblemi.</string>
     <string name="crash_export">Esporta diagnostici</string>
-    <string name="crash_export_failed">Esportassion diagnostici fai脿</string>
+    <string name="crash_export_failed">Esportassion diagnostici faià</string>
 
     <!-- Bootstrap Loading -->
-    <string name="bootstrap_title">Av矛o del gioco zont脿</string>
-    <string name="bootstrap_status_preparing">Preparassion de艂 pacheto bers脿glio鈥?/string>
-    <string name="bootstrap_status_copy_assets">C貌pia dati Unity鈥?/string>
-    <string name="bootstrap_status_detecting_version">Rilevassion varsion Unity鈥?/string>
-    <string name="bootstrap_status_downloading_libunity">Descaricamento libunity no stripp脿鈥?/string>
-    <string name="bootstrap_status_extracting_runtime">Estrassion fi艂i runtime鈥?/string>
-    <string name="bootstrap_status_registering_libraries">Registrassion liberarie native鈥?/string>
-    <string name="bootstrap_status_installing_hooks">Instalassion hook鈥?/string>
-    <string name="bootstrap_status_launching">Av矛o gioco鈥?/string>
-    <string name="bootstrap_status_error">Av矛o fai脿</string>
+    <string name="bootstrap_title">Avìo del gioco zontà</string>
+    <string name="bootstrap_status_preparing">Preparassion deł pacheto bersàglio…</string>
+    <string name="bootstrap_status_copy_assets">Còpia dati Unity…</string>
+    <string name="bootstrap_status_detecting_version">Rilevassion varsion Unity…</string>
+    <string name="bootstrap_status_downloading_libunity">Descaricamento libunity no strippà…</string>
+    <string name="bootstrap_status_extracting_runtime">Estrassion fiłi runtime…</string>
+    <string name="bootstrap_status_registering_libraries">Registrassion liberarie native…</string>
+    <string name="bootstrap_status_installing_hooks">Instalassion hook…</string>
+    <string name="bootstrap_status_launching">Avìo gioco…</string>
+    <string name="bootstrap_status_error">Avìo faià</string>
     <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
 </resources>
 

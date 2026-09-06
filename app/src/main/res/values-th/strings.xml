@@ -5,135 +5,143 @@
     <string name="app_tagline">BepInEx Launcher</string>
 
     <!-- Navigation -->
-    <string name="nav_games">喙€喔佮浮</string>
-    <string name="nav_modpacks">喙佮笧喙囙竵 mod</string>
-    <string name="nav_settings">喔佮覆喔｀笗喔编箟喔囙竸喙堗覆</string>
-    <string name="nav_about">喙€喔佮傅喙堗涪喔о竵喔编笟</string>
+    <string name="nav_games">เกม</string>
+    <string name="nav_modpacks">แพ็กเกจม็อด</string>
+    <string name="nav_settings">การตั้งค่า</string>
+    <string name="nav_about">เกี่ยวกับ</string>
 
     <!-- Game Detection -->
-    <string name="scan_title">喙€喔佮浮喔椸傅喙堗笗喔｀抚喔堗笧喔?/string>
-    <string name="scanning">喔佮赋喔ム副喔囙釜喙佮竵喔權斧喔侧箑喔佮浮 Unity IL2CPP鈥?/string>
-    <string name="no_games_found">喙勦浮喙堗笧喔氞箑喔佮浮 Unity IL2CPP</string>
-    <string name="no_games_hint">喔曕复喔斷笗喔编箟喔囙箑喔佮浮 Unity IL2CPP 喙€喔炧阜喙堗腑喙€喔｀复喙堗浮喔曕箟喔?/string>
-    <string name="scan_again">喔箒喔佮笝喔傅喔佮竸喔｀副喙夃竾</string>
-    <string name="rescan">喔箒喔佮笝喙冟斧喔∴箞</string>
+    <string name="scan_title">เกมที่ตรวจพบ</string>
+    <string name="scanning">กำลังสแกนเกม Unity IL2CPP…</string>
+    <string name="no_games_found">ไม่พบเกม Unity IL2CPP</string>
+    <string name="no_games_hint">ติดตั้งเกม Unity IL2CPP เพื่อเริ่มต้นใช้งาน</string>
+    <string name="scan_again">สแกนอีกครั้ง</string>
+    <string name="rescan">สแกนใหม่</string>
 
     <!-- Framework Status -->
-    <string name="framework_ready">BepInEx 喔炧福喙夃腑喔?/string>
-    <string name="framework_setting_up">喔佮赋喔ム副喔囙笗喔编箟喔囙竸喙堗覆鈥?/string>
-    <string name="extracting">喔佮赋喔ム副喔囙箒喔⑧竵 BepInEx鈥?/string>
-    <string name="mod_count">%d mod</string>
+    <string name="framework_ready">BepInEx พร้อมใช้งาน</string>
+    <string name="framework_setting_up">กำลังตั้งค่า…</string>
+    <string name="extracting">กำลังแตกไฟล์ BepInEx…</string>
+    <string name="mod_count">%d ม็อด</string>
 
     <!-- Actions -->
-    <string name="import_mod">喔權赋喙€喔傕箟喔?mod</string>
-    <string name="launch">喙€喔涏复喔斷箖喔娻箟喔囙覆喔?/string>
-    <string name="refresh">喔｀傅喙€喔熰福喔?/string>
-    <string name="delete">喔ム笟</string>
+    <string name="import_mod">นำเข้าม็อด</string>
+    <string name="launch">เปิดใช้งาน</string>
+    <string name="refresh">รีเฟรช</string>
+    <string name="delete">ลบ</string>
 
     <!-- Mods -->
-    <string name="installed_mods">mod 喔椸傅喙堗笗喔脆笖喔曕副喙夃竾喙佮弗喙夃抚</string>
-    <string name="no_mods_installed">喙勦浮喙堗浮喔?mod 喔椸傅喙堗笗喔脆笖喔曕副喙夃竾喙佮弗喙夃抚</string>
-    <string name="no_mods_hint">喙佮笗喔班笝喔赤箑喔傕箟喔?mod 喙€喔炧阜喙堗腑喙€喔炧复喙堗浮喙勦笩喔ム箤 .dll</string>
-    <string name="mod_deleted">喔ム笟喙佮弗喙夃抚: %s</string>
-    <string name="mod_imported">喔權赋喙€喔傕箟喔侧箒喔ム箟喔? %s</string>
-    <string name="import_failed">喔權赋喙€喔傕箟喔侧弗喙夃浮喙€喔弗喔?/string>
+    <string name="installed_mods">ม็อดที่ติดตั้งแล้ว</string>
+    <string name="no_mods_installed">ยังไม่มีม็อดที่ติดตั้ง</string>
+    <string name="no_mods_hint">แตะ \"นำเข้าม็อด\" เพื่อเพิ่มไฟล์ .dll</string>
+    <string name="mod_deleted">ลบแล้ว: %s</string>
+    <string name="mod_imported">นำเข้าแล้ว: %s</string>
+    <string name="import_failed">นำเข้าไม่สำเร็จ</string>
 
     <!-- Modpacks -->
-    <string name="modpack_title">喙佮笧喙囙竵 mod</string>
-    <string name="modpack_create">喔福喙夃覆喔囙箒喔炧箛喔?mod</string>
-    <string name="modpack_delete">喔ム笟喙佮笧喙囙竵 mod</string>
-    <string name="modpack_rename">喙€喔涏弗喔掂箞喔⑧笝喔娻阜喙堗腑</string>
-    <string name="modpack_export">喔箞喔囙腑喔竵</string>
-    <string name="modpack_import">喔權赋喙€喔傕箟喔侧箒喔炧箛喔?mod</string>
-    <string name="modpack_select_active">喙€喔涏复喔斷箖喔娻箟喔囙覆喔?/string>
-    <string name="modpack_vanilla">Vanilla (喙勦浮喙堗浮喔?mod)</string>
-    <string name="modpack_name_hint">喔娻阜喙堗腑喙佮笧喙囙竵 mod</string>
-    <string name="modpack_confirm_delete_title">喔ム笟喙佮笧喙囙竵 mod</string>
-    <string name="modpack_confirm_delete_msg">喔ム笟 \"%s\" 喙佮弗喔?mod 喔椸副喙夃竾喔浮喔斷斧喔｀阜喔箘喔∴箞? 喔佮覆喔｀笖喔赤箑喔權复喔權竵喔侧福喔權傅喙夃箘喔∴箞喔覆喔∴覆喔｀笘喔⑧箟喔笝喔佮弗喔编笟喙勦笖喙?/string>
-    <string name="modpack_created">喔福喙夃覆喔囙箒喔炧箛喔?mod 喙佮弗喙夃抚: %s</string>
-    <string name="modpack_deleted">喔ム笟喙佮笧喙囙竵 mod 喙佮弗喙夃抚: %s</string>
-    <string name="modpack_exported">喔箞喔囙腑喔竵喙佮弗喙夃抚: %s</string>
-    <string name="modpack_imported">喔權赋喙€喔傕箟喔侧箒喔ム箟喔? %s</string>
-    <string name="modpack_no_mods">喙勦浮喙堗浮喔?mod 喙冟笝喙佮笧喙囙竵喔權傅喙?/string>
-    <string name="modpack_add_mod">喙€喔炧复喙堗浮 mod</string>
-    <string name="modpack_target_game">喔赋喔福喔编笟: %s</string>
-    <string name="modpack_mod_count">%d mod</string>
-    <string name="modpack_active">喙冟笂喙夃竾喔侧笝喔涪喔灌箞</string>
+    <string name="modpack_title">แพ็กเกจม็อด</string>
+    <string name="modpack_create">สร้างแพ็กเกจม็อด</string>
+    <string name="modpack_delete">ลบแพ็กเกจม็อด</string>
+    <string name="modpack_rename">เปลี่ยนชื่อ</string>
+    <string name="modpack_export">ส่งออก</string>
+    <string name="modpack_import">นำเข้าแพ็กเกจม็อด</string>
+    <string name="modpack_select_active">เปิดใช้งาน</string>
+    <string name="modpack_vanilla">Vanilla (ไม่มีม็อด)</string>
+    <string name="modpack_name_hint">ชื่อแพ็กเกจม็อด</string>
+    <string name="modpack_confirm_delete_title">ลบแพ็กเกจม็อด</string>
+    <string name="modpack_confirm_delete_msg">ลบ \"%s\" และม็อดทั้งหมดหรือไม่? การดำเนินการนี้ไม่สามารถย้อนกลับได้</string>
+    <string name="modpack_created">สร้างแพ็กเกจม็อดแล้ว: %s</string>
+    <string name="modpack_deleted">ลบแพ็กเกจม็อดแล้ว: %s</string>
+    <string name="modpack_exported">ส่งออกแล้ว: %s</string>
+    <string name="modpack_imported">นำเข้าแล้ว: %s</string>
+    <string name="modpack_no_mods">ไม่มีม็อดในแพ็กเกจนี้</string>
+    <string name="modpack_add_mod">เพิ่มม็อด</string>
+    <string name="modpack_target_game">สำหรับ: %s</string>
+    <string name="modpack_mod_count">%d ม็อด</string>
+    <string name="modpack_active">เปิดใช้งานอยู่</string>
 
     <!-- Config Editor -->
-    <string name="config_editor_title">喔曕副喔о箒喔佮箟喙勦競喔佮覆喔｀竵喔赤斧喔權笖喔勦箞喔?/string>
-    <string name="config_editor_save">喔氞副喔權笚喔多竵</string>
-    <string name="config_editor_save_failed">喔氞副喔權笚喔多竵喙勦笩喔ム箤喔ム箟喔∴箑喔弗喔?/string>
-    <string name="config_editor_unsaved">喔∴傅喔佮覆喔｀箑喔涏弗喔掂箞喔⑧笝喙佮笡喔ム竾喔椸傅喙堗涪喔编竾喙勦浮喙堗箘喔斷箟喔氞副喔權笚喔多竵</string>
-    <string name="config_editor_discard_title">喔ム赴喔椸复喙夃竾喔佮覆喔｀箑喔涏弗喔掂箞喔⑧笝喙佮笡喔ム竾?</string>
-    <string name="config_editor_discard_msg">喔勦父喔撪浮喔掂竵喔侧福喙€喔涏弗喔掂箞喔⑧笝喙佮笡喔ム竾喔椸傅喙堗涪喔编竾喙勦浮喙堗箘喔斷箟喔氞副喔權笚喔多竵 喔曕箟喔竾喔佮覆喔｀弗喔班笚喔脆箟喔囙斧喔｀阜喔箘喔∴箞?</string>
-    <string name="config_editor_no_configs">喙勦浮喙堗浮喔掂箘喔熰弗喙屶竵喔赤斧喔權笖喔勦箞喔?/string>
+    <string name="config_editor_title">ตัวแก้ไขการตั้งค่า</string>
+    <string name="config_editor_save">บันทึก</string>
+    <string name="config_editor_save_failed">บันทึกไฟล์ไม่สำเร็จ</string>
+    <string name="config_editor_unsaved">มีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก</string>
+    <string name="config_editor_discard_title">ละทิ้งการเปลี่ยนแปลง?</string>
+    <string name="config_editor_discard_msg">คุณมีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก ต้องการละทิ้งหรือไม่?</string>
+    <string name="config_editor_no_configs">ไม่มีไฟล์การตั้งค่า</string>
 
     <!-- Mod File Browser -->
-    <string name="mod_file_browser_title">喙勦笩喔ム箤 mod</string>
-    <string name="mod_file_browser_empty">喙勦笖喙€喔｀竵喔椸腑喔｀傅喔權傅喙夃抚喙堗覆喔囙箑喔涏弗喙堗覆</string>
-    <string name="mod_file_browser_missing">喙勦笖喙€喔｀竵喔椸腑喔｀傅喔傕腑喔囙箒喔炧箛喔?mod 喙勦浮喙堗浮喔掂腑喔⑧腹喙?/string>
-    <string name="mod_file_browser_directory">喙勦笖喙€喔｀竵喔椸腑喔｀傅</string>
-    <string name="mod_file_browser_editable_file">%1$s 路 喙佮笗喔班箑喔炧阜喙堗腑喔斷腹喔福喔粪腑喙佮竵喙夃箘喔?/string>
-    <string name="mod_file_browser_unsupported_file">%1$s 路 喙勦浮喙堗福喔竾喔｀副喔氞竵喔侧福喙佮釜喔斷竾喔曕副喔о腑喔⑧箞喔侧竾</string>
-    <string name="mod_file_browser_edit_file">喔斷腹喔福喔粪腑喙佮竵喙夃箘喔傕箘喔熰弗喙?/string>
-    <string name="mod_file_browser_delete_file">喔ム笟喙勦笩喔ム箤</string>
-    <string name="mod_file_browser_delete_title">喔ム笟喙勦笩喔ム箤?</string>
-    <string name="mod_file_browser_delete_message">喔ム笟 \"%1$s\"? 喔佮覆喔｀笖喔赤箑喔權复喔權竵喔侧福喔權傅喙夃箘喔∴箞喔覆喔∴覆喔｀笘喔⑧箟喔笝喔佮弗喔编笟喙勦笖喙?/string>
-    <string name="mod_file_browser_delete_failed">喔ム笟喙勦笩喔ム箤喔ム箟喔∴箑喔弗喔?/string>
-    <string name="mod_file_browser_protected">喙勦笩喔ム箤喔椸傅喙堗笘喔灌竵喔涏箟喔竾喔佮副喔?/string>
-    <string name="mod_file_browser_protected_file">喔傕箟喔浮喔灌弗喙€喔∴笗喔侧競喔竾喙佮笧喙囙竵 mod 喔椸傅喙堗笘喔灌竵喔涏箟喔竾喔佮副喔?路 喙勦浮喙堗釜喔侧浮喔侧福喔栢箒喔佮箟喙勦競喔福喔粪腑喔ム笟喙勦笖喙?/string>
+    <string name="mod_file_browser_title">ไฟล์ม็อด</string>
+    <string name="mod_file_browser_empty">ไดเรกทอรีนี้ว่างเปล่า</string>
+    <string name="mod_file_browser_missing">ไดเรกทอรีแพ็กเกจม็อดไม่มีอยู่</string>
+    <string name="mod_file_browser_directory">ไดเรกทอรี</string>
+    <string name="mod_file_browser_editable_file">%1$s · แตะเพื่อดูหรือแก้ไข</string>
+    <string name="mod_file_browser_unsupported_file">%1$s · ไม่รองรับการแสดงตัวอย่าง</string>
+    <string name="mod_file_browser_edit_file">ดูหรือแก้ไขไฟล์</string>
+    <string name="mod_file_browser_delete_file">ลบไฟล์</string>
+    <string name="mod_file_browser_delete_title">ลบไฟล์?</string>
+    <string name="mod_file_browser_delete_message">ลบ \"%1$s\"? การดำเนินการนี้ไม่สามารถย้อนกลับได้</string>
+    <string name="mod_file_browser_delete_failed">ลบไฟล์ไม่สำเร็จ</string>
+    <string name="mod_file_browser_protected">ไฟล์ที่ได้รับการป้องกัน</string>
+    <string name="mod_file_browser_protected_file">ข้อมูลเมตาแพ็กเกจม็อดที่ได้รับการป้องกัน · ไม่สามารถแก้ไขหรือลบได้</string>
 
     <!-- Settings -->
-    <string name="settings_title">喔佮覆喔｀笗喔编箟喔囙竸喙堗覆</string>
-    <string name="settings_section_appearance">喔ム副喔佮俯喔撪赴</string>
-    <string name="settings_section_ingame">喙冟笝喙€喔佮浮</string>
-    <string name="settings_section_maintenance">喔佮覆喔｀笟喔赤福喔膏竾喔｀副喔佮俯喔?/string>
-    <string name="settings_section_config">喙勦笩喔ム箤喔佮赋喔笝喔斷竸喙堗覆</string>
-    <string name="settings_clear_bepinex">喔ム箟喔侧竾喙勦笩喔ム箤 BepInEx</string>
-    <string name="settings_clear_bepinex_desc">喔ム笟喙勦笩喔ム箤 BepInEx 喔椸副喙夃竾喔浮喔斷箒喔ム赴绋嬪簭闆?interop 喔堗赋喙€喔涏箛喔權笗喙夃腑喔囙箒喔⑧竵喙冟斧喔∴箞喙冟笝喔佮覆喔｀箑喔涏复喔斷竸喔｀副喙夃竾喔栢副喔斷箘喔?/string>
-    <string name="settings_clear_dotnet">喔ム箟喔侧竾喔傕箟喔浮喔灌弗 .NET</string>
-    <string name="settings_clear_dotnet_desc">喔ム笟 runtime .NET 喙佮弗喔班競喙夃腑喔∴腹喔ム箑喔佮浮喔椸傅喙堗竸喔编笖喔ム腑喔?喙勦笩喔ム箤喔堗赴喔栢腹喔佮箒喔⑧竵喙冟斧喔∴箞喙冟笝喔佮覆喔｀箑喔涏复喔斷竸喔｀副喙夃竾喔栢副喔斷箘喔?/string>
-    <string name="settings_copy_resources">喔勦副喔斷弗喔竵喔椸福喔编笧喔⑧覆喔佮福喙€喔佮浮</string>
-    <string name="settings_copy_resources_desc">喔勦副喔斷弗喔竵喔傕箟喔浮喔灌弗喔椸福喔编笧喔⑧覆喔佮福喙€喔佮浮喙勦笡喔⑧副喔囙笚喔掂箞喔堗副喔斷箑喔佮箛喔氞箖喔權箑喔勦福喔粪箞喔竾喙€喔炧阜喙堗腑喔福喙夃覆喔?interop</string>
-    <string name="settings_theme">喔樴傅喔?/string>
-    <string name="settings_language">喔犩覆喔┼覆</string>
-    <string name="settings_dynamic_color">喔傅喙佮笟喔氞箘喔斷笝喔侧浮喔脆竵</string>
-    <string name="settings_dynamic_color_desc">喙冟笂喙夃釜喔?Android Monet 喙€喔∴阜喙堗腑喔∴傅available</string>
-    <string name="settings_animation_disabled">喔涏复喔斷竵喔侧福喙冟笂喙夃竾喔侧笝喙佮腑喔權复喙€喔∴笂喔编笝</string>
-    <string name="settings_animation_disabled_desc">喔涏复喔斷竵喔侧福喙冟笂喙夃竾喔侧笝喙佮腑喔權复喙€喔∴笂喔编笝喔佮覆喔｀笝喔赤笚喔侧竾喙佮弗喔班竵喔侧福喙€喔涏弗喔掂箞喔⑧笝喔笝喙夃覆</string>
-    <string name="settings_about">喙€喔佮傅喙堗涪喔о竵喔编笟</string>
+    <string name="settings_title">การตั้งค่า</string>
+    <string name="settings_section_appearance">ลักษณะที่ปรากฏ</string>
+    <string name="settings_section_ingame">ในเกม</string>
+    <string name="settings_section_maintenance">การบำรุงรักษา</string>
+    <string name="settings_section_config">ไฟล์การตั้งค่า</string>
+    <string name="settings_clear_bepinex">ล้างไฟล์ BepInEx</string>
+    <string name="settings_clear_bepinex_desc">ลบไฟล์ BepInEx ทั้งหมดและ Assembly interop จำเป็นต้องแตกไฟล์ใหม่ในการเปิดครั้งถัดไป</string>
+    <string name="settings_clear_dotnet">ล้างข้อมูล .NET</string>
+    <string name="settings_clear_dotnet_desc">ลบ Runtime .NET และข้อมูลเกมที่คัดลอกมา ไฟล์จะถูกแตกใหม่ในการเปิดครั้งถัดไป</string>
+    <string name="settings_unstripped_libunity">ใช้ libunity แบบไม่ถูกตัด</string>
+    <string name="settings_unstripped_libunity_desc">ดาวน์โหลดและใช้ libunity.so แบบไม่ถูกตัดที่มี icalls ครบถ้วน</string>
+    <string name="settings_clear_libunity">ล้างแคช libunity</string>
+    <string name="settings_clear_libunity_desc">ลบไฟล์ libunity.so ที่ดาวน์โหลดมาแบบไม่ถูกตัด จะดาวน์โหลดใหม่ในการเปิดครั้งถัดไป</string>
+    <string name="settings_copy_resources">คัดลอกทรัพยากรเกม</string>
+    <string name="settings_copy_resources_desc">คัดลอกข้อมูล Asset ของเกมไปยังพื้นที่จัดเก็บภายในสำหรับการสร้าง interop</string>
+    <string name="settings_theme">ธีม</string>
+    <string name="settings_language">ภาษา</string>
+    <string name="settings_dynamic_color">สีแบบไดนามิก</string>
+    <string name="settings_dynamic_color_desc">ใช้สี Android Monet เมื่อมีให้ใช้งาน</string>
+    <string name="settings_animation_disabled">ปิดการใช้งานแอนิเมชัน</string>
+    <string name="settings_animation_disabled_desc">ปิดการใช้งานแอนิเมชันการนำทางและการเปลี่ยนหน้า</string>
+    <string name="settings_about">เกี่ยวกับ</string>
 
     <!-- Confirm Dialogs -->
-    <string name="confirm_clear_bepinex_title">喔ム箟喔侧竾喙勦笩喔ム箤 BepInEx?</string>
-    <string name="confirm_clear_bepinex_msg">喔佮覆喔｀笖喔赤箑喔權复喔權竵喔侧福喔權傅喙夃笀喔班弗喔氞箘喔熰弗喙?BepInEx 喔椸副喙夃竾喔浮喔斷箒喔ム赴绋嬪簭闆?interop 喔赋喔福喔编笟喙€喔佮浮喔權傅喙?喔勦父喔撪笀喔班笗喙夃腑喔囙箒喔⑧竵喙冟斧喔∴箞喙冟笝喔佮覆喔｀箑喔涏复喔斷竸喔｀副喙夃竾喔栢副喔斷箘喔?/string>
-    <string name="confirm_clear_dotnet_title">喔ム箟喔侧竾喔傕箟喔浮喔灌弗 .NET?</string>
-    <string name="confirm_clear_dotnet_msg">喔佮覆喔｀笖喔赤箑喔權复喔權竵喔侧福喔權傅喙夃笀喔班弗喔?runtime .NET 喙佮弗喔班競喙夃腑喔∴腹喔ム箑喔佮浮喔椸傅喙堗竸喔编笖喔ム腑喔佮釜喔赤斧喔｀副喔氞箑喔佮浮喔權傅喙?喙勦笩喔ム箤喔堗赴喔栢腹喔佮箒喔⑧竵喙冟斧喔∴箞喙冟笝喔佮覆喔｀箑喔涏复喔斷竸喔｀副喙夃竾喔栢副喔斷箘喔?/string>
-    <string name="confirm_copy_resources_title">喔勦副喔斷弗喔竵喔椸福喔编笧喔⑧覆喔佮福喙€喔佮浮?</string>
-    <string name="confirm_copy_resources_msg">喔佮覆喔｀笖喔赤箑喔權复喔權竵喔侧福喔權傅喙夃笀喔班竸喔编笖喔ム腑喔佮競喙夃腑喔∴腹喔ム笚喔｀副喔炧涪喔侧竵喔｀箑喔佮浮喔堗覆喔?APK 喙勦笡喔⑧副喔囙笚喔掂箞喔堗副喔斷箑喔佮箛喔氞箖喔權箑喔勦福喔粪箞喔竾</string>
-    <string name="confirm_yes">喙冟笂喙?/string>
-    <string name="confirm_no">喙勦浮喙?/string>
-    <string name="confirm_cancel">喔⑧竵喙€喔ム复喔?/string>
-    <string name="confirm_delete">喔ム笟</string>
+    <string name="confirm_clear_bepinex_title">ล้างไฟล์ BepInEx?</string>
+    <string name="confirm_clear_bepinex_msg">การดำเนินการนี้จะลบไฟล์ BepInEx ทั้งหมดและ Assembly interop สำหรับเกมนี้ คุณจะต้องแตกไฟล์ใหม่ในการเปิดครั้งถัดไป</string>
+    <string name="confirm_clear_dotnet_title">ล้างข้อมูล .NET?</string>
+    <string name="confirm_clear_dotnet_msg">การดำเนินการนี้จะลบ Runtime .NET และข้อมูลเกมที่คัดลอกมาสำหรับเกมนี้ ไฟล์จะถูกแตกใหม่ในการเปิดครั้งถัดไป</string>
+    <string name="confirm_copy_resources_title">คัดลอกทรัพยากรเกม?</string>
+    <string name="confirm_copy_resources_msg">การดำเนินการนี้จะคัดลอกข้อมูล Asset ของเกมจาก APK ไปยังพื้นที่จัดเก็บภายใน</string>
+    <string name="confirm_clear_libunity_title">ล้างแคช libunity?</string>
+    <string name="confirm_clear_libunity_msg">การดำเนินการนี้จะลบไฟล์ libunity.so ที่ดาวน์โหลดมาแบบไม่ถูกตัด จะดาวน์โหลดใหม่ในการเปิดครั้งถัดไป</string>
+    <string name="clear_libunity_done">ล้างแคช libunity แล้ว</string>
+    <string name="clear_libunity_none">ไม่มีแคช libunity ที่ต้องล้าง</string>
+    <string name="confirm_yes">ใช่</string>
+    <string name="confirm_no">ไม่</string>
+    <string name="confirm_cancel">ยกเลิก</string>
+    <string name="confirm_delete">ลบ</string>
 
     <!-- Theme -->
-    <string name="theme_dark">喔∴阜喔?/string>
-    <string name="theme_light">喔抚喙堗覆喔?/string>
-    <string name="theme_system">喔勦箞喔侧箑喔｀复喙堗浮喔曕箟喔權競喔竾喔｀赴喔氞笟</string>
+    <string name="theme_dark">มืด</string>
+    <string name="theme_light">สว่าง</string>
+    <string name="theme_system">ค่าเริ่มต้นของระบบ</string>
 
     <!-- Language -->
     <string name="lang_english">English</string>
-    <string name="lang_chinese">绠€浣撲腑鏂?/string>
-    <string name="lang_system">喔勦箞喔侧箑喔｀复喙堗浮喔曕箟喔權競喔竾喔｀赴喔氞笟</string>
+    <string name="lang_chinese">简体中文</string>
+    <string name="lang_system">ค่าเริ่มต้นของระบบ</string>
 
     <!-- About -->
     <string name="about_title">BepInEx Launcher</string>
-    <string name="about_description">喔曕副喔о箓喔弗喔?BepInEx 喔椸傅喙堗福喔竾喔｀副喔?Android</string>
-    <string name="about_version">喙€喔о腑喔｀箤喔娻副喔?%1$s (喔氞复喔ム笖喙?%2$d)</string>
-    <string name="about_disclaimer">鈿?BepInEx Launcher 喙勦浮喙堗箘喔斷箟喔｀副喔氞竵喔侧福喔笝喔编笟喔笝喔膏笝喔涪喙堗覆喔囙箑喔涏箛喔權笚喔侧竾喔佮覆喔｀笀喔侧竵喙傕竸喔｀竾喔佮覆喔?BepInEx</string>
-    <string name="about_projects_section">喙傕竸喔｀竾喔佮覆喔｀笚喔掂箞喙冟笂喙?&amp; 喔箟喔侧竾喔复喔?/string>
+    <string name="about_description">ตัวโหลด BepInEx ที่รองรับ Android</string>
+    <string name="about_version">เวอร์ชัน %1$s (บิลด์ %2$d)</string>
+    <string name="about_disclaimer">⚠ BepInEx Launcher ไม่ได้รับการสนับสนุนอย่างเป็นทางการจากโครงการ BepInEx</string>
+    <string name="about_projects_section">โครงการที่ใช้ &amp; อ้างอิง</string>
     <string name="about_project_bepinex_name">BepInEx</string>
-    <string name="about_project_bepinex_desc">Unity IL2CPP modding framework 鈥?the core plugin loader. BepInEx 6.0.0-pre.2 by BepInEx team.</string>
+    <string name="about_project_bepinex_desc">Unity IL2CPP modding framework — the core plugin loader. BepInEx 6.0.0-pre.2 by BepInEx team.</string>
     <string name="about_project_fusioncore_name">FusionCore</string>
     <string name="about_project_fusioncore_desc">Starlight team\'s Android Unity IL2CPP Runtime Container. Main reference for injection chain, Pine hooks, and NativeLoader architecture.</string>
     <string name="about_project_nextbep_name">NextBep (BepInEx.Android)</string>
@@ -141,18 +149,18 @@
     <string name="about_project_dotnet_name">dotnet/runtime</string>
     <string name="about_project_dotnet_desc">Microsoft .NET Runtime v10.0.5. Built from source with OpenSSL crypto backend to fix BoringSSL SIGSEGV on Android 16 / Xiaomi HyperOS.</string>
     <string name="about_project_openssl_name">OpenSSL</string>
-    <string name="about_project_openssl_desc">OpenSSL 3.4.0 鈥?replacing BoringSSL for ARM64 Android crypto. libcrypto.so + libssl.so.</string>
+    <string name="about_project_openssl_desc">OpenSSL 3.4.0 — replacing BoringSSL for ARM64 Android crypto. libcrypto.so + libssl.so.</string>
     <string name="about_project_pine_name">Pine</string>
     <string name="about_project_pine_desc">ART Java method hook framework (top.canyie.pine:core:0.3.0). Used for ClassLoader, PackageManager, and UnityPlayer hooks.</string>
     <string name="about_project_dobby_name">Dobby</string>
     <string name="about_project_dobby_desc">Native hook framework for ARM64. Used for il2cpp_init hook in libfusion.</string>
     <string name="about_project_bepinexandroid_name">BepInEx.Android.Launcher</string>
-    <string name="about_project_bepinexandroid_desc">Generic BepInEx Android launcher 鈥?supports multiple games with modpack management.</string>
+    <string name="about_project_bepinexandroid_desc">Generic BepInEx Android launcher — supports multiple games with modpack management.</string>
     <string name="about_project_cpp2il_name">Cpp2IL</string>
     <string name="about_project_cpp2il_desc">IL2CPP reverse engineering tool. Used for interop assembly generation.</string>
-    <string name="about_dev_section">喔權副喔佮笧喔编笒喔權覆喔弗喔编竵</string>
-    <string name="about_dev_names">HayashiUme 路 HexCat 路 Celestynka</string>
-    <string name="about_footer">漏2026 NextBep</string>
+    <string name="about_dev_section">นักพัฒนาหลัก</string>
+    <string name="about_dev_names">HayashiUme · HexCat · Celestynka</string>
+    <string name="about_footer">©2026 NextBep</string>
 
     <string name="about_url_bepinex">https://github.com/BepInEx/BepInEx</string>
     <string name="about_url_fusioncore">https://github.com/All-Of-Us-Mods/FusionCore</string>
@@ -165,58 +173,65 @@
     <string name="about_url_cpp2il">https://github.com/SamboyCoding/Cpp2IL</string>
 
     <!-- Log -->
-    <string name="log_title">喔氞副喔權笚喔多竵 BepInEx</string>
-    <string name="log_share">喙佮笂喔｀箤</string>
-    <string name="log_copy">喔勦副喔斷弗喔竵</string>
-    <string name="log_clear">喔ム箟喔侧竾</string>
-    <string name="log_empty">喔⑧副喔囙箘喔∴箞喔∴傅喔｀覆喔⑧竵喔侧福喔氞副喔權笚喔多竵 喙€喔涏复喔斷箑喔佮浮喙€喔炧阜喙堗腑喔斷腹喔氞副喔權笚喔多竵 BepInEx</string>
-    <string name="log_copied">喔勦副喔斷弗喔竵喔氞副喔權笚喔多竵喙勦笡喔⑧副喔囙竸喔ム复喔涏笟喔福喙屶笖喙佮弗喙夃抚</string>
-    <string name="log_filter_all">喔椸副喙夃竾喔浮喔?/string>
-    <string name="log_filter_errors">喔傕箟喔笢喔脆笖喔炧弗喔侧笖</string>
-    <string name="log_filter_warnings">喔勦赋喙€喔曕阜喔笝</string>
-    <string name="log_auto_scroll">喙€喔ム阜喙堗腑喔權腑喔编笗喙傕笝喔∴副喔曕复</string>
+    <string name="log_title">บันทึก BepInEx</string>
+    <string name="log_share">แชร์</string>
+    <string name="log_copy">คัดลอก</string>
+    <string name="log_clear">ล้าง</string>
+    <string name="log_empty">ยังไม่มีรายการบันทึก เปิดเกมเพื่อดูบันทึก BepInEx</string>
+    <string name="log_copied">คัดลอกบันทึกไปยังคลิปบอร์ดแล้ว</string>
+    <string name="log_filter_all">ทั้งหมด</string>
+    <string name="log_filter_errors">ข้อผิดพลาด</string>
+    <string name="log_filter_warnings">คำเตือน</string>
+    <string name="log_auto_scroll">เลื่อนอัตโนมัติ</string>
 
     <!-- Storage Permission -->
-    <string name="storage_permission_title">喔曕箟喔竾喔佮覆喔｀釜喔脆笚喔樴复喙屶竵喔侧福喙€喔傕箟喔侧笘喔多竾喔椸傅喙堗笀喔编笖喙€喔佮箛喔?/string>
-    <string name="storage_permission_message">BepInEx Launcher 喔曕箟喔竾喔佮覆喔｀箑喔傕箟喔侧笘喔多竾喙勦笩喔ム箤喔椸副喙夃竾喔浮喔斷箑喔炧阜喙堗腑喙佮涪喔?BepInEx 喙佮弗喔班笀喔编笖喔佮覆喔?mod</string>
-    <string name="storage_permission_grant">喙冟斧喙夃釜喔脆笚喔樴复喙?/string>
+    <string name="storage_permission_title">ต้องการสิทธิ์การเข้าถึงพื้นที่จัดเก็บ</string>
+    <string name="storage_permission_message">BepInEx Launcher ต้องการเข้าถึงไฟล์ทั้งหมดเพื่อแตกไฟล์ BepInEx และจัดการม็อด</string>
+    <string name="storage_permission_grant">ให้สิทธิ์</string>
 
     <!-- In-Game Settings -->
-    <string name="settings_ingame_section">喙冟笝喙€喔佮浮</string>
-    <string name="settings_floating_log">喔氞副喔權笚喔多竵喙佮笟喔氞弗喔涪喙冟笝喙€喔佮浮</string>
-    <string name="settings_floating_log_desc">喙佮釜喔斷竾喔涏父喙堗浮喔氞副喔權笚喔多竵喙佮笟喔氞弗喔涪喔涪喔灌箞喙€喔笝喔粪腑喙€喔佮浮 喙佮笗喔班箑喔炧阜喙堗腑喔斷腹喔氞副喔權笚喔多竵 BepInEx 喙佮笟喔氞箑喔｀傅喔⑧弗喙勦笚喔∴箤</string>
-    <string name="settings_block_unity_kill">喔氞弗喙囙腑喔佮竵喔侧福喔腑喔佮笀喔侧竵 Unity 喔曕腑喔權箑喔｀复喙堗浮喔曕箟喔?/string>
-    <string name="settings_block_unity_kill_desc">喔氞弗喙囙腑喔?UnityPlayer.kill() 喔娻副喙堗抚喔勦福喔侧抚喔曕腑喔權箑喔｀复喙堗浮喔曕箟喔?喙€喔涏复喔斷箖喔娻箟喔囙覆喔權箑喔夃笧喔侧赴喙€喔佮浮喔椸傅喙堗腑喔竵喔堗覆喔佮竵喔侧福喔夃傅喔?/string>
+    <string name="settings_ingame_section">ในเกม</string>
+    <string name="settings_floating_log">บันทึกลอยในเกม</string>
+    <string name="settings_floating_log_desc">แสดงปุ่มบันทึกลอยบนหน้าเกม แตะเพื่อดูบันทึก BepInEx แบบเรียลไทม์</string>
+    <string name="settings_block_unity_kill">บล็อกการปิดตัว Unity ตอนเริ่มต้น</string>
+    <string name="settings_block_unity_kill_desc">บล็อก UnityPlayer.kill() ในช่วงเวลาสั้นๆ ตอนเริ่มต้น เปิดใช้เฉพาะเกมที่ปิดตัวระหว่างการฉีด</string>
 
     <!-- Launch -->
-    <string name="launch_failed">喙€喔涏复喔斷箖喔娻箟喔囙覆喔權弗喙夃浮喙€喔弗喔?/string>
-    <string name="launch_wait_extraction">喔佮福喔膏笓喔侧福喔?鈥?BepInEx 喔⑧副喔囙竵喔赤弗喔编竾喙佮涪喔佮箘喔熰弗喙屶腑喔⑧腹喙?/string>
-    <string name="launch_no_game">喙勦浮喙堗箘喔斷箟喙€喔ム阜喔竵喙€喔佮浮</string>
+    <string name="launch_failed">เปิดใช้งานไม่สำเร็จ</string>
+    <string name="launch_wait_extraction">กรุณารอ — BepInEx กำลังแตกไฟล์อยู่</string>
+    <string name="launch_no_game">ไม่ได้เลือกเกม</string>
 
     <!-- Generic -->
-    <string name="ok">喔曕竵喔ム竾</string>
-    <string name="back">喔佮弗喔编笟</string>
-    <string name="close">喔涏复喔?/string>
-    <string name="loading">喔佮赋喔ム副喔囙箓喔弗喔斺€?/string>
-    <string name="error">喔傕箟喔笢喔脆笖喔炧弗喔侧笖</string>
-    <string name="done">喙€喔福喙囙笀喔复喙夃笝</string>
-    <string name="share_saved">喔氞副喔權笚喔多竵喔傕箟喔竸喔о覆喔∴箒喔ム箟喔?喔佮弗喔编笟喙勦笡喔椸傅喙堗箑喔佮浮</string>
-    <string name="crash_detected_title">喔佮覆喔｀箑喔涏复喔斷箑喔佮浮喔勦福喔编箟喔囙竵喙堗腑喔權箘喔∴箞喔佮弗喔编笟喔∴覆</string>
-    <string name="crash_detected_message">喔佮覆喔｀箑喔涏复喔斷竸喔｀副喙夃竾喔佮箞喔笝喔傕腑喔?%1$s 喔覆喔堗競喔编笖喔傕箟喔竾 喔勦父喔撪釜喔侧浮喔侧福喔栢釜喙堗竾喔腑喔佮競喙夃腑喔∴腹喔ム抚喔脆笝喔脆笀喔夃副喔⑧箑喔炧阜喙堗腑喙佮竵喙夃笡喔编笉喔覆</string>
-    <string name="crash_export">喔箞喔囙腑喔竵喔傕箟喔浮喔灌弗喔о复喔權复喔堗笁喔编涪</string>
-    <string name="crash_export_failed">喔箞喔囙腑喔竵喔傕箟喔浮喔灌弗喔о复喔權复喔堗笁喔编涪喔ム箟喔∴箑喔弗喔?/string>
+    <string name="ok">ตกลง</string>
+    <string name="back">ย้อนกลับ</string>
+    <string name="close">ปิด</string>
+    <string name="loading">กำลังโหลด…</string>
+    <string name="error">ข้อผิดพลาด</string>
+    <string name="done">เสร็จสิ้น</string>
+    <string name="share_saved">บันทึกข้อความแล้ว กลับไปที่เกม</string>
+    <string name="crash_detected_title">การเปิดเกมครั้งก่อนไม่ได้กลับมา</string>
+    <string name="crash_detected_message">การเปิด %1$s ครั้งก่อนอาจเกิดปัญหา คุณสามารถส่งออกข้อมูลวินิจฉัยเพื่อแก้ไขปัญหาได้</string>
+    <string name="crash_export">ส่งออกข้อมูลวินิจฉัย</string>
+    <string name="crash_export_failed">ส่งออกข้อมูลวินิจฉัยไม่สำเร็จ</string>
+
+    <!-- Update -->
+    <string name="update_title">มีอัปเดตใหม่</string>
+    <string name="update_current_version">ปัจจุบัน: %1$s</string>
+    <string name="update_latest_version">ล่าสุด: %1$s</string>
+    <string name="update_release_notes">บันทึกเวอร์ชัน</string>
+    <string name="update_download">ดาวน์โหลด</string>
+    <string name="update_later">ภายหลัง</string>
 
     <!-- Bootstrap Loading -->
-    <string name="bootstrap_title">喔佮赋喔ム副喔囙箑喔涏复喔斷箑喔佮浮喔椸傅喙堗箑喔ム阜喔竵</string>
-    <string name="bootstrap_status_preparing">喔佮赋喔ム副喔囙箑喔曕福喔掂涪喔∴箒喔炧箛喔佮箑喔佮笀喙€喔涏箟喔侧斧喔∴覆喔⑩€?/string>
-    <string name="bootstrap_status_copy_assets">喔佮赋喔ム副喔囙竸喔编笖喔ム腑喔佮競喙夃腑喔∴腹喔?Unity鈥?/string>
-    <string name="bootstrap_status_detecting_version">喔佮赋喔ム副喔囙笗喔｀抚喔堗笀喔编笟喙€喔о腑喔｀箤喔娻副喔?Unity鈥?/string>
-    <string name="bootstrap_status_downloading_libunity">喔佮赋喔ム副喔囙笖喔侧抚喔權箤喙傕斧喔ム笖 libunity 喙佮笟喔氞箘喔∴箞 strip鈥?/string>
-    <string name="bootstrap_status_extracting_runtime">喔佮赋喔ム副喔囙箒喔⑧竵喙勦笩喔ム箤 runtime鈥?/string>
-    <string name="bootstrap_status_registering_libraries">喔佮赋喔ム副喔囙弗喔囙笚喔班箑喔氞傅喔⑧笝喙勦弗喔氞福喔侧福喔?native鈥?/string>
-    <string name="bootstrap_status_installing_hooks">喔佮赋喔ム副喔囙笗喔脆笖喔曕副喙夃竾 hook鈥?/string>
-    <string name="bootstrap_status_launching">喔佮赋喔ム副喔囙箑喔涏复喔斷箑喔佮浮鈥?/string>
-    <string name="bootstrap_status_error">喙€喔涏复喔斷箖喔娻箟喔囙覆喔權弗喙夃浮喙€喔弗喔?/string>
+    <string name="bootstrap_title">กำลังเปิดเกมที่เลือก</string>
+    <string name="bootstrap_status_preparing">กำลังเตรียมแพ็กเกจเป้าหมาย…</string>
+    <string name="bootstrap_status_copy_assets">กำลังคัดลอกข้อมูล Unity…</string>
+    <string name="bootstrap_status_detecting_version">กำลังตรวจจับเวอร์ชัน Unity…</string>
+    <string name="bootstrap_status_downloading_libunity">กำลังดาวน์โหลด libunity แบบไม่ถูกตัด…</string>
+    <string name="bootstrap_status_extracting_runtime">กำลังแตกไฟล์ Runtime…</string>
+    <string name="bootstrap_status_registering_libraries">กำลังลงทะเบียนไลบรารี native…</string>
+    <string name="bootstrap_status_installing_hooks">กำลังติดตั้ง hooks…</string>
+    <string name="bootstrap_status_launching">กำลังเปิดเกม…</string>
+    <string name="bootstrap_status_error">เปิดใช้งานไม่สำเร็จ</string>
     <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
 </resources>
-
