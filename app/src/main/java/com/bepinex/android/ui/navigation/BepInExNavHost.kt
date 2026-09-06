@@ -2,8 +2,6 @@ package com.bepinex.android.ui.navigation
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
@@ -168,7 +166,7 @@ fun BepInExNavHost(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    val showBottomBar = currentRoute in listOf(NavRoutes.GAMES, "modpacks/{packageName}", "settings/{packageName}")
+    val showBottomBar = false
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -230,7 +228,8 @@ fun BepInExNavHost(
                     enterTransition = { slideInHorizontally(tween(300)) { it } + fadeIn(tween(300)) },
                     exitTransition = { slideOutHorizontally(tween(300)) { it } + fadeOut(tween(300)) }
                 ) {
-                    GameScreen(
+                    MainPagerScreen(
+                        scope = scope,
                         detectedGames = detectedGames,
                         selectedGame = selectedGame,
                         isScanning = isScanning,
@@ -243,16 +242,83 @@ fun BepInExNavHost(
                         onSelectGame = onSelectGame,
                         onRescan = onRescan,
                         onLaunch = { onLaunch(activeModpackName) },
-                        onNavigateToSettings = {
-                            selectedGame?.let {
-                                navController.navigate(NavRoutes.settings(it.packageName))
+                        modpacks = modpacks,
+                        themeMode = themeMode,
+                        language = language,
+                        dynamicColor = dynamicColor,
+                        animationDisabled = animationDisabled,
+                        floatingLogInGame = AppSettings.isFloatingLogInGameEnabled(context),
+                        blockUnityKill = AppSettings.isUnityKillBlockEnabled(context, selectedGame?.packageName ?: ""),
+                        onNavigateToAbout = { navController.navigate(NavRoutes.ABOUT) },
+                        onThemeChanged = onThemeChanged,
+                        onLanguageChanged = onLanguageChanged,
+                        onDynamicColorChanged = onDynamicColorChanged,
+                        onAnimationDisabledChanged = onAnimationDisabledChanged,
+                        onFloatingLogInGameChanged = { enabled ->
+                            AppSettings.setFloatingLogInGameEnabled(context, enabled)
+                        },
+                        onBlockUnityKillChanged = { enabled ->
+                            selectedGame?.let { game ->
+                                AppSettings.setUnityKillBlockEnabled(context, game.packageName, enabled)
                             }
                         },
-                        onNavigateToModpacks = {
-                            selectedGame?.let {
-                                navController.navigate(NavRoutes.modpacks(it.packageName))
+                        onClearBepInEx = { selectedGame?.let { onClearBepInEx(it.packageName) } },
+                        onClearDotnet = { selectedGame?.let { onClearDotnet(it.packageName) } },
+                        onCopyGameResources = { selectedGame?.let { onCopyGameResources(it.packageName) } },
+                        onCreateModpack = { name ->
+                            selectedGame?.let { game ->
+                                modpackManager.createModpack(game.packageName, name)
+                                modpacks = modpackManager.listModpacks(game.packageName)
                             }
-                        }
+                        },
+                        onDeleteModpack = { name ->
+                            selectedGame?.let { game ->
+                                modpackManager.deleteModpack(game.packageName, name)
+                                if (activeModpackName == name) activeModpackName = null
+                                modpacks = modpackManager.listModpacks(game.packageName)
+                            }
+                        },
+                        onRenameModpack = { oldName, newName ->
+                            selectedGame?.let { game ->
+                                modpackManager.renameModpack(game.packageName, oldName, newName)
+                                modpacks = modpackManager.listModpacks(game.packageName)
+                            }
+                        },
+                        onSelectModpack = { name ->
+                            selectedGame?.let { game ->
+                                val previous = activeModpackName
+                                if (previous != name) {
+                                    modpackManager.persistRuntimeState(game.packageName, previous)
+                                    if (name == null) modpackManager.clearActiveMods(game.packageName)
+                                    else modpackManager.applyModpack(game.packageName, name)
+                                    AppSettings.setActiveModpack(context, game.packageName, name)
+                                    activeModpackName = name
+                                    modpackRefreshKey++
+                                }
+                            }
+                        },
+                        onOpenModpack = { name ->
+                            selectedGame?.let { game ->
+                                navController.navigate(NavRoutes.modpackDetail(game.packageName, name))
+                            }
+                        },
+                        onExportModpack = { name ->
+                            selectedGame?.let { game ->
+                                val file = File(context.cacheDir, "$name.zip")
+                                if (modpackManager.exportModpack(game.packageName, name, file)) {
+                                    val uri = androidx.core.content.FileProvider.getUriForFile(
+                                        context, "${context.packageName}.provider", file
+                                    )
+                                    val share = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+                                        type = "application/zip"
+                                        putExtra(android.content.Intent.EXTRA_STREAM, uri)
+                                        addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                    }
+                                    context.startActivity(android.content.Intent.createChooser(share, name))
+                                }
+                            }
+                        },
+                        onImportModpack = { importModpackTrigger = true },
                     )
                 }
 
