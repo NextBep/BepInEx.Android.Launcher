@@ -12,7 +12,7 @@
 
     <!-- Game Detection -->
     <string name="scan_title">Обнаруженные игры</string>
-    <string name="scanning">Поиск игр Unity IL2CPP…</string>
+    <string name="scanning">Поиск игр Unity IL2CPP...</string>
     <string name="no_games_found">Игры Unity IL2CPP не найдены</string>
     <string name="no_games_hint">Установите игру Unity IL2CPP для начала</string>
     <string name="scan_again">Сканировать снова</string>
@@ -20,8 +20,8 @@
 
     <!-- Framework Status -->
     <string name="framework_ready">BepInEx готов</string>
-    <string name="framework_setting_up">Настройка…</string>
-    <string name="extracting">Извлечение BepInEx…</string>
+    <string name="framework_setting_up">Настройка...</string>
+    <string name="extracting">Извлечение BepInEx...</string>
     <string name="mod_count">%d мод(ов)</string>
 
     <!-- Actions -->
@@ -197,7 +197,7 @@
     <string name="ok">OK</string>
     <string name="back">Назад</string>
     <string name="close">Закрыть</string>
-    <string name="loading">Загрузка…</string>
+    <string name="loading">Загрузка...</string>
     <string name="error">Ошибка</string>
     <string name="done">Готово</string>
     <string name="share_saved">Сообщение сохранено, вернитесь к игре</string>
@@ -208,14 +208,14 @@
 
     <!-- Bootstrap Loading -->
     <string name="bootstrap_title">Запуск выбранной игры</string>
-    <string name="bootstrap_status_preparing">Подготовка целевого пакета…</string>
-    <string name="bootstrap_status_copy_assets">Копирование данных Unity…</string>
-    <string name="bootstrap_status_detecting_version">Определение версии Unity…</string>
-    <string name="bootstrap_status_downloading_libunity">Загрузка нестрипованного libunity…</string>
-    <string name="bootstrap_status_extracting_runtime">Извлечение файлов среды выполнения…</string>
-    <string name="bootstrap_status_registering_libraries">Регистрация нативных библиотек…</string>
-    <string name="bootstrap_status_installing_hooks">Установка хуков…</string>
-    <string name="bootstrap_status_launching">Запуск игры…</string>
+    <string name="bootstrap_status_preparing">Подготовка целевого пакета...</string>
+    <string name="bootstrap_status_copy_assets">Копирование данных Unity...</string>
+    <string name="bootstrap_status_detecting_version">Определение версии Unity...</string>
+    <string name="bootstrap_status_downloading_libunity">Загрузка нестрипованного libunity...</string>
+    <string name="bootstrap_status_extracting_runtime">Извлечение файлов среды выполнения...</string>
+    <string name="bootstrap_status_registering_libraries">Регистрация нативных библиотек...</string>
+    <string name="bootstrap_status_installing_hooks">Установка хуков...</string>
+    <string name="bootstrap_status_launching">Запуск игры...</string>
     <string name="bootstrap_status_error">Ошибка запуска</string>
     <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
 </resources>

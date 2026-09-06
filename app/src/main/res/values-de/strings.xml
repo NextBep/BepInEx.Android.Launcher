@@ -12,7 +12,7 @@
 
     <!-- Game Detection -->
     <string name="scan_title">Erkannte Spiele</string>
-    <string name="scanning">Scanne nach Unity IL2CPP-Spielen…</string>
+    <string name="scanning">Scanne nach Unity IL2CPP-Spielen...</string>
     <string name="no_games_found">Keine Unity IL2CPP-Spiele gefunden</string>
     <string name="no_games_hint">Installieren Sie ein Unity IL2CPP-Spiel um zu beginnen</string>
     <string name="scan_again">Erneut scannen</string>
@@ -20,8 +20,8 @@
 
     <!-- Framework Status -->
     <string name="framework_ready">BepInEx bereit</string>
-    <string name="framework_setting_up">Wird eingerichtet…</string>
-    <string name="extracting">BepInEx wird entpackt…</string>
+    <string name="framework_setting_up">Wird eingerichtet...</string>
+    <string name="extracting">BepInEx wird entpackt...</string>
     <string name="mod_count">%d Mod(s)</string>
 
     <!-- Actions -->
@@ -197,7 +197,7 @@
     <string name="ok">OK</string>
     <string name="back">Zurück</string>
     <string name="close">Schließen</string>
-    <string name="loading">Wird geladen…</string>
+    <string name="loading">Wird geladen...</string>
     <string name="error">Fehler</string>
     <string name="done">Fertig</string>
     <string name="share_saved">Nachricht gespeichert, kehren Sie zum Spiel zurück</string>
@@ -208,14 +208,14 @@
 
     <!-- Bootstrap Loading -->
     <string name="bootstrap_title">Ausgewähltes Spiel wird gestartet</string>
-    <string name="bootstrap_status_preparing">Zielpaket wird vorbereitet…</string>
-    <string name="bootstrap_status_copy_assets">Unity-Daten werden kopiert…</string>
-    <string name="bootstrap_status_detecting_version">Unity-Version wird erkannt…</string>
-    <string name="bootstrap_status_downloading_libunity">Ungestrippte libunity wird heruntergeladen…</string>
-    <string name="bootstrap_status_extracting_runtime">Laufzeitdateien werden extrahiert…</string>
-    <string name="bootstrap_status_registering_libraries">Native Bibliotheken werden registriert…</string>
-    <string name="bootstrap_status_installing_hooks">Hooks werden installiert…</string>
-    <string name="bootstrap_status_launching">Spiel wird gestartet…</string>
+    <string name="bootstrap_status_preparing">Zielpaket wird vorbereitet...</string>
+    <string name="bootstrap_status_copy_assets">Unity-Daten werden kopiert...</string>
+    <string name="bootstrap_status_detecting_version">Unity-Version wird erkannt...</string>
+    <string name="bootstrap_status_downloading_libunity">Ungestrippte libunity wird heruntergeladen...</string>
+    <string name="bootstrap_status_extracting_runtime">Laufzeitdateien werden extrahiert...</string>
+    <string name="bootstrap_status_registering_libraries">Native Bibliotheken werden registriert...</string>
+    <string name="bootstrap_status_installing_hooks">Hooks werden installiert...</string>
+    <string name="bootstrap_status_launching">Spiel wird gestartet...</string>
     <string name="bootstrap_status_error">Start fehlgeschlagen</string>
     <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
 </resources>

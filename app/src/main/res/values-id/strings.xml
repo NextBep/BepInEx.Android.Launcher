@@ -12,7 +12,7 @@
 
     <!-- Game Detection -->
     <string name="scan_title">Game Terdeteksi</string>
-    <string name="scanning">Mencari game Unity IL2CPP…</string>
+    <string name="scanning">Mencari game Unity IL2CPP...</string>
     <string name="no_games_found">Tidak Ada Game Unity IL2CPP yang Ditemukan</string>
     <string name="no_games_hint">Instal game Unity IL2CPP untuk memulai</string>
     <string name="scan_again">Pindai Lagi</string>
@@ -20,8 +20,8 @@
 
     <!-- Framework Status -->
     <string name="framework_ready">BepInEx Siap</string>
-    <string name="framework_setting_up">Menyiapkan…</string>
-    <string name="extracting">Mengekstrak BepInEx…</string>
+    <string name="framework_setting_up">Menyiapkan...</string>
+    <string name="extracting">Mengekstrak BepInEx...</string>
     <string name="mod_count">%d mod</string>
 
     <!-- Actions -->
@@ -197,7 +197,7 @@
     <string name="ok">OK</string>
     <string name="back">Kembali</string>
     <string name="close">Tutup</string>
-    <string name="loading">Memuat…</string>
+    <string name="loading">Memuat...</string>
     <string name="error">Kesalahan</string>
     <string name="done">Selesai</string>
     <string name="share_saved">Pesan tersimpan, kembali ke game</string>
@@ -208,14 +208,14 @@
 
     <!-- Bootstrap Loading -->
     <string name="bootstrap_title">Meluncurkan game yang dipilih</string>
-    <string name="bootstrap_status_preparing">Menyiapkan paket target…</string>
-    <string name="bootstrap_status_copy_assets">Menyalin data Unity…</string>
-    <string name="bootstrap_status_detecting_version">Mendeteksi versi Unity…</string>
-    <string name="bootstrap_status_downloading_libunity">Mengunduh libunity tanpa strip…</string>
-    <string name="bootstrap_status_extracting_runtime">Mengekstrak file runtime…</string>
-    <string name="bootstrap_status_registering_libraries">Mendaftarkan pustaka native…</string>
-    <string name="bootstrap_status_installing_hooks">Memasang hook…</string>
-    <string name="bootstrap_status_launching">Meluncurkan game…</string>
+    <string name="bootstrap_status_preparing">Menyiapkan paket target...</string>
+    <string name="bootstrap_status_copy_assets">Menyalin data Unity...</string>
+    <string name="bootstrap_status_detecting_version">Mendeteksi versi Unity...</string>
+    <string name="bootstrap_status_downloading_libunity">Mengunduh libunity tanpa strip...</string>
+    <string name="bootstrap_status_extracting_runtime">Mengekstrak file runtime...</string>
+    <string name="bootstrap_status_registering_libraries">Mendaftarkan pustaka native...</string>
+    <string name="bootstrap_status_installing_hooks">Memasang hook...</string>
+    <string name="bootstrap_status_launching">Meluncurkan game...</string>
     <string name="bootstrap_status_error">Peluncuran gagal</string>
     <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
 </resources>

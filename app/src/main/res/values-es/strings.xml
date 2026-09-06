@@ -12,7 +12,7 @@
 
     <!-- Game Detection -->
     <string name="scan_title">Juegos Detectados</string>
-    <string name="scanning">Buscando juegos Unity IL2CPP…</string>
+    <string name="scanning">Buscando juegos Unity IL2CPP...</string>
     <string name="no_games_found">No se encontraron juegos Unity IL2CPP</string>
     <string name="no_games_hint">Instala un juego Unity IL2CPP para comenzar</string>
     <string name="scan_again">Escanear de Nuevo</string>
@@ -20,8 +20,8 @@
 
     <!-- Framework Status -->
     <string name="framework_ready">BepInEx Listo</string>
-    <string name="framework_setting_up">Configurando…</string>
-    <string name="extracting">Extrayendo BepInEx…</string>
+    <string name="framework_setting_up">Configurando...</string>
+    <string name="extracting">Extrayendo BepInEx...</string>
     <string name="mod_count">%d mod(s)</string>
 
     <!-- Actions -->
@@ -133,7 +133,7 @@
     <string name="about_disclaimer">⚠ BepInEx Launcher no es oficialmente soportado por el proyecto BepInEx.</string>
     <string name="about_projects_section">Proyectos Utilizados &amp; Referenciados</string>
     <string name="about_project_bepinex_name">BepInEx</string>
-    <string name="about_project_bepinex_desc">Unity IL2CPP modding framework …the core plugin loader. BepInEx 6.0.0-pre.2 by BepInEx team.</string>
+    <string name="about_project_bepinex_desc">Unity IL2CPP modding framework ...the core plugin loader. BepInEx 6.0.0-pre.2 by BepInEx team.</string>
     <string name="about_project_fusioncore_name">FusionCore</string>
     <string name="about_project_fusioncore_desc">Starlight team\'s Android Unity IL2CPP Runtime Container. Main reference for injection chain, Pine hooks, and NativeLoader architecture.</string>
     <string name="about_project_nextbep_name">NextBep (BepInEx.Android)</string>
@@ -141,13 +141,13 @@
     <string name="about_project_dotnet_name">dotnet/runtime</string>
     <string name="about_project_dotnet_desc">Microsoft .NET Runtime v10.0.5. Built from source with OpenSSL crypto backend to fix BoringSSL SIGSEGV on Android 16 / Xiaomi HyperOS.</string>
     <string name="about_project_openssl_name">OpenSSL</string>
-    <string name="about_project_openssl_desc">OpenSSL 3.4.0 …replacing BoringSSL for ARM64 Android crypto. libcrypto.so + libssl.so.</string>
+    <string name="about_project_openssl_desc">OpenSSL 3.4.0 ...replacing BoringSSL for ARM64 Android crypto. libcrypto.so + libssl.so.</string>
     <string name="about_project_pine_name">Pine</string>
     <string name="about_project_pine_desc">ART Java method hook framework (top.canyie.pine:core:0.3.0). Used for ClassLoader, PackageManager, and UnityPlayer hooks.</string>
     <string name="about_project_dobby_name">Dobby</string>
     <string name="about_project_dobby_desc">Native hook framework for ARM64. Used for il2cpp_init hook in libfusion.</string>
     <string name="about_project_bepinexandroid_name">BepInEx.Android.Launcher</string>
-    <string name="about_project_bepinexandroid_desc">Generic BepInEx Android launcher …supports multiple games with modpack management.</string>
+    <string name="about_project_bepinexandroid_desc">Generic BepInEx Android launcher ...supports multiple games with modpack management.</string>
     <string name="about_project_cpp2il_name">Cpp2IL</string>
     <string name="about_project_cpp2il_desc">IL2CPP reverse engineering tool. Used for interop assembly generation.</string>
     <string name="about_dev_section">Desarrolladores Principales</string>
@@ -190,14 +190,14 @@
 
     <!-- Launch -->
     <string name="launch_failed">Error al iniciar</string>
-    <string name="launch_wait_extraction">Por favor espera …BepInEx todavía se está extrayendo</string>
+    <string name="launch_wait_extraction">Por favor espera ...BepInEx todavía se está extrayendo</string>
     <string name="launch_no_game">No se seleccionó ningún juego</string>
 
     <!-- Generic -->
     <string name="ok">OK</string>
     <string name="back">Volver</string>
     <string name="close">Cerrar</string>
-    <string name="loading">Cargando…</string>
+    <string name="loading">Cargando...</string>
     <string name="error">Error</string>
     <string name="done">Listo</string>
     <string name="share_saved">Mensaje guardado, vuelve al juego</string>
@@ -208,14 +208,14 @@
 
     <!-- Bootstrap Loading -->
     <string name="bootstrap_title">Iniciando juego seleccionado</string>
-    <string name="bootstrap_status_preparing">Preparando paquete objetivo…</string>
-    <string name="bootstrap_status_copy_assets">Copiando datos Unity…</string>
-    <string name="bootstrap_status_detecting_version">Detectando versión Unity…</string>
-    <string name="bootstrap_status_downloading_libunity">Descargando libunity sin strip…</string>
-    <string name="bootstrap_status_extracting_runtime">Extrayendo archivos de runtime…</string>
-    <string name="bootstrap_status_registering_libraries">Registrando bibliotecas nativas…</string>
-    <string name="bootstrap_status_installing_hooks">Instalando hooks…</string>
-    <string name="bootstrap_status_launching">Iniciando juego…</string>
+    <string name="bootstrap_status_preparing">Preparando paquete objetivo...</string>
+    <string name="bootstrap_status_copy_assets">Copiando datos Unity...</string>
+    <string name="bootstrap_status_detecting_version">Detectando versión Unity...</string>
+    <string name="bootstrap_status_downloading_libunity">Descargando libunity sin strip...</string>
+    <string name="bootstrap_status_extracting_runtime">Extrayendo archivos de runtime...</string>
+    <string name="bootstrap_status_registering_libraries">Registrando bibliotecas nativas...</string>
+    <string name="bootstrap_status_installing_hooks">Instalando hooks...</string>
+    <string name="bootstrap_status_launching">Iniciando juego...</string>
     <string name="bootstrap_status_error">Error al iniciar</string>
     <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
 </resources>

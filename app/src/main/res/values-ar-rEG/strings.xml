@@ -12,7 +12,7 @@
 
     <!-- Game Detection -->
     <string name="scan_title">الألعاب المكتشفة</string>
-    <string name="scanning">جاري البحث عن ألعاب Unity IL2CPP…</string>
+    <string name="scanning">جاري البحث عن ألعاب Unity IL2CPP...</string>
     <string name="no_games_found">مفيش ألعاب Unity IL2CPP اتنشأت</string>
     <string name="no_games_hint">نزل لعبة Unity IL2CPP عشان تبدأ</string>
     <string name="scan_again">امسح تاني</string>
@@ -20,8 +20,8 @@
 
     <!-- Framework Status -->
     <string name="framework_ready">BepInEx جاهز</string>
-    <string name="framework_setting_up">جاري الإعداد…</string>
-    <string name="extracting">جاري استخراج BepInEx…</string>
+    <string name="framework_setting_up">جاري الإعداد...</string>
+    <string name="extracting">جاري استخراج BepInEx...</string>
     <string name="mod_count">%d مودات</string>
 
     <!-- Actions -->
@@ -197,7 +197,7 @@
     <string name="ok">تمام</string>
     <string name="back">رجوع</string>
     <string name="close">قفل</string>
-    <string name="loading">جاري التحميل…</string>
+    <string name="loading">جاري التحميل...</string>
     <string name="error">خطأ</string>
     <string name="done">خلص</string>
     <string name="share_saved">الرسالة اتحفظت، روح على اللعبة</string>
@@ -208,14 +208,14 @@
 
     <!-- Bootstrap Loading -->
     <string name="bootstrap_title">جاري تشغيل اللعبة المختارة</string>
-    <string name="bootstrap_status_preparing">جاري تحضير الحزمة المستهدفة…</string>
-    <string name="bootstrap_status_copy_assets">جاري نسخ بيانات Unity…</string>
-    <string name="bootstrap_status_detecting_version">جاري اكتشاف إصدار Unity…</string>
-    <string name="bootstrap_status_downloading_libunity">جاري تحميل libunity اللي مش مصغّر…</string>
-    <string name="bootstrap_status_extracting_runtime">جاري استخراج ملفات بيئة التشغيل…</string>
-    <string name="bootstrap_status_registering_libraries">جاري تسجيل المكتبات الأصلية…</string>
-    <string name="bootstrap_status_installing_hooks">جاري تثبيت الخطاطات…</string>
-    <string name="bootstrap_status_launching">جاري تشغيل اللعبة…</string>
+    <string name="bootstrap_status_preparing">جاري تحضير الحزمة المستهدفة...</string>
+    <string name="bootstrap_status_copy_assets">جاري نسخ بيانات Unity...</string>
+    <string name="bootstrap_status_detecting_version">جاري اكتشاف إصدار Unity...</string>
+    <string name="bootstrap_status_downloading_libunity">جاري تحميل libunity اللي مش مصغّر...</string>
+    <string name="bootstrap_status_extracting_runtime">جاري استخراج ملفات بيئة التشغيل...</string>
+    <string name="bootstrap_status_registering_libraries">جاري تسجيل المكتبات الأصلية...</string>
+    <string name="bootstrap_status_installing_hooks">جاري تثبيت الخطاطات...</string>
+    <string name="bootstrap_status_launching">جاري تشغيل اللعبة...</string>
     <string name="bootstrap_status_error">التشغيل فشل</string>
     <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
 </resources>

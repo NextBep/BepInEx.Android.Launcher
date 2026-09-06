@@ -12,7 +12,7 @@
 
     <!-- Game Detection -->
     <string name="scan_title">已偵測到的遊戲</string>
-    <string name="scanning">正在掃描 Unity IL2CPP 遊戲…</string>
+    <string name="scanning">正在掃描 Unity IL2CPP 遊戲...</string>
     <string name="no_games_found">未找到 Unity IL2CPP 遊戲</string>
     <string name="no_games_hint">請安裝一款 Unity IL2CPP 遊戲以開始使用</string>
     <string name="scan_again">再次掃描</string>
@@ -20,8 +20,8 @@
 
     <!-- Framework Status -->
     <string name="framework_ready">BepInEx 已就緒</string>
-    <string name="framework_setting_up">正在設定…</string>
-    <string name="extracting">正在解壓 BepInEx…</string>
+    <string name="framework_setting_up">正在設定...</string>
+    <string name="extracting">正在解壓 BepInEx...</string>
     <string name="mod_count">%d 個模組</string>
 
     <!-- Actions -->
@@ -197,7 +197,7 @@
     <string name="ok">確定</string>
     <string name="back">返回</string>
     <string name="close">關閉</string>
-    <string name="loading">載入中…</string>
+    <string name="loading">載入中...</string>
     <string name="error">錯誤</string>
     <string name="done">完成</string>
     <string name="share_saved">訊息已儲存，請返回遊戲</string>
@@ -208,14 +208,14 @@
 
     <!-- Bootstrap Loading -->
     <string name="bootstrap_title">正在啟動所選遊戲</string>
-    <string name="bootstrap_status_preparing">正在準備目標套件…</string>
-    <string name="bootstrap_status_copy_assets">正在複製 Unity 資料…</string>
-    <string name="bootstrap_status_detecting_version">正在偵測 Unity 版本…</string>
-    <string name="bootstrap_status_downloading_libunity">正在下載未裁剪的 libunity…</string>
-    <string name="bootstrap_status_extracting_runtime">正在解壓執行時檔案…</string>
-    <string name="bootstrap_status_registering_libraries">正在註冊原生函式庫…</string>
-    <string name="bootstrap_status_installing_hooks">正在安裝 hooks…</string>
-    <string name="bootstrap_status_launching">正在啟動遊戲…</string>
+    <string name="bootstrap_status_preparing">正在準備目標套件...</string>
+    <string name="bootstrap_status_copy_assets">正在複製 Unity 資料...</string>
+    <string name="bootstrap_status_detecting_version">正在偵測 Unity 版本...</string>
+    <string name="bootstrap_status_downloading_libunity">正在下載未裁剪的 libunity...</string>
+    <string name="bootstrap_status_extracting_runtime">正在解壓執行時檔案...</string>
+    <string name="bootstrap_status_registering_libraries">正在註冊原生函式庫...</string>
+    <string name="bootstrap_status_installing_hooks">正在安裝 hooks...</string>
+    <string name="bootstrap_status_launching">正在啟動遊戲...</string>
     <string name="bootstrap_status_error">啟動失敗</string>
     <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
 </resources>

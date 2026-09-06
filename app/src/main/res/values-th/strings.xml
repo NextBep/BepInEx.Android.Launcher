@@ -12,7 +12,7 @@
 
     <!-- Game Detection -->
     <string name="scan_title">เกมที่ตรวจพบ</string>
-    <string name="scanning">กำลังสแกนเกม Unity IL2CPP…</string>
+    <string name="scanning">กำลังสแกนเกม Unity IL2CPP...</string>
     <string name="no_games_found">ไม่พบเกม Unity IL2CPP</string>
     <string name="no_games_hint">ติดตั้งเกม Unity IL2CPP เพื่อเริ่มต้นใช้งาน</string>
     <string name="scan_again">สแกนอีกครั้ง</string>
@@ -20,8 +20,8 @@
 
     <!-- Framework Status -->
     <string name="framework_ready">BepInEx พร้อมใช้งาน</string>
-    <string name="framework_setting_up">กำลังตั้งค่า…</string>
-    <string name="extracting">กำลังแตกไฟล์ BepInEx…</string>
+    <string name="framework_setting_up">กำลังตั้งค่า...</string>
+    <string name="extracting">กำลังแตกไฟล์ BepInEx...</string>
     <string name="mod_count">%d ม็อด</string>
 
     <!-- Actions -->
@@ -205,7 +205,7 @@
     <string name="ok">ตกลง</string>
     <string name="back">ย้อนกลับ</string>
     <string name="close">ปิด</string>
-    <string name="loading">กำลังโหลด…</string>
+    <string name="loading">กำลังโหลด...</string>
     <string name="error">ข้อผิดพลาด</string>
     <string name="done">เสร็จสิ้น</string>
     <string name="share_saved">บันทึกข้อความแล้ว กลับไปที่เกม</string>
@@ -224,14 +224,14 @@
 
     <!-- Bootstrap Loading -->
     <string name="bootstrap_title">กำลังเปิดเกมที่เลือก</string>
-    <string name="bootstrap_status_preparing">กำลังเตรียมแพ็กเกจเป้าหมาย…</string>
-    <string name="bootstrap_status_copy_assets">กำลังคัดลอกข้อมูล Unity…</string>
-    <string name="bootstrap_status_detecting_version">กำลังตรวจจับเวอร์ชัน Unity…</string>
-    <string name="bootstrap_status_downloading_libunity">กำลังดาวน์โหลด libunity แบบไม่ถูกตัด…</string>
-    <string name="bootstrap_status_extracting_runtime">กำลังแตกไฟล์ Runtime…</string>
-    <string name="bootstrap_status_registering_libraries">กำลังลงทะเบียนไลบรารี native…</string>
-    <string name="bootstrap_status_installing_hooks">กำลังติดตั้ง hooks…</string>
-    <string name="bootstrap_status_launching">กำลังเปิดเกม…</string>
+    <string name="bootstrap_status_preparing">กำลังเตรียมแพ็กเกจเป้าหมาย...</string>
+    <string name="bootstrap_status_copy_assets">กำลังคัดลอกข้อมูล Unity...</string>
+    <string name="bootstrap_status_detecting_version">กำลังตรวจจับเวอร์ชัน Unity...</string>
+    <string name="bootstrap_status_downloading_libunity">กำลังดาวน์โหลด libunity แบบไม่ถูกตัด...</string>
+    <string name="bootstrap_status_extracting_runtime">กำลังแตกไฟล์ Runtime...</string>
+    <string name="bootstrap_status_registering_libraries">กำลังลงทะเบียนไลบรารี native...</string>
+    <string name="bootstrap_status_installing_hooks">กำลังติดตั้ง hooks...</string>
+    <string name="bootstrap_status_launching">กำลังเปิดเกม...</string>
     <string name="bootstrap_status_error">เปิดใช้งานไม่สำเร็จ</string>
     <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
 </resources>

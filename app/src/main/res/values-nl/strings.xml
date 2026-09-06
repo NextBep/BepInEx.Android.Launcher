@@ -12,7 +12,7 @@
 
     <!-- Game Detection -->
     <string name="scan_title">Gedetecteerde games</string>
-    <string name="scanning">Scannen naar Unity IL2CPP games…</string>
+    <string name="scanning">Scannen naar Unity IL2CPP games...</string>
     <string name="no_games_found">Geen Unity IL2CPP games gevonden</string>
     <string name="no_games_hint">Installeer een Unity IL2CPP game om te beginnen</string>
     <string name="scan_again">Opnieuw scannen</string>
@@ -20,8 +20,8 @@
 
     <!-- Framework Status -->
     <string name="framework_ready">BepInEx gereed</string>
-    <string name="framework_setting_up">Bezig met instellen…</string>
-    <string name="extracting">BepInEx uitpakken…</string>
+    <string name="framework_setting_up">Bezig met instellen...</string>
+    <string name="extracting">BepInEx uitpakken...</string>
     <string name="mod_count">%d mod(s)</string>
 
     <!-- Actions -->
@@ -197,7 +197,7 @@
     <string name="ok">OK</string>
     <string name="back">Terug</string>
     <string name="close">Sluiten</string>
-    <string name="loading">Laden…</string>
+    <string name="loading">Laden...</string>
     <string name="error">Fout</string>
     <string name="done">Gereed</string>
     <string name="share_saved">Bericht opgeslagen, ga terug naar de game</string>
@@ -208,14 +208,14 @@
 
     <!-- Bootstrap Loading -->
     <string name="bootstrap_title">Geselecteerde game starten</string>
-    <string name="bootstrap_status_preparing">Doelpakket voorbereiden…</string>
-    <string name="bootstrap_status_copy_assets">Unity-gegevens kopiëren…</string>
-    <string name="bootstrap_status_detecting_version">Unity-versie detecteren…</string>
-    <string name="bootstrap_status_downloading_libunity">Onbewerkte libunity downloaden…</string>
-    <string name="bootstrap_status_extracting_runtime">Runtime-bestanden uitpakken…</string>
-    <string name="bootstrap_status_registering_libraries">Native bibliotheken registreren…</string>
-    <string name="bootstrap_status_installing_hooks">Hooks installeren…</string>
-    <string name="bootstrap_status_launching">Game starten…</string>
+    <string name="bootstrap_status_preparing">Doelpakket voorbereiden...</string>
+    <string name="bootstrap_status_copy_assets">Unity-gegevens kopiëren...</string>
+    <string name="bootstrap_status_detecting_version">Unity-versie detecteren...</string>
+    <string name="bootstrap_status_downloading_libunity">Onbewerkte libunity downloaden...</string>
+    <string name="bootstrap_status_extracting_runtime">Runtime-bestanden uitpakken...</string>
+    <string name="bootstrap_status_registering_libraries">Native bibliotheken registreren...</string>
+    <string name="bootstrap_status_installing_hooks">Hooks installeren...</string>
+    <string name="bootstrap_status_launching">Game starten...</string>
     <string name="bootstrap_status_error">Starten mislukt</string>
     <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
 </resources>
