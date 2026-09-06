@@ -29,6 +29,7 @@ class BootstrapActivity : Activity() {
         const val EXTRA_TARGET_PACKAGE = "target_package"
         const val EXTRA_USE_ORIGINAL_LIBUNITY = "og_libunity"
         const val EXTRA_ACTIVE_MODPACK = "active_modpack" // null/empty = vanilla
+        const val EXTRA_BLOCK_UNITY_KILL = "block_unity_kill"
 
         private const val BACKUP_UNITY_VERSION = "2017.0.0"
         private const val GLOBAL_METADATA_FILE = "global-metadata.dat"
@@ -108,6 +109,10 @@ class BootstrapActivity : Activity() {
 
         // 3. Prepare Fusion state (paths, extract zips, copy data, detect version)
         val useOriginalLibUnity = intent.getBooleanExtra(EXTRA_USE_ORIGINAL_LIBUNITY, true)
+        val blockUnityKill = intent.getBooleanExtra(
+            EXTRA_BLOCK_UNITY_KILL,
+            AppSettings.isUnityKillBlockEnabled(this, targetPackage)
+        )
         preparedConfig = prepareFusionState(targetPackage, gameContext, useOriginalLibUnity)
 
         // 4. Register game native libraries (match FusionCore: no exclusions)
@@ -128,7 +133,7 @@ class BootstrapActivity : Activity() {
             ClassLoaderHooks.installHooks(gameContext.classLoader)
             PackageManagerHooks.installHooks(packageManager)
             InstrumentationHooks.install()
-            UnityPlayerHooks.installHooks(gameContext)
+            UnityPlayerHooks.installHooks(gameContext, blockUnityKill)
             BepInExLog.i("Base hooks installed")
         } catch (e: Exception) {
             throw IllegalStateException("Failed to install base hooks", e)

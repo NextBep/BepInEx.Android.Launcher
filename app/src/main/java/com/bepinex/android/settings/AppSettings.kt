@@ -15,6 +15,7 @@ object AppSettings {
     private const val KEY_THEME_MODE = "theme_mode"
     private const val KEY_LANGUAGE = "language"
     private const val KEY_FLOATING_LOG_IN_GAME = "floating_log_in_game"
+    private const val KEY_BLOCK_UNITY_KILL_PREFIX = "block_unity_kill_"
     private const val KEY_ACTIVE_MODPACK_PREFIX = "active_modpack_"
 
     enum class ThemeMode {
@@ -81,6 +82,16 @@ object AppSettings {
 
     fun setFloatingLogInGameEnabled(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_FLOATING_LOG_IN_GAME, enabled).apply()
+    }
+
+    /** Whether startup calls to UnityPlayer.kill() should be blocked for a game. */
+    fun isUnityKillBlockEnabled(context: Context, packageName: String): Boolean =
+        prefs(context).getBoolean(KEY_BLOCK_UNITY_KILL_PREFIX + packageName, false)
+
+    fun setUnityKillBlockEnabled(context: Context, packageName: String, enabled: Boolean) {
+        prefs(context).edit()
+            .putBoolean(KEY_BLOCK_UNITY_KILL_PREFIX + packageName, enabled)
+            .apply()
     }
 
     fun getActiveModpack(context: Context, packageName: String): String? =

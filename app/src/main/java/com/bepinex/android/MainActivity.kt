@@ -258,6 +258,10 @@ class MainActivity : ComponentActivity() {
             val intent = Intent(this, BootstrapActivity::class.java).apply {
                 putExtra(BootstrapActivity.EXTRA_TARGET_PACKAGE, game.packageName)
                 putExtra(BootstrapActivity.EXTRA_USE_ORIGINAL_LIBUNITY, true)
+                putExtra(
+                    BootstrapActivity.EXTRA_BLOCK_UNITY_KILL,
+                    AppSettings.isUnityKillBlockEnabled(this@MainActivity, game.packageName)
+                )
                 modpackName?.let { putExtra(BootstrapActivity.EXTRA_ACTIVE_MODPACK, it) }
             }
             startActivity(intent)

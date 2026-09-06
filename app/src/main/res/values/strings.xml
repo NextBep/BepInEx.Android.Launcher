@@ -165,6 +165,8 @@
     <string name="settings_ingame_section">In-Game</string>
     <string name="settings_floating_log">Floating Log in Game</string>
     <string name="settings_floating_log_desc">Show a floating log button on top of the game. Tap to view real-time BepInEx logs.</string>
+    <string name="settings_block_unity_kill">Block Unity startup exit</string>
+    <string name="settings_block_unity_kill_desc">Block UnityPlayer.kill() briefly during startup. Enable only for games that exit during injection.</string>
 
     <!-- Launch -->
     <string name="launch_failed">Launch failed</string>

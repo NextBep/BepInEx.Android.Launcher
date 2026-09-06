@@ -26,11 +26,13 @@ fun SettingsScreen(
     themeMode: AppSettings.ThemeMode,
     language: AppSettings.Language,
     floatingLogInGame: Boolean,
+    blockUnityKill: Boolean,
     onNavigateBack: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onThemeChanged: (AppSettings.ThemeMode) -> Unit,
     onLanguageChanged: (AppSettings.Language) -> Unit,
     onFloatingLogInGameChanged: (Boolean) -> Unit,
+    onBlockUnityKillChanged: (Boolean) -> Unit,
     onClearBepInEx: () -> Unit,
     onClearDotnet: () -> Unit,
     onCopyGameResources: () -> Unit
@@ -85,6 +87,23 @@ fun SettingsScreen(
                             tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     },
                     modifier = Modifier.clickable { showThemeMenu = true }
+                )
+            }
+
+            item {
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.settings_block_unity_kill)) },
+                    supportingContent = { Text(stringResource(R.string.settings_block_unity_kill_desc)) },
+                    leadingContent = {
+                        Icon(Icons.Outlined.Shield, null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    },
+                    trailingContent = {
+                        Switch(
+                            checked = blockUnityKill,
+                            onCheckedChange = onBlockUnityKillChanged
+                        )
+                    }
                 )
             }
 

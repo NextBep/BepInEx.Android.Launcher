@@ -165,6 +165,8 @@
     <string name="settings_ingame_section">游戏内</string>
     <string name="settings_floating_log">游戏内悬浮日志</string>
     <string name="settings_floating_log_desc">在游戏画面上显示一个悬浮日志按钮。点击可查看实时 BepInEx 日志。</string>
+    <string name="settings_block_unity_kill">阻止 Unity 启动退出</string>
+    <string name="settings_block_unity_kill_desc">在启动阶段短暂拦截 UnityPlayer.kill()。仅在游戏因注入而退出时开启。</string>
 
     <!-- Launch -->
     <string name="launch_failed">启动失败</string>

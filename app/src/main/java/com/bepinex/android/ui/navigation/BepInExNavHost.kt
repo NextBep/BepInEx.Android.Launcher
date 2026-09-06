@@ -388,11 +388,15 @@ fun BepInExNavHost(
                     var floatingLogInGame by remember {
                         mutableStateOf(AppSettings.isFloatingLogInGameEnabled(settingsContext))
                     }
+                    var blockUnityKill by remember(packageName) {
+                        mutableStateOf(AppSettings.isUnityKillBlockEnabled(settingsContext, packageName))
+                    }
                     SettingsScreen(
                         packageName = packageName,
                         themeMode = themeMode,
                         language = language,
                         floatingLogInGame = floatingLogInGame,
+                        blockUnityKill = blockUnityKill,
                         onNavigateBack = { navController.popBackStack() },
                         onNavigateToAbout = { navController.navigate(NavRoutes.ABOUT) },
                         onThemeChanged = onThemeChanged,
@@ -400,6 +404,10 @@ fun BepInExNavHost(
                         onFloatingLogInGameChanged = { enabled ->
                             AppSettings.setFloatingLogInGameEnabled(settingsContext, enabled)
                             floatingLogInGame = enabled
+                        },
+                        onBlockUnityKillChanged = { enabled ->
+                            AppSettings.setUnityKillBlockEnabled(settingsContext, packageName, enabled)
+                            blockUnityKill = enabled
                         },
                         onClearBepInEx = { onClearBepInEx(packageName) },
                         onClearDotnet = { onClearDotnet(packageName) },
