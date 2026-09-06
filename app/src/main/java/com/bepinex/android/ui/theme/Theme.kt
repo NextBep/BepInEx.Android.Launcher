@@ -10,24 +10,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.bepinex.android.settings.AppSettings
 
-// Brand seed color
-// A purple-blue that gives BepInEx identity without overpowering Material 3
-private val BrandSeed = Color(0xFF6750A4)  // M3 baseline purple
-
+// Deep blue brand fallback for devices without Monet support or when disabled.
 // Fallback color schemes for devices without dynamic color (pre-Android 12)
 private val LightFallbackColors = lightColorScheme(
-    primary = Color(0xFF6750A4),
+    primary = Color(0xFF164A8A),
     onPrimary = Color.White,
-    primaryContainer = Color(0xFFEADDFF),
-    onPrimaryContainer = Color(0xFF21005D),
-    secondary = Color(0xFF625B71),
+    primaryContainer = Color(0xFFD5E3FF),
+    onPrimaryContainer = Color(0xFF001B3D),
+    secondary = Color(0xFF555F71),
     onSecondary = Color.White,
-    secondaryContainer = Color(0xFFE8DEF8),
-    onSecondaryContainer = Color(0xFF1D192B),
-    tertiary = Color(0xFF7D5260),
+    secondaryContainer = Color(0xFFD9E3F8),
+    onSecondaryContainer = Color(0xFF121C2B),
+    tertiary = Color(0xFF6C5775),
     onTertiary = Color.White,
-    tertiaryContainer = Color(0xFFFFD8E4),
-    onTertiaryContainer = Color(0xFF31111D),
+    tertiaryContainer = Color(0xFFF4D9F1),
+    onTertiaryContainer = Color(0xFF251329),
     error = Color(0xFFB3261E),
     onError = Color.White,
     errorContainer = Color(0xFFF9DEDC),
@@ -42,23 +39,23 @@ private val LightFallbackColors = lightColorScheme(
     outlineVariant = Color(0xFFCAC4D0),
     inverseSurface = Color(0xFF313033),
     inverseOnSurface = Color(0xFFF4EFF4),
-    inversePrimary = Color(0xFFD0BCFF),
-    surfaceTint = Color(0xFF6750A4)
+    inversePrimary = Color(0xFFA9C7FF),
+    surfaceTint = Color(0xFF164A8A)
 )
 
 private val DarkFallbackColors = darkColorScheme(
-    primary = Color(0xFFD0BCFF),
-    onPrimary = Color(0xFF381E72),
-    primaryContainer = Color(0xFF4F378B),
-    onPrimaryContainer = Color(0xFFEADDFF),
-    secondary = Color(0xFFCCC2DC),
-    onSecondary = Color(0xFF332D41),
-    secondaryContainer = Color(0xFF4A4458),
-    onSecondaryContainer = Color(0xFFE8DEF8),
-    tertiary = Color(0xFFEFB8C8),
-    onTertiary = Color(0xFF492532),
-    tertiaryContainer = Color(0xFF633B48),
-    onTertiaryContainer = Color(0xFFFFD8E4),
+    primary = Color(0xFFA9C7FF),
+    onPrimary = Color(0xFF003062),
+    primaryContainer = Color(0xFF004786),
+    onPrimaryContainer = Color(0xFFD5E3FF),
+    secondary = Color(0xFFBDC7DC),
+    onSecondary = Color(0xFF273141),
+    secondaryContainer = Color(0xFF3D4759),
+    onSecondaryContainer = Color(0xFFD9E3F8),
+    tertiary = Color(0xFFD8BDE0),
+    onTertiary = Color(0xFF3B2942),
+    tertiaryContainer = Color(0xFF523E59),
+    onTertiaryContainer = Color(0xFFF4D9F1),
     error = Color(0xFFF2B8B5),
     onError = Color(0xFF601410),
     errorContainer = Color(0xFF8C1D18),
@@ -73,8 +70,8 @@ private val DarkFallbackColors = darkColorScheme(
     outlineVariant = Color(0xFF49454F),
     inverseSurface = Color(0xFFE6E1E5),
     inverseOnSurface = Color(0xFF313033),
-    inversePrimary = Color(0xFF6750A4),
-    surfaceTint = Color(0xFFD0BCFF)
+    inversePrimary = Color(0xFF164A8A),
+    surfaceTint = Color(0xFFA9C7FF)
 )
 
 // Theme
@@ -83,7 +80,7 @@ private val DarkFallbackColors = darkColorScheme(
  * BepInEx Launcher theme  -- Material 3 Design.
  *
  * Uses dynamic colors (Material You) on Android 12+,
- * falls back to a purple-toned Material 3 baseline scheme.
+ * falls back to a deep-blue Material 3 scheme.
  *
  * @param themeMode Dark / Light / System override
  * @param dynamicColor Whether to use Material You dynamic colors (default true on API 31+)

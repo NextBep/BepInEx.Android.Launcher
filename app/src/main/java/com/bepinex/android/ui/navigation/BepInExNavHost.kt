@@ -53,12 +53,16 @@ fun BepInExNavHost(
     // Settings state
     themeMode: AppSettings.ThemeMode,
     language: AppSettings.Language,
+    dynamicColor: Boolean,
+    animationDisabled: Boolean,
     // Callbacks
     onSelectGame: (GameDetector.DetectedGame) -> Unit,
     onRescan: () -> Unit,
     onLaunch: (modpackName: String?) -> Unit,
     onThemeChanged: (AppSettings.ThemeMode) -> Unit,
     onLanguageChanged: (AppSettings.Language) -> Unit,
+    onDynamicColorChanged: (Boolean) -> Unit,
+    onAnimationDisabledChanged: (Boolean) -> Unit,
     onClearBepInEx: (String) -> Unit,
     onClearDotnet: (String) -> Unit,
     onCopyGameResources: (String) -> Unit
@@ -405,10 +409,14 @@ fun BepInExNavHost(
                             AppSettings.setFloatingLogInGameEnabled(settingsContext, enabled)
                             floatingLogInGame = enabled
                         },
-                        onBlockUnityKillChanged = { enabled ->
+    onBlockUnityKillChanged = { enabled ->
                             AppSettings.setUnityKillBlockEnabled(settingsContext, packageName, enabled)
                             blockUnityKill = enabled
                         },
+                        dynamicColor = dynamicColor,
+                        animationDisabled = animationDisabled,
+                        onDynamicColorChanged = onDynamicColorChanged,
+                        onAnimationDisabledChanged = onAnimationDisabledChanged,
                         onClearBepInEx = { onClearBepInEx(packageName) },
                         onClearDotnet = { onClearDotnet(packageName) },
                         onCopyGameResources = { onCopyGameResources(packageName) }

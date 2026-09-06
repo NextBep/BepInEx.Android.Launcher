@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bepinex.android.R
 import com.bepinex.android.settings.AppSettings
+import android.os.Build
 
 /**
  * Settings screen with theme, language, and maintenance actions.
@@ -27,12 +28,16 @@ fun SettingsScreen(
     language: AppSettings.Language,
     floatingLogInGame: Boolean,
     blockUnityKill: Boolean,
+    dynamicColor: Boolean,
+    animationDisabled: Boolean,
     onNavigateBack: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onThemeChanged: (AppSettings.ThemeMode) -> Unit,
     onLanguageChanged: (AppSettings.Language) -> Unit,
     onFloatingLogInGameChanged: (Boolean) -> Unit,
     onBlockUnityKillChanged: (Boolean) -> Unit,
+    onDynamicColorChanged: (Boolean) -> Unit,
+    onAnimationDisabledChanged: (Boolean) -> Unit,
     onClearBepInEx: () -> Unit,
     onClearDotnet: () -> Unit,
     onCopyGameResources: () -> Unit
@@ -87,6 +92,36 @@ fun SettingsScreen(
                             tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     },
                     modifier = Modifier.clickable { showThemeMenu = true }
+                )
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                item {
+                    ListItem(
+                        headlineContent = { Text(stringResource(R.string.settings_dynamic_color)) },
+                        supportingContent = { Text(stringResource(R.string.settings_dynamic_color_desc)) },
+                        leadingContent = {
+                            Icon(Icons.Outlined.ColorLens, null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        },
+                        trailingContent = {
+                            Switch(checked = dynamicColor, onCheckedChange = onDynamicColorChanged)
+                        }
+                    )
+                }
+            }
+
+            item {
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.settings_animation_disabled)) },
+                    supportingContent = { Text(stringResource(R.string.settings_animation_disabled_desc)) },
+                    leadingContent = {
+                        Icon(Icons.Outlined.Animation, null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    },
+                    trailingContent = {
+                        Switch(checked = animationDisabled, onCheckedChange = onAnimationDisabledChanged)
+                    }
                 )
             }
 

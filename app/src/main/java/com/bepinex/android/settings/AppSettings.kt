@@ -15,6 +15,8 @@ object AppSettings {
     private const val KEY_THEME_MODE = "theme_mode"
     private const val KEY_LANGUAGE = "language"
     private const val KEY_FLOATING_LOG_IN_GAME = "floating_log_in_game"
+    private const val KEY_DYNAMIC_COLOR = "dynamic_color"
+    private const val KEY_ANIMATION_DISABLED = "animation_disabled"
     private const val KEY_BLOCK_UNITY_KILL_PREFIX = "block_unity_kill_"
     private const val KEY_ACTIVE_MODPACK_PREFIX = "active_modpack_"
 
@@ -82,6 +84,20 @@ object AppSettings {
 
     fun setFloatingLogInGameEnabled(context: Context, enabled: Boolean) {
         prefs(context).edit().putBoolean(KEY_FLOATING_LOG_IN_GAME, enabled).apply()
+    }
+
+    fun isDynamicColorEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_DYNAMIC_COLOR, true)
+
+    fun setDynamicColorEnabled(context: Context, enabled: Boolean) {
+        prefs(context).edit().putBoolean(KEY_DYNAMIC_COLOR, enabled).apply()
+    }
+
+    fun isAnimationDisabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_ANIMATION_DISABLED, false)
+
+    fun setAnimationDisabled(context: Context, disabled: Boolean) {
+        prefs(context).edit().putBoolean(KEY_ANIMATION_DISABLED, disabled).apply()
     }
 
     /** Whether startup calls to UnityPlayer.kill() should be blocked for a game. */

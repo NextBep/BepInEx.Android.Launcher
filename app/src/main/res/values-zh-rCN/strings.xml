@@ -82,6 +82,10 @@
     <string name="settings_copy_resources_desc">将游戏的资源数据从 APK 复制到本地存储，用于 interop 生成。</string>
     <string name="settings_theme">主题</string>
     <string name="settings_language">语言</string>
+    <string name="settings_dynamic_color">动态配色</string>
+    <string name="settings_dynamic_color_desc">在支持的 Android 设备上使用 Monet 配色。</string>
+    <string name="settings_animation_disabled">禁用动画</string>
+    <string name="settings_animation_disabled_desc">禁用导航和页面转场动画。</string>
     <string name="settings_about">关于</string>
 
     <!-- Confirm Dialogs -->

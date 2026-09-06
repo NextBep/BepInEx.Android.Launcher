@@ -52,6 +52,8 @@ class MainActivity : ComponentActivity() {
     // Settings state
     private var themeMode = AppSettings.ThemeMode.SYSTEM
     private var language = AppSettings.Language.SYSTEM
+    private var dynamicColor = AppSettings.isDynamicColorEnabled(this)
+    private var animationDisabled = AppSettings.isAnimationDisabled(this)
 
     private val storagePermissionLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -83,6 +85,8 @@ class MainActivity : ComponentActivity() {
         AppSettings.initialize(this)
         themeMode = AppSettings.getThemeMode(this)
         language = AppSettings.getLanguage(this)
+        dynamicColor = AppSettings.isDynamicColorEnabled(this)
+        animationDisabled = AppSettings.isAnimationDisabled(this)
 
         BepInExLog.init(this)
         BepInExLog.i("=== BepInEx Launcher ===")
@@ -391,7 +395,7 @@ class MainActivity : ComponentActivity() {
 
     private fun render() {
         setContent {
-            BepInExTheme(themeMode = themeMode) {
+            BepInExTheme(themeMode = themeMode, dynamicColor = dynamicColor) {
                 val crash = pendingCrash
                 BepInExNavHost(
                     scope = scope,
@@ -405,6 +409,8 @@ class MainActivity : ComponentActivity() {
                     extractionStatus = extractionStatus,
                     themeMode = themeMode,
                     language = language,
+                    dynamicColor = dynamicColor,
+                    animationDisabled = animationDisabled,
                     onSelectGame = { selectGame(it) },
                     onRescan = {
                         GameDetector.invalidateCache()
@@ -413,6 +419,14 @@ class MainActivity : ComponentActivity() {
                     onLaunch = { modpackName -> launchGame(modpackName) },
                     onThemeChanged = { onThemeChanged(it) },
                     onLanguageChanged = { onLanguageChanged(it) },
+                    onDynamicColorChanged = {
+                        dynamicColor = it
+                        AppSettings.setDynamicColorEnabled(this@MainActivity, it)
+                    },
+                    onAnimationDisabledChanged = {
+                        animationDisabled = it
+                        AppSettings.setAnimationDisabled(this@MainActivity, it)
+                    },
                     onClearBepInEx = { onClearBepInEx(it) },
                     onClearDotnet = { onClearDotnet(it) },
                     onCopyGameResources = { onCopyGameResources(it) }
