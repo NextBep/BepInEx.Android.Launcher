@@ -19,6 +19,7 @@ object AppSettings {
     private const val KEY_ANIMATION_DISABLED = "animation_disabled"
     private const val KEY_BLOCK_UNITY_KILL_PREFIX = "block_unity_kill_"
     private const val KEY_ACTIVE_MODPACK_PREFIX = "active_modpack_"
+    private const val KEY_USE_UNSTRIPPED_LIBUNITY_PREFIX = "use_unstripped_libunity_"
 
     enum class ThemeMode {
         SYSTEM, DARK, LIGHT;
@@ -107,6 +108,16 @@ object AppSettings {
     fun setUnityKillBlockEnabled(context: Context, packageName: String, enabled: Boolean) {
         prefs(context).edit()
             .putBoolean(KEY_BLOCK_UNITY_KILL_PREFIX + packageName, enabled)
+            .apply()
+    }
+
+    /** Whether to download and use unstripped libunity.so for a game. */
+    fun isUseUnstrippedLibUnity(context: Context, packageName: String): Boolean =
+        prefs(context).getBoolean(KEY_USE_UNSTRIPPED_LIBUNITY_PREFIX + packageName, true)
+
+    fun setUseUnstrippedLibUnity(context: Context, packageName: String, enabled: Boolean) {
+        prefs(context).edit()
+            .putBoolean(KEY_USE_UNSTRIPPED_LIBUNITY_PREFIX + packageName, enabled)
             .apply()
     }
 

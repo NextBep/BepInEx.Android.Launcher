@@ -18,6 +18,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import com.bepinex.android.settings.AppSettings
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.bepinex.android.GameDetector
@@ -58,6 +60,7 @@ fun MainPagerScreen(
     onBlockUnityKillChanged: (Boolean) -> Unit,
     onClearBepInEx: () -> Unit,
     onClearDotnet: () -> Unit,
+    onClearLibUnity: () -> Unit,
     onCopyGameResources: () -> Unit,
     onCreateModpack: (String) -> Unit,
     onDeleteModpack: (String) -> Unit,
@@ -149,6 +152,7 @@ fun MainPagerScreen(
                     language = language,
                     floatingLogInGame = floatingLogInGame,
                     blockUnityKill = blockUnityKill,
+                    useUnstrippedLibUnity = AppSettings.isUseUnstrippedLibUnity(LocalContext.current, selectedGame?.packageName ?: ""),
                     dynamicColor = dynamicColor,
                     animationDisabled = animationDisabled,
                     onNavigateBack = {
@@ -159,10 +163,16 @@ fun MainPagerScreen(
                     onLanguageChanged = onLanguageChanged,
                     onFloatingLogInGameChanged = onFloatingLogInGameChanged,
                     onBlockUnityKillChanged = onBlockUnityKillChanged,
+                    onUseUnstrippedLibUnityChanged = { enabled ->
+                        selectedGame?.let { game ->
+                            AppSettings.setUseUnstrippedLibUnity(LocalContext.current, game.packageName, enabled)
+                        }
+                    },
                     onDynamicColorChanged = onDynamicColorChanged,
                     onAnimationDisabledChanged = onAnimationDisabledChanged,
                     onClearBepInEx = onClearBepInEx,
                     onClearDotnet = onClearDotnet,
+                    onClearLibUnity = onClearLibUnity,
                     onCopyGameResources = onCopyGameResources
                 )
             }

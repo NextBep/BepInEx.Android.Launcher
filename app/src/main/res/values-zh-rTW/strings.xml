@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">BepInEx 啟動器</string>
+    <string name="app_tagline">BepInEx 啟動器</string>
+
+    <!-- Navigation -->
+    <string name="nav_games">遊戲</string>
+    <string name="nav_modpacks">模組包</string>
+    <string name="nav_settings">設定</string>
+    <string name="nav_about">關於</string>
+
+    <!-- Game Detection -->
+    <string name="scan_title">已偵測到的遊戲</string>
+    <string name="scanning">正在掃描 Unity IL2CPP 遊戲…</string>
+    <string name="no_games_found">未找到 Unity IL2CPP 遊戲</string>
+    <string name="no_games_hint">請安裝一款 Unity IL2CPP 遊戲以開始使用</string>
+    <string name="scan_again">再次掃描</string>
+    <string name="rescan">重新掃描</string>
+
+    <!-- Framework Status -->
+    <string name="framework_ready">BepInEx 已就緒</string>
+    <string name="framework_setting_up">正在設定…</string>
+    <string name="extracting">正在解壓 BepInEx…</string>
+    <string name="mod_count">%d 個模組</string>
+
+    <!-- Actions -->
+    <string name="import_mod">匯入模組</string>
+    <string name="launch">啟動</string>
+    <string name="refresh">重新整理</string>
+    <string name="delete">刪除</string>
+
+    <!-- Mods -->
+    <string name="installed_mods">已安裝的模組</string>
+    <string name="no_mods_installed">尚未安裝任何模組</string>
+    <string name="no_mods_hint">點選「匯入模組」以新增 .dll 檔案</string>
+    <string name="mod_deleted">已刪除：%s</string>
+    <string name="mod_imported">已匯入：%s</string>
+    <string name="import_failed">匯入失敗</string>
+
+    <!-- Modpacks -->
+    <string name="modpack_title">模組包</string>
+    <string name="modpack_create">建立模組包</string>
+    <string name="modpack_delete">刪除模組包</string>
+    <string name="modpack_rename">重新命名</string>
+    <string name="modpack_export">匯出</string>
+    <string name="modpack_import">匯入模組包</string>
+    <string name="modpack_select_active">啟用</string>
+    <string name="modpack_vanilla">原版（無模組）</string>
+    <string name="modpack_name_hint">模組包名稱</string>
+    <string name="modpack_confirm_delete_title">刪除模組包</string>
+    <string name="modpack_confirm_delete_msg">確定要刪除「%s」及其所有模組嗎？此操作無法復原。</string>
+    <string name="modpack_created">已建立模組包：%s</string>
+    <string name="modpack_deleted">已刪除模組包：%s</string>
+    <string name="modpack_exported">已匯出：%s</string>
+    <string name="modpack_imported">已匯入：%s</string>
+    <string name="modpack_no_mods">此模組包中沒有模組</string>
+    <string name="modpack_add_mod">新增模組</string>
+    <string name="modpack_target_game">適用於：%s</string>
+    <string name="modpack_mod_count">%d 個模組</string>
+    <string name="modpack_active">已啟用</string>
+
+    <!-- Config Editor -->
+    <string name="config_editor_title">設定編輯器</string>
+    <string name="config_editor_save">儲存</string>
+    <string name="config_editor_save_failed">儲存檔案失敗</string>
+    <string name="config_editor_unsaved">有未儲存的變更</string>
+    <string name="config_editor_discard_title">捨棄變更？</string>
+    <string name="config_editor_discard_msg">您有未儲存的變更。是否捨棄？</string>
+    <string name="config_editor_no_configs">沒有設定檔</string>
+
+    <!-- Mod File Browser -->
+    <string name="mod_file_browser_title">模組檔案</string>
+    <string name="mod_file_browser_empty">此目錄為空</string>
+    <string name="mod_file_browser_missing">模組包目錄不存在</string>
+    <string name="mod_file_browser_directory">目錄</string>
+    <string name="mod_file_browser_editable_file">%1$s · 點選以檢視或編輯</string>
+    <string name="mod_file_browser_unsupported_file">%1$s · 不支援預覽</string>
+    <string name="mod_file_browser_edit_file">檢視或編輯檔案</string>
+    <string name="mod_file_browser_delete_file">刪除檔案</string>
+    <string name="mod_file_browser_delete_title">刪除檔案？</string>
+    <string name="mod_file_browser_delete_message">確定要刪除「%1$s」嗎？此操作無法復原。</string>
+    <string name="mod_file_browser_delete_failed">刪除檔案失敗</string>
+    <string name="mod_file_browser_protected">受保護的檔案</string>
+    <string name="mod_file_browser_protected_file">受保護的模組包中繼資料 · 無法編輯或刪除</string>
+
+    <!-- Settings -->
+    <string name="settings_title">設定</string>
+    <string name="settings_section_appearance">外觀</string>
+    <string name="settings_section_ingame">遊戲內</string>
+    <string name="settings_section_maintenance">維護</string>
+    <string name="settings_section_config">設定檔</string>
+    <string name="settings_clear_bepinex">清除 BepInEx 檔案</string>
+    <string name="settings_clear_bepinex_desc">刪除所有 BepInEx 檔案和 interop 組件。下次啟動時需要重新解壓。</string>
+    <string name="settings_clear_dotnet">清除 .NET 資料</string>
+    <string name="settings_clear_dotnet_desc">刪除 .NET 執行時和已複製的遊戲資料。下次啟動時會重新解壓。</string>
+    <string name="settings_copy_resources">複製遊戲資源</string>
+    <string name="settings_copy_resources_desc">將遊戲的資產資料複製到本機儲存空間，以進行 interop 生成。</string>
+    <string name="settings_theme">佈景主題</string>
+    <string name="settings_language">語言</string>
+    <string name="settings_dynamic_color">動態色彩</string>
+    <string name="settings_dynamic_color_desc">在可用時使用 Android Monet 色彩。</string>
+    <string name="settings_animation_disabled">停用動畫</string>
+    <string name="settings_animation_disabled_desc">停用導覽和頁面過渡動畫。</string>
+    <string name="settings_about">關於</string>
+
+    <!-- Confirm Dialogs -->
+    <string name="confirm_clear_bepinex_title">清除 BepInEx 檔案？</string>
+    <string name="confirm_clear_bepinex_msg">這將刪除此遊戲的所有 BepInEx 檔案和 interop 組件。您需要在下次啟動時重新解壓。</string>
+    <string name="confirm_clear_dotnet_title">清除 .NET 資料？</string>
+    <string name="confirm_clear_dotnet_msg">這將刪除此遊戲的 .NET 執行時和已複製的遊戲資料。下次啟動時會重新解壓。</string>
+    <string name="confirm_copy_resources_title">複製遊戲資源？</string>
+    <string name="confirm_copy_resources_msg">這將從 APK 複製遊戲的資產資料到本機儲存空間。</string>
+    <string name="confirm_yes">是</string>
+    <string name="confirm_no">否</string>
+    <string name="confirm_cancel">取消</string>
+    <string name="confirm_delete">刪除</string>
+
+    <!-- Theme -->
+    <string name="theme_dark">深色</string>
+    <string name="theme_light">淺色</string>
+    <string name="theme_system">系統預設</string>
+
+    <!-- Language -->
+    <string name="lang_english">English</string>
+    <string name="lang_chinese">繁體中文</string>
+    <string name="lang_system">系統預設</string>
+
+    <!-- About -->
+    <string name="about_title">BepInEx 啟動器</string>
+    <string name="about_description">支援 Android 的 BepInEx 載入器</string>
+    <string name="about_version">版本 %1$s（組建 %2$d）</string>
+    <string name="about_disclaimer">⚠ BepInEx 啟動器並非由 BepInEx 專案官方支援。</string>
+    <string name="about_projects_section">使用的專案與參考</string>
+    <string name="about_project_bepinex_name">BepInEx</string>
+    <string name="about_project_bepinex_desc">Unity IL2CPP modding framework — the core plugin loader. BepInEx 6.0.0-pre.2 by BepInEx team.</string>
+    <string name="about_project_fusioncore_name">FusionCore</string>
+    <string name="about_project_fusioncore_desc">Starlight team\'s Android Unity IL2CPP Runtime Container. Main reference for injection chain, Pine hooks, and NativeLoader architecture.</string>
+    <string name="about_project_nextbep_name">NextBep (BepInEx.Android)</string>
+    <string name="about_project_nextbep_desc">Our custom BepInEx fork for Android. Adapts BepInEx 6 for embedded CoreCLR + IL2CPP interop.</string>
+    <string name="about_project_dotnet_name">dotnet/runtime</string>
+    <string name="about_project_dotnet_desc">Microsoft .NET Runtime v10.0.5. Built from source with OpenSSL crypto backend to fix BoringSSL SIGSEGV on Android 16 / Xiaomi HyperOS.</string>
+    <string name="about_project_openssl_name">OpenSSL</string>
+    <string name="about_project_openssl_desc">OpenSSL 3.4.0 — replacing BoringSSL for ARM64 Android crypto. libcrypto.so + libssl.so.</string>
+    <string name="about_project_pine_name">Pine</string>
+    <string name="about_project_pine_desc">ART Java method hook framework (top.canyie.pine:core:0.3.0). Used for ClassLoader, PackageManager, and UnityPlayer hooks.</string>
+    <string name="about_project_dobby_name">Dobby</string>
+    <string name="about_project_dobby_desc">Native hook framework for ARM64. Used for il2cpp_init hook in libfusion.</string>
+    <string name="about_project_bepinexandroid_name">BepInEx.Android.Launcher</string>
+    <string name="about_project_bepinexandroid_desc">Generic BepInEx Android launcher — supports multiple games with modpack management.</string>
+    <string name="about_project_cpp2il_name">Cpp2IL</string>
+    <string name="about_project_cpp2il_desc">IL2CPP reverse engineering tool. Used for interop assembly generation.</string>
+    <string name="about_dev_section">主要開發者</string>
+    <string name="about_dev_names">HayashiUme · HexCat · Celestynka</string>
+    <string name="about_footer">©2026 NextBep</string>
+
+    <string name="about_url_bepinex">https://github.com/BepInEx/BepInEx</string>
+    <string name="about_url_fusioncore">https://github.com/All-Of-Us-Mods/FusionCore</string>
+    <string name="about_url_nextbep">https://github.com/NextBep/BepInEx.Android</string>
+    <string name="about_url_bepinexandroid">https://github.com/NextBep/BepInEx.Android.Launcher</string>
+    <string name="about_url_dotnet">https://github.com/dotnet/runtime</string>
+    <string name="about_url_openssl">https://github.com/openssl/openssl</string>
+    <string name="about_url_pine">https://github.com/canyie/Pine</string>
+    <string name="about_url_dobby">https://github.com/jmpews/Dobby</string>
+    <string name="about_url_cpp2il">https://github.com/SamboyCoding/Cpp2IL</string>
+
+    <!-- Log -->
+    <string name="log_title">BepInEx 記錄</string>
+    <string name="log_share">分享</string>
+    <string name="log_copy">複製</string>
+    <string name="log_clear">清除</string>
+    <string name="log_empty">尚無記錄。啟動遊戲以查看 BepInEx 記錄。</string>
+    <string name="log_copied">記錄已複製到剪貼簿</string>
+    <string name="log_filter_all">全部</string>
+    <string name="log_filter_errors">錯誤</string>
+    <string name="log_filter_warnings">警告</string>
+    <string name="log_auto_scroll">自動捲動</string>
+
+    <!-- Storage Permission -->
+    <string name="storage_permission_title">需要儲存權限</string>
+    <string name="storage_permission_message">BepInEx 啟動器需要存取所有檔案才能解壓 BepInEx 及管理模組。</string>
+    <string name="storage_permission_grant">授予权限</string>
+
+    <!-- In-Game Settings -->
+    <string name="settings_ingame_section">遊戲內</string>
+    <string name="settings_floating_log">遊戲內浮動記錄</string>
+    <string name="settings_floating_log_desc">在遊戲上方顯示浮動記錄按鈕。點選以即時檢視 BepInEx 記錄。</string>
+    <string name="settings_block_unity_kill">阻止 Unity 啟動退出</string>
+    <string name="settings_block_unity_kill_desc">在啟動時暫時阻止 UnityPlayer.kill()。僅適用於在注入期間退出的遊戲。</string>
+
+    <!-- Launch -->
+    <string name="launch_failed">啟動失敗</string>
+    <string name="launch_wait_extraction">請稍候 — BepInEx 仍在解壓中</string>
+    <string name="launch_no_game">未選擇遊戲</string>
+
+    <!-- Generic -->
+    <string name="ok">確定</string>
+    <string name="back">返回</string>
+    <string name="close">關閉</string>
+    <string name="loading">載入中…</string>
+    <string name="error">錯誤</string>
+    <string name="done">完成</string>
+    <string name="share_saved">訊息已儲存，請返回遊戲</string>
+    <string name="crash_detected_title">上次遊戲啟動未正常返回</string>
+    <string name="crash_detected_message">%1$s 的上次啟動可能已崩潰。您可以匯出診斷資料以進行疑難排解。</string>
+    <string name="crash_export">匯出診斷資料</string>
+    <string name="crash_export_failed">匯出診斷資料失敗</string>
+
+    <!-- Bootstrap Loading -->
+    <string name="bootstrap_title">正在啟動所選遊戲</string>
+    <string name="bootstrap_status_preparing">正在準備目標套件…</string>
+    <string name="bootstrap_status_copy_assets">正在複製 Unity 資料…</string>
+    <string name="bootstrap_status_detecting_version">正在偵測 Unity 版本…</string>
+    <string name="bootstrap_status_downloading_libunity">正在下載未裁剪的 libunity…</string>
+    <string name="bootstrap_status_extracting_runtime">正在解壓執行時檔案…</string>
+    <string name="bootstrap_status_registering_libraries">正在註冊原生函式庫…</string>
+    <string name="bootstrap_status_installing_hooks">正在安裝 hooks…</string>
+    <string name="bootstrap_status_launching">正在啟動遊戲…</string>
+    <string name="bootstrap_status_error">啟動失敗</string>
+    <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
+</resources>

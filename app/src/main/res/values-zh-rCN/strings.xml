@@ -63,10 +63,26 @@
     <!-- Config Editor -->
     <string name="config_editor_title">配置编辑器</string>
     <string name="config_editor_save">保存</string>
+    <string name="config_editor_save_failed">保存文件失败</string>
     <string name="config_editor_unsaved">有未保存的更改</string>
     <string name="config_editor_discard_title">放弃更改？</string>
     <string name="config_editor_discard_msg">您有未保存的更改，确定要放弃吗？</string>
     <string name="config_editor_no_configs">无配置文件</string>
+
+    <!-- Mod File Browser -->
+    <string name="mod_file_browser_title">模组文件</string>
+    <string name="mod_file_browser_empty">此目录为空</string>
+    <string name="mod_file_browser_missing">整合包目录不存在</string>
+    <string name="mod_file_browser_directory">目录</string>
+    <string name="mod_file_browser_editable_file">%1$s · 点击查看或编辑</string>
+    <string name="mod_file_browser_unsupported_file">%1$s · 不支持预览</string>
+    <string name="mod_file_browser_edit_file">查看或编辑文件</string>
+    <string name="mod_file_browser_delete_file">删除文件</string>
+    <string name="mod_file_browser_delete_title">删除文件？</string>
+    <string name="mod_file_browser_delete_message">确定要删除"%1$s"吗？此操作不可撤销。</string>
+    <string name="mod_file_browser_delete_failed">删除文件失败</string>
+    <string name="mod_file_browser_protected">受保护文件</string>
+    <string name="mod_file_browser_protected_file">整合包元数据 · 无法编辑或删除</string>
 
     <!-- Settings -->
     <string name="settings_title">设置</string>
@@ -78,6 +94,10 @@
     <string name="settings_clear_bepinex_desc">删除所有 BepInEx 文件和 interop 程序集。下次启动需要重新解压。</string>
     <string name="settings_clear_dotnet">清空 .NET 数据</string>
     <string name="settings_clear_dotnet_desc">删除 .NET 运行时和复制的游戏数据。下次启动将重新解压。</string>
+    <string name="settings_unstripped_libunity">使用未裁剪的 libunity</string>
+    <string name="settings_unstripped_libunity_desc">下载并使用包含完整 icalls 的未裁剪 libunity.so。</string>
+    <string name="settings_clear_libunity">清除 libunity 缓存</string>
+    <string name="settings_clear_libunity_desc">删除已下载的未裁剪 libunity.so 文件。下次启动将重新下载。</string>
     <string name="settings_copy_resources">复制游戏资源库</string>
     <string name="settings_copy_resources_desc">将游戏的资源数据从 APK 复制到本地存储，用于 interop 生成。</string>
     <string name="settings_theme">主题</string>
@@ -95,6 +115,10 @@
     <string name="confirm_clear_dotnet_msg">这将删除此游戏的 .NET 运行时和复制的游戏数据。下次启动将重新解压。</string>
     <string name="confirm_copy_resources_title">复制游戏资源？</string>
     <string name="confirm_copy_resources_msg">将游戏 APK 中的资源数据复制到本地存储。</string>
+    <string name="confirm_clear_libunity_title">清除 libunity 缓存？</string>
+    <string name="confirm_clear_libunity_msg">这将删除已下载的未裁剪 libunity.so 文件。下次启动将重新下载。</string>
+    <string name="clear_libunity_done">libunity 缓存已清除</string>
+    <string name="clear_libunity_none">没有可清除的 libunity 缓存</string>
     <string name="confirm_yes">确定</string>
     <string name="confirm_no">取消</string>
     <string name="confirm_cancel">取消</string>
@@ -189,6 +213,14 @@
     <string name="crash_detected_message">上次启动 %1$s 可能发生了崩溃。你可以导出诊断信息以便排查。</string>
     <string name="crash_export">导出诊断信息</string>
     <string name="crash_export_failed">诊断信息导出失败</string>
+
+    <!-- Update -->
+    <string name="update_title">有新版本可用</string>
+    <string name="update_current_version">当前版本：%1$s</string>
+    <string name="update_latest_version">最新版本：%1$s</string>
+    <string name="update_release_notes">更新日志</string>
+    <string name="update_download">下载</string>
+    <string name="update_later">稍后</string>
 
     <!-- Bootstrap Loading -->
     <string name="bootstrap_title">正在启动游戏</string>

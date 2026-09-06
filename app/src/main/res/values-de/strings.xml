@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">BepInEx Launcher</string>
+    <string name="app_tagline">BepInEx Launcher</string>
+
+    <!-- Navigation -->
+    <string name="nav_games">Spiele</string>
+    <string name="nav_modpacks">Modpakete</string>
+    <string name="nav_settings">Einstellungen</string>
+    <string name="nav_about">Über</string>
+
+    <!-- Game Detection -->
+    <string name="scan_title">Erkannte Spiele</string>
+    <string name="scanning">Scanne nach Unity IL2CPP-Spielen…</string>
+    <string name="no_games_found">Keine Unity IL2CPP-Spiele gefunden</string>
+    <string name="no_games_hint">Installieren Sie ein Unity IL2CPP-Spiel um zu beginnen</string>
+    <string name="scan_again">Erneut scannen</string>
+    <string name="rescan">Neu scannen</string>
+
+    <!-- Framework Status -->
+    <string name="framework_ready">BepInEx bereit</string>
+    <string name="framework_setting_up">Wird eingerichtet…</string>
+    <string name="extracting">BepInEx wird entpackt…</string>
+    <string name="mod_count">%d Mod(s)</string>
+
+    <!-- Actions -->
+    <string name="import_mod">Mod importieren</string>
+    <string name="launch">Starten</string>
+    <string name="refresh">Aktualisieren</string>
+    <string name="delete">Löschen</string>
+
+    <!-- Mods -->
+    <string name="installed_mods">Installierte Mods</string>
+    <string name="no_mods_installed">Keine Mods installiert</string>
+    <string name="no_mods_hint">Tippen Sie auf Mod importieren um eine .dll-Datei hinzuzufügen</string>
+    <string name="mod_deleted">Gelöscht: %s</string>
+    <string name="mod_imported">Importiert: %s</string>
+    <string name="import_failed">Import fehlgeschlagen</string>
+
+    <!-- Modpacks -->
+    <string name="modpack_title">Modpakete</string>
+    <string name="modpack_create">Modpaket erstellen</string>
+    <string name="modpack_delete">Modpaket löschen</string>
+    <string name="modpack_rename">Umbenennen</string>
+    <string name="modpack_export">Exportieren</string>
+    <string name="modpack_import">Modpaket importieren</string>
+    <string name="modpack_select_active">Aktivieren</string>
+    <string name="modpack_vanilla">Standard (keine Mods)</string>
+    <string name="modpack_name_hint">Modpaketname</string>
+    <string name="modpack_confirm_delete_title">Modpaket löschen</string>
+    <string name="modpack_confirm_delete_msg">\"%s\" und alle Mods löschen? Dies kann nicht rückgängig gemacht werden.</string>
+    <string name="modpack_created">Modpaket erstellt: %s</string>
+    <string name="modpack_deleted">Modpaket gelöscht: %s</string>
+    <string name="modpack_exported">Exportiert: %s</string>
+    <string name="modpack_imported">Importiert: %s</string>
+    <string name="modpack_no_mods">Keine Mods in diesem Modpaket</string>
+    <string name="modpack_add_mod">Mod hinzufügen</string>
+    <string name="modpack_target_game">Für: %s</string>
+    <string name="modpack_mod_count">%d Mod(s)</string>
+    <string name="modpack_active">Aktiv</string>
+
+    <!-- Config Editor -->
+    <string name="config_editor_title">Config-Editor</string>
+    <string name="config_editor_save">Speichern</string>
+    <string name="config_editor_save_failed">Datei konnte nicht gespeichert werden</string>
+    <string name="config_editor_unsaved">Ungespeicherte Änderungen</string>
+    <string name="config_editor_discard_title">Änderungen verwerfen?</string>
+    <string name="config_editor_discard_msg">Sie haben ungespeicherte Änderungen. Verwerfen?</string>
+    <string name="config_editor_no_configs">Keine Konfigurationsdateien</string>
+
+    <!-- Mod File Browser -->
+    <string name="mod_file_browser_title">Mod-Dateien</string>
+    <string name="mod_file_browser_empty">Dieses Verzeichnis ist leer</string>
+    <string name="mod_file_browser_missing">Das Modpaket-Verzeichnis existiert nicht</string>
+    <string name="mod_file_browser_directory">Verzeichnis</string>
+    <string name="mod_file_browser_editable_file">%1$s · Tippen zum Anzeigen oder Bearbeiten</string>
+    <string name="mod_file_browser_unsupported_file">%1$s · Vorschau nicht unterstützt</string>
+    <string name="mod_file_browser_edit_file">Datei anzeigen oder bearbeiten</string>
+    <string name="mod_file_browser_delete_file">Datei löschen</string>
+    <string name="mod_file_browser_delete_title">Datei löschen?</string>
+    <string name="mod_file_browser_delete_message">\"%1$s\" löschen? Dies kann nicht rückgängig gemacht werden.</string>
+    <string name="mod_file_browser_delete_failed">Datei konnte nicht gelöscht werden</string>
+    <string name="mod_file_browser_protected">Geschützte Datei</string>
+    <string name="mod_file_browser_protected_file">Geschützte Modpaket-Metadaten · Kann nicht bearbeitet oder gelöscht werden</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Einstellungen</string>
+    <string name="settings_section_appearance">Erscheinungsbild</string>
+    <string name="settings_section_ingame">Im Spiel</string>
+    <string name="settings_section_maintenance">Wartung</string>
+    <string name="settings_section_config">Konfigurationsdateien</string>
+    <string name="settings_clear_bepinex">BepInEx-Dateien löschen</string>
+    <string name="settings_clear_bepinex_desc">Alle BepInEx-Dateien und Interop-Assemblys löschen. Erforderlich für die Neuextraktion beim nächsten Start.</string>
+    <string name="settings_clear_dotnet">.NET-Daten löschen</string>
+    <string name="settings_clear_dotnet_desc">Die .NET-Laufzeit und kopierten Spieldaten löschen. Dateien werden beim nächsten Start neu extrahiert.</string>
+    <string name="settings_copy_resources">Spielressourcen kopieren</string>
+    <string name="settings_copy_resources_desc">Die Ressourcendaten des Spiels in den lokalen Speicher kopieren für die Interop-Generierung.</string>
+    <string name="settings_theme">Thema</string>
+    <string name="settings_language">Sprache</string>
+    <string name="settings_dynamic_color">Dynamische Farbe</string>
+    <string name="settings_dynamic_color_desc">Android Monet-Farben verwenden wenn verfügbar.</string>
+    <string name="settings_animation_disabled">Animationen deaktivieren</string>
+    <string name="settings_animation_disabled_desc">Navigations- und Seitenübergangsanimationen deaktivieren.</string>
+    <string name="settings_about">Über</string>
+
+    <!-- Confirm Dialogs -->
+    <string name="confirm_clear_bepinex_title">BepInEx-Dateien löschen?</string>
+    <string name="confirm_clear_bepinex_msg">Dies löscht alle BepInEx-Dateien und Interop-Assemblys für dieses Spiel. Sie müssen beim nächsten Start neu extrahieren.</string>
+    <string name="confirm_clear_dotnet_title">.NET-Daten löschen?</string>
+    <string name="confirm_clear_dotnet_msg">Dies löscht die .NET-Laufzeit und kopierten Spieldaten für dieses Spiel. Dateien werden beim nächsten Start neu extrahiert.</string>
+    <string name="confirm_copy_resources_title">Spielressourcen kopieren?</string>
+    <string name="confirm_copy_resources_msg">Dies kopiert die Ressourcendaten des Spiels von der APK in den lokalen Speicher.</string>
+    <string name="confirm_yes">Ja</string>
+    <string name="confirm_no">Nein</string>
+    <string name="confirm_cancel">Abbrechen</string>
+    <string name="confirm_delete">Löschen</string>
+
+    <!-- Theme -->
+    <string name="theme_dark">Dunkel</string>
+    <string name="theme_light">Hell</string>
+    <string name="theme_system">Systemstandard</string>
+
+    <!-- Language -->
+    <string name="lang_english">English</string>
+    <string name="lang_chinese">简体中文</string>
+    <string name="lang_system">Systemstandard</string>
+
+    <!-- About -->
+    <string name="about_title">BepInEx Launcher</string>
+    <string name="about_description">Ein BepInEx-Lader mit Android-Unterstützung</string>
+    <string name="about_version">Version %1$s (Build %2$d)</string>
+    <string name="about_disclaimer">⚠ BepInEx Launcher wird vom BepInEx-Projekt nicht offiziell unterstützt.</string>
+    <string name="about_projects_section">Verwendete &amp; referenzierte Projekte</string>
+    <string name="about_project_bepinex_name">BepInEx</string>
+    <string name="about_project_bepinex_desc">Unity IL2CPP modding framework — the core plugin loader. BepInEx 6.0.0-pre.2 by BepInEx team.</string>
+    <string name="about_project_fusioncore_name">FusionCore</string>
+    <string name="about_project_fusioncore_desc">Starlight team\'s Android Unity IL2CPP Runtime Container. Main reference for injection chain, Pine hooks, and NativeLoader architecture.</string>
+    <string name="about_project_nextbep_name">NextBep (BepInEx.Android)</string>
+    <string name="about_project_nextbep_desc">Our custom BepInEx fork for Android. Adapts BepInEx 6 for embedded CoreCLR + IL2CPP interop.</string>
+    <string name="about_project_dotnet_name">dotnet/runtime</string>
+    <string name="about_project_dotnet_desc">Microsoft .NET Runtime v10.0.5. Built from source with OpenSSL crypto backend to fix BoringSSL SIGSEGV on Android 16 / Xiaomi HyperOS.</string>
+    <string name="about_project_openssl_name">OpenSSL</string>
+    <string name="about_project_openssl_desc">OpenSSL 3.4.0 — replacing BoringSSL for ARM64 Android crypto. libcrypto.so + libssl.so.</string>
+    <string name="about_project_pine_name">Pine</string>
+    <string name="about_project_pine_desc">ART Java method hook framework (top.canyie.pine:core:0.3.0). Used for ClassLoader, PackageManager, and UnityPlayer hooks.</string>
+    <string name="about_project_dobby_name">Dobby</string>
+    <string name="about_project_dobby_desc">Native hook framework for ARM64. Used for il2cpp_init hook in libfusion.</string>
+    <string name="about_project_bepinexandroid_name">BepInEx.Android.Launcher</string>
+    <string name="about_project_bepinexandroid_desc">Generic BepInEx Android launcher — supports multiple games with modpack management.</string>
+    <string name="about_project_cpp2il_name">Cpp2IL</string>
+    <string name="about_project_cpp2il_desc">IL2CPP reverse engineering tool. Used for interop assembly generation.</string>
+    <string name="about_dev_section">Hauptentwickler</string>
+    <string name="about_dev_names">HayashiUme · HexCat · Celestynka</string>
+    <string name="about_footer">©2026 NextBep</string>
+
+    <string name="about_url_bepinex">https://github.com/BepInEx/BepInEx</string>
+    <string name="about_url_fusioncore">https://github.com/All-Of-Us-Mods/FusionCore</string>
+    <string name="about_url_nextbep">https://github.com/NextBep/BepInEx.Android</string>
+    <string name="about_url_bepinexandroid">https://github.com/NextBep/BepInEx.Android.Launcher</string>
+    <string name="about_url_dotnet">https://github.com/dotnet/runtime</string>
+    <string name="about_url_openssl">https://github.com/openssl/openssl</string>
+    <string name="about_url_pine">https://github.com/canyie/Pine</string>
+    <string name="about_url_dobby">https://github.com/jmpews/Dobby</string>
+    <string name="about_url_cpp2il">https://github.com/SamboyCoding/Cpp2IL</string>
+
+    <!-- Log -->
+    <string name="log_title">BepInEx-Protokoll</string>
+    <string name="log_share">Teilen</string>
+    <string name="log_copy">Kopieren</string>
+    <string name="log_clear">Löschen</string>
+    <string name="log_empty">Noch keine Protokolleinträge. Starten Sie ein Spiel um BepInEx-Protokolle zu sehen.</string>
+    <string name="log_copied">Protokoll in Zwischenablage kopiert</string>
+    <string name="log_filter_all">Alle</string>
+    <string name="log_filter_errors">Fehler</string>
+    <string name="log_filter_warnings">Warnungen</string>
+    <string name="log_auto_scroll">Automatisches Scrollen</string>
+
+    <!-- Storage Permission -->
+    <string name="storage_permission_title">Speicherzugriff erforderlich</string>
+    <string name="storage_permission_message">BepInEx Launcher benötigt Zugriff auf alle Dateien um BepInEx zu entpacken und Mods zu verwalten.</string>
+    <string name="storage_permission_grant">Zugriff erteilen</string>
+
+    <!-- In-Game Settings -->
+    <string name="settings_ingame_section">Im Spiel</string>
+    <string name="settings_floating_log">Schwebendes Protokoll im Spiel</string>
+    <string name="settings_floating_log_desc">Einen schwebenden Protokollbutton über dem Spiel anzeigen. Tippen Sie um Echtzeit-BepInEx-Protokolle zu sehen.</string>
+    <string name="settings_block_unity_kill">Unity-Startabbruch blockieren</string>
+    <string name="settings_block_unity_kill_desc">UnityPlayer.kill() beim Start vorübergehend blockieren. Nur für Spiele aktivieren die beim Injection beenden.</string>
+
+    <!-- Launch -->
+    <string name="launch_failed">Start fehlgeschlagen</string>
+    <string name="launch_wait_extraction">Bitte warten — BepInEx wird noch extrahiert</string>
+    <string name="launch_no_game">Kein Spiel ausgewählt</string>
+
+    <!-- Generic -->
+    <string name="ok">OK</string>
+    <string name="back">Zurück</string>
+    <string name="close">Schließen</string>
+    <string name="loading">Wird geladen…</string>
+    <string name="error">Fehler</string>
+    <string name="done">Fertig</string>
+    <string name="share_saved">Nachricht gespeichert, kehren Sie zum Spiel zurück</string>
+    <string name="crash_detected_title">Vorheriger Spielstart ist nicht zurückgekehrt</string>
+    <string name="crash_detected_message">Der vorherige Start von %1$s ist möglicherweise abgestürzt. Sie können Diagnosedaten exportieren zur Fehlerbehebung.</string>
+    <string name="crash_export">Diagnosedaten exportieren</string>
+    <string name="crash_export_failed">Diagnosedaten konnten nicht exportiert werden</string>
+
+    <!-- Bootstrap Loading -->
+    <string name="bootstrap_title">Ausgewähltes Spiel wird gestartet</string>
+    <string name="bootstrap_status_preparing">Zielpaket wird vorbereitet…</string>
+    <string name="bootstrap_status_copy_assets">Unity-Daten werden kopiert…</string>
+    <string name="bootstrap_status_detecting_version">Unity-Version wird erkannt…</string>
+    <string name="bootstrap_status_downloading_libunity">Ungestrippte libunity wird heruntergeladen…</string>
+    <string name="bootstrap_status_extracting_runtime">Laufzeitdateien werden extrahiert…</string>
+    <string name="bootstrap_status_registering_libraries">Native Bibliotheken werden registriert…</string>
+    <string name="bootstrap_status_installing_hooks">Hooks werden installiert…</string>
+    <string name="bootstrap_status_launching">Spiel wird gestartet…</string>
+    <string name="bootstrap_status_error">Start fehlgeschlagen</string>
+    <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
+</resources>

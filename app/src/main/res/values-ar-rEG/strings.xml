@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">BepInEx Launcher</string>
+    <string name="app_tagline">BepInEx Launcher</string>
+
+    <!-- Navigation -->
+    <string name="nav_games">الألعاب</string>
+    <string name="nav_modpacks">مجموعات المودات</string>
+    <string name="nav_settings">الإعدادات</string>
+    <string name="nav_about">عن التطبيق</string>
+
+    <!-- Game Detection -->
+    <string name="scan_title">الألعاب المكتشفة</string>
+    <string name="scanning">جاري البحث عن ألعاب Unity IL2CPP…</string>
+    <string name="no_games_found">مفيش ألعاب Unity IL2CPP اتنشأت</string>
+    <string name="no_games_hint">نزل لعبة Unity IL2CPP عشان تبدأ</string>
+    <string name="scan_again">امسح تاني</string>
+    <string name="rescan">إعادة المسح</string>
+
+    <!-- Framework Status -->
+    <string name="framework_ready">BepInEx جاهز</string>
+    <string name="framework_setting_up">جاري الإعداد…</string>
+    <string name="extracting">جاري استخراج BepInEx…</string>
+    <string name="mod_count">%d مودات</string>
+
+    <!-- Actions -->
+    <string name="import_mod">استيراد مود</string>
+    <string name="launch">شغل</string>
+    <string name="refresh">تحديث</string>
+    <string name="delete">مسح</string>
+
+    <!-- Mods -->
+    <string name="installed_mods">المودات المتنشأة</string>
+    <string name="no_mods_installed">مفيش مودات اتنشأت</string>
+    <string name="no_mods_hint">اضغط استيراد مود عشان تضيف ملف .dll</string>
+    <string name="mod_deleted">اتمسح: %s</string>
+    <string name="mod_imported">اتنشأ: %s</string>
+    <string name="import_failed">الاستيراد فشل</string>
+
+    <!-- Modpacks -->
+    <string name="modpack_title">مجموعات المودات</string>
+    <string name="modpack_create">إنشاء مجموعة مودات</string>
+    <string name="modpack_delete">مسح مجموعة المودات</string>
+    <string name="modpack_rename">غيّر الاسم</string>
+    <string name="modpack_export">تصدير</string>
+    <string name="modpack_import">استيراد مجموعة مودات</string>
+    <string name="modpack_select_active">تفعيل</string>
+    <string name="modpack_vanilla">أصلي (من غير مودات)</string>
+    <string name="modpack_name_hint">اسم مجموعة المودات</string>
+    <string name="modpack_confirm_delete_title">مسح مجموعة المودات</string>
+    <string name="modpack_confirm_delete_msg">تمسح \"%s\" و كل موداتها؟ مفيش رجوع في الخطوة دي.</string>
+    <string name="modpack_created">اتعملت مجموعة المودات: %s</string>
+    <string name="modpack_deleted">اتمسحت مجموعة المودات: %s</string>
+    <string name="modpack_exported">اتصادر: %s</string>
+    <string name="modpack_imported">اتنشأ: %s</string>
+    <string name="modpack_no_mods">مفيش مودات في المجموعة دي</string>
+    <string name="modpack_add_mod">ضيف مود</string>
+    <string name="modpack_target_game">لـ: %s</string>
+    <string name="modpack_mod_count">%d مودات</string>
+    <string name="modpack_active">نشط</string>
+
+    <!-- Config Editor -->
+    <string name="config_editor_title">محرر الإعدادات</string>
+    <string name="config_editor_save">احفظ</string>
+    <string name="config_editor_save_failed">الحفظ فشل</string>
+    <string name="config_editor_unsaved">فيه تغييرات متمسحتش</string>
+    <string name="config_editor_discard_title">تسAttributed تجاهل التغييرات؟</string>
+    <string name="config_editor_discard_msg">فيه تغييرات متمسحتش. تتجاهلها؟</string>
+    <string name="config_editor_no_configs">مفيش ملفات إعدادات</string>
+
+    <!-- Mod File Browser -->
+    <string name="mod_file_browser_title">ملفات المودات</string>
+    <string name="mod_file_browser_empty">الملف ده فاضي</string>
+    <string name="mod_file_browser_missing">مجلد مجموعة المودات مش موجود</string>
+    <string name="mod_file_browser_directory">مجلد</string>
+    <string name="mod_file_browser_editable_file">%1$s · اضغط عشان تشوف أو تعدّل</string>
+    <string name="mod_file_browser_unsupported_file">%1$s · المعاينة مش مدعومة</string>
+    <string name="mod_file_browser_edit_file">شوف أو عدّل الملف</string>
+    <string name="mod_file_browser_delete_file">مسح الملف</string>
+    <string name="mod_file_browser_delete_title">تمسح الملف؟</string>
+    <string name="mod_file_browser_delete_message">تمسح \"%1$s\"؟ مفيش رجوع في الخطوة دي.</string>
+    <string name="mod_file_browser_delete_failed">المسح فشل</string>
+    <string name="mod_file_browser_protected">ملف محمي</string>
+    <string name="mod_file_browser_protected_file">بيانات مجموعة المودات المحمية · مفيش تعديل أو مسح</string>
+
+    <!-- Settings -->
+    <string name="settings_title">الإعدادات</string>
+    <string name="settings_section_appearance">المظهر</string>
+    <string name="settings_section_ingame">في اللعبة</string>
+    <string name="settings_section_maintenance">الصيانة</string>
+    <string name="settings_section_config">ملفات الإعدادات</string>
+    <string name="settings_clear_bepinex">مسح ملفات BepInEx</string>
+    <string name="settings_clear_bepinex_desc">مسح كل ملفات BepInEx و مكتبات الربط. محتاج تعيد الاستخراج في المرة الجاية.</string>
+    <string name="settings_clear_dotnet">مسح بيانات .NET</string>
+    <string name="settings_clear_dotnet_desc">مسح بيئة تشغيل .NET و بيانات اللعبة المنقولة. الملفات هتتستخرج تاني في المرة الجاية.</string>
+    <string name="settings_copy_resources">نسخ موارد اللعبة</string>
+    <string name="settings_copy_resources_desc">نسخ بياناتأصول اللعبة على التخزين المحلي عشان توليد الربط.</string>
+    <string name="settings_theme">السمة</string>
+    <string name="settings_language">اللغة</string>
+    <string name="settings_dynamic_color">اللون الديناميكي</string>
+    <string name="settings_dynamic_color_desc">استخدم ألوان Android Monet لما تكون متاحة.</string>
+    <string name="settings_animation_disabled">عطّل الرسوم المتحركة</string>
+    <string name="settings_animation_disabled_desc">عطّل رسوم حركة التنقل وانتقال الصفحات.</string>
+    <string name="settings_about">عن التطبيق</string>
+
+    <!-- Confirm Dialogs -->
+    <string name="confirm_clear_bepinex_title">تمسح ملفات BepInEx؟</string>
+    <string name="confirm_clear_bepinex_msg">هتمسح كل ملفات BepInEx و مكتبات الربط للعبة دي. هتحتاج تعيد الاستخراج في المرة الجاية.</string>
+    <string name="confirm_clear_dotnet_title">تمسح بيانات .NET؟</string>
+    <string name="confirm_clear_dotnet_msg">هتمسح بيئة تشغيل .NET و بيانات اللعبة المنقولة للعبة دي. الملفات هتتستخرج تاني في المرة الجاية.</string>
+    <string name="confirm_copy_resources_title">تمسح موارد اللعبة؟</string>
+    <string name="confirm_copy_resources_msg">هتنسخ بيانات أصول اللعبة من الـ APK على التخزين المحلي.</string>
+    <string name="confirm_yes">أيوه</string>
+    <string name="confirm_no">لأ</string>
+    <string name="confirm_cancel">إلغاء</string>
+    <string name="confirm_delete">مسح</string>
+
+    <!-- Theme -->
+    <string name="theme_dark">داكن</string>
+    <string name="theme_light">فاتح</string>
+    <string name="theme_system">النظام الافتراضي</string>
+
+    <!-- Language -->
+    <string name="lang_english">English</string>
+    <string name="lang_chinese">简体中文</string>
+    <string name="lang_system">النظام الافتراضي</string>
+
+    <!-- About -->
+    <string name="about_title">BepInEx Launcher</string>
+    <string name="about_description">محمّل BepInEx بيدعم Android</string>
+    <string name="about_version">الإصدار %1$s (البناء %2$d)</string>
+    <string name="about_disclaimer">⚠ BepInEx Launcher مش مدعوم رسميًا من مشروع BepInEx.</string>
+    <string name="about_projects_section">المشاريع المستخدمة والمُرجعية</string>
+    <string name="about_project_bepinex_name">BepInEx</string>
+    <string name="about_project_bepinex_desc">Unity IL2CPP modding framework — the core plugin loader. BepInEx 6.0.0-pre.2 by BepInEx team.</string>
+    <string name="about_project_fusioncore_name">FusionCore</string>
+    <string name="about_project_fusioncore_desc">Starlight team\'s Android Unity IL2CPP Runtime Container. Main reference for injection chain, Pine hooks, and NativeLoader architecture.</string>
+    <string name="about_project_nextbep_name">NextBep (BepInEx.Android)</string>
+    <string name="about_project_nextbep_desc">Our custom BepInEx fork for Android. Adapts BepInEx 6 for embedded CoreCLR + IL2CPP interop.</string>
+    <string name="about_project_dotnet_name">dotnet/runtime</string>
+    <string name="about_project_dotnet_desc">Microsoft .NET Runtime v10.0.5. Built from source with OpenSSL crypto backend to fix BoringSSL SIGSEGV on Android 16 / Xiaomi HyperOS.</string>
+    <string name="about_project_openssl_name">OpenSSL</string>
+    <string name="about_project_openssl_desc">OpenSSL 3.4.0 — replacing BoringSSL for ARM64 Android crypto. libcrypto.so + libssl.so.</string>
+    <string name="about_project_pine_name">Pine</string>
+    <string name="about_project_pine_desc">ART Java method hook framework (top.canyie.pine:core:0.3.0). Used for ClassLoader, PackageManager, and UnityPlayer hooks.</string>
+    <string name="about_project_dobby_name">Dobby</string>
+    <string name="about_project_dobby_desc">Native hook framework for ARM64. Used for il2cpp_init hook in libfusion.</string>
+    <string name="about_project_bepinexandroid_name">BepInEx.Android.Launcher</string>
+    <string name="about_project_bepinexandroid_desc">Generic BepInEx Android launcher — supports multiple games with modpack management.</string>
+    <string name="about_project_cpp2il_name">Cpp2IL</string>
+    <string name="about_project_cpp2il_desc">IL2CPP reverse engineering tool. Used for interop assembly generation.</string>
+    <string name="about_dev_section">المطورين الرئيسيين</string>
+    <string name="about_dev_names">HayashiUme · HexCat · Celestynka</string>
+    <string name="about_footer">©2026 NextBep</string>
+
+    <string name="about_url_bepinex">https://github.com/BepInEx/BepInEx</string>
+    <string name="about_url_fusioncore">https://github.com/All-Of-Us-Mods/FusionCore</string>
+    <string name="about_url_nextbep">https://github.com/NextBep/BepInEx.Android</string>
+    <string name="about_url_bepinexandroid">https://github.com/NextBep/BepInEx.Android.Launcher</string>
+    <string name="about_url_dotnet">https://github.com/dotnet/runtime</string>
+    <string name="about_url_openssl">https://github.com/openssl/openssl</string>
+    <string name="about_url_pine">https://github.com/canyie/Pine</string>
+    <string name="about_url_dobby">https://github.com/jmpews/Dobby</string>
+    <string name="about_url_cpp2il">https://github.com/SamboyCoding/Cpp2IL</string>
+
+    <!-- Log -->
+    <string name="log_title">سجل BepInEx</string>
+    <string name="log_share">مشاركة</string>
+    <string name="log_copy">نسخ</string>
+    <string name="log_clear">مسح</string>
+    <string name="log_empty">مفيش سجلات لسه. شغل لعبة عشان تشوف سجلات BepInEx.</string>
+    <string name="log_copied">السجل اتنسخ على الحافظة</string>
+    <string name="log_filter_all">الكل</string>
+    <string name="log_filter_errors">أخطاء</string>
+    <string name="log_filter_warnings">تحذيرات</string>
+    <string name="log_auto_scroll">تمرير تلقائي</string>
+
+    <!-- Storage Permission -->
+    <string name="storage_permission_title">إذن التخزين مطلوب</string>
+    <string name="storage_permission_message">BepInEx Launcher محتاج يوصل لكل الملفات عشان يستخرج BepInEx و يدير المودات.</string>
+    <string name="storage_permission_grant">امنح الإذن</string>
+
+    <!-- In-Game Settings -->
+    <string name="settings_ingame_section">في اللعبة</string>
+    <string name="settings_floating_log">سجل عائم في اللعبة</string>
+    <string name="settings_floating_log_desc">ถ้จัดแสดงปุ่มบันทึกแบบลอยอยู่เหนือเกม แตะเพื่อดูบันทึก BepInEx แบบเรียลไทม์</string>
+    <string name="settings_block_unity_kill">حظر خروج بدء تشغيل Unity</string>
+    <string name="settings_block_unity_kill_desc">حظر UnityPlayer.kill() مؤقتًا أثناء بدء التشغيل. فعّل بس للألعاب اللي بت退出 أثناء الحقن.</string>
+
+    <!-- Launch -->
+    <string name="launch_failed">التشغيل فشل</string>
+    <string name="launch_wait_extraction">استنى شوية — BepInEx لسه بيتستخرج</string>
+    <string name="launch_no_game">مفيش لعبة اتناخت</string>
+
+    <!-- Generic -->
+    <string name="ok">تمام</string>
+    <string name="back">رجوع</string>
+    <string name="close">قفل</string>
+    <string name="loading">جاري التحميل…</string>
+    <string name="error">خطأ</string>
+    <string name="done">خلص</string>
+    <string name="share_saved">الرسالة اتحفظت، روح على اللعبة</string>
+    <string name="crash_detected_title">التشغيل السابق للعبة مش رجع</string>
+    <string name="crash_detected_message">التشغيل السابق لـ %s ممكن يكون تعطل. تقدر تصدر بيانات تشخيصية عشان تحل المشكلة.</string>
+    <string name="crash_export">تصدير البيانات التشخيصية</string>
+    <string name="crash_export_failed">التصدير فشل</string>
+
+    <!-- Bootstrap Loading -->
+    <string name="bootstrap_title">جاري تشغيل اللعبة المختارة</string>
+    <string name="bootstrap_status_preparing">جاري تحضير الحزمة المستهدفة…</string>
+    <string name="bootstrap_status_copy_assets">جاري نسخ بيانات Unity…</string>
+    <string name="bootstrap_status_detecting_version">جاري اكتشاف إصدار Unity…</string>
+    <string name="bootstrap_status_downloading_libunity">جاري تحميل libunity اللي مش مصغّر…</string>
+    <string name="bootstrap_status_extracting_runtime">جاري استخراج ملفات بيئة التشغيل…</string>
+    <string name="bootstrap_status_registering_libraries">جاري تسجيل المكتبات الأصلية…</string>
+    <string name="bootstrap_status_installing_hooks">جاري تثبيت الخطاطات…</string>
+    <string name="bootstrap_status_launching">جاري تشغيل اللعبة…</string>
+    <string name="bootstrap_status_error">التشغيل فشل</string>
+    <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
+</resources>

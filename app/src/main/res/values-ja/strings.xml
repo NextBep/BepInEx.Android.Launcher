@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">BepInEx ランチャー</string>
+    <string name="app_tagline">BepInEx ランチャー</string>
+
+    <!-- Navigation -->
+    <string name="nav_games">ゲーム</string>
+    <string name="nav_modpacks">Modパック</string>
+    <string name="nav_settings">設定</string>
+    <string name="nav_about">このアプリについて</string>
+
+    <!-- Game Detection -->
+    <string name="scan_title">検出されたゲーム</string>
+    <string name="scanning">Unity IL2CPP ゲームをスキャン中…</string>
+    <string name="no_games_found">Unity IL2CPP ゲームが見つかりません</string>
+    <string name="no_games_hint">Unity IL2CPP ゲームをインストールして開始してください</string>
+    <string name="scan_again">再スキャン</string>
+    <string name="rescan">再スキャン</string>
+
+    <!-- Framework Status -->
+    <string name="framework_ready">BepInEx 準備完了</string>
+    <string name="framework_setting_up">セットアップ中…</string>
+    <string name="extracting">BepInEx を展開中…</string>
+    <string name="mod_count">%d 件の mod</string>
+
+    <!-- Actions -->
+    <string name="import_mod">Mod をインポート</string>
+    <string name="launch">起動</string>
+    <string name="refresh">更新</string>
+    <string name="delete">削除</string>
+
+    <!-- Mods -->
+    <string name="installed_mods">インストール済み Mod</string>
+    <string name="no_mods_installed">インストールされた Mod はありません</string>
+    <string name="no_mods_hint">「Mod をインポート」をタップして .dll ファイルを追加してください</string>
+    <string name="mod_deleted">削除しました: %s</string>
+    <string name="mod_imported">インポートしました: %s</string>
+    <string name="import_failed">インポートに失敗しました</string>
+
+    <!-- Modpacks -->
+    <string name="modpack_title">Modパック</string>
+    <string name="modpack_create">Modパックを作成</string>
+    <string name="modpack_delete">Modパックを削除</string>
+    <string name="modpack_rename">名前を変更</string>
+    <string name="modpack_export">エクスポート</string>
+    <string name="modpack_import">Modパックをインポート</string>
+    <string name="modpack_select_active">有効にする</string>
+    <string name="modpack_vanilla">バニラ（Mod なし）</string>
+    <string name="modpack_name_hint">Modパック名</string>
+    <string name="modpack_confirm_delete_title">Modパックを削除</string>
+    <string name="modpack_confirm_delete_msg">「%s」とそのすべての Mod を削除しますか？この操作は元に戻せません。</string>
+    <string name="modpack_created">Modパックを作成しました: %s</string>
+    <string name="modpack_deleted">Modパックを削除しました: %s</string>
+    <string name="modpack_exported">エクスポートしました: %s</string>
+    <string name="modpack_imported">インポートしました: %s</string>
+    <string name="modpack_no_mods">この Modパックに Mod はありません</string>
+    <string name="modpack_add_mod">Mod を追加</string>
+    <string name="modpack_target_game">対象: %s</string>
+    <string name="modpack_mod_count">%d 件の mod</string>
+    <string name="modpack_active">有効</string>
+
+    <!-- Config Editor -->
+    <string name="config_editor_title">設定エディタ</string>
+    <string name="config_editor_save">保存</string>
+    <string name="config_editor_save_failed">ファイルの保存に失敗しました</string>
+    <string name="config_editor_unsaved">未保存の変更</string>
+    <string name="config_editor_discard_title">変更を破棄しますか？</string>
+    <string name="config_editor_discard_msg">未保存の変更があります。破棄しますか？</string>
+    <string name="config_editor_no_configs">設定ファイルがありません</string>
+
+    <!-- Mod File Browser -->
+    <string name="mod_file_browser_title">Mod ファイル</string>
+    <string name="mod_file_browser_empty">このディレクトリは空です</string>
+    <string name="mod_file_browser_missing">Modパックのディレクトリが存在しません</string>
+    <string name="mod_file_browser_directory">ディレクトリ</string>
+    <string name="mod_file_browser_editable_file">%1$s · タップして表示または編集</string>
+    <string name="mod_file_browser_unsupported_file">%1$s · プレビュー非対応</string>
+    <string name="mod_file_browser_edit_file">ファイルを表示または編集</string>
+    <string name="mod_file_browser_delete_file">ファイルを削除</string>
+    <string name="mod_file_browser_delete_title">ファイルを削除しますか？</string>
+    <string name="mod_file_browser_delete_message">「%1$s」を削除しますか？この操作は元に戻せません。</string>
+    <string name="mod_file_browser_delete_failed">ファイルの削除に失敗しました</string>
+    <string name="mod_file_browser_protected">保護されたファイル</string>
+    <string name="mod_file_browser_protected_file">保護された Modパックメタデータ · 編集・削除できません</string>
+
+    <!-- Settings -->
+    <string name="settings_title">設定</string>
+    <string name="settings_section_appearance">外観</string>
+    <string name="settings_section_ingame">ゲーム内</string>
+    <string name="settings_section_maintenance">メンテナンス</string>
+    <string name="settings_section_config">設定ファイル</string>
+    <string name="settings_clear_bepinex">BepInEx ファイルをクリア</string>
+    <string name="settings_clear_bepinex_desc">すべての BepInEx ファイルと interop アセンブリを削除します。次回起動時に再展開が必要です。</string>
+    <string name="settings_clear_dotnet">.NET データをクリア</string>
+    <string name="settings_clear_dotnet_desc">.NET ランタイムとコピーされたゲームデータを削除します。次回起動時にファイルが再展開されます。</string>
+    <string name="settings_copy_resources">ゲームリソースをコピー</string>
+    <string name="settings_copy_resources_desc">ゲームのアセットデータをローカルストレージにコピーして interop を生成します。</string>
+    <string name="settings_theme">テーマ</string>
+    <string name="settings_language">言語</string>
+    <string name="settings_dynamic_color">ダイナミックカラー</string>
+    <string name="settings_dynamic_color_desc">利用可能な場合に Android Monet カラーを使用します。</string>
+    <string name="settings_animation_disabled">アニメーションを無効化</string>
+    <string name="settings_animation_disabled_desc">ナビゲーションとページ遷移のアニメーションを無効化します。</string>
+    <string name="settings_about">このアプリについて</string>
+
+    <!-- Confirm Dialogs -->
+    <string name="confirm_clear_bepinex_title">BepInEx ファイルをクリアしますか？</string>
+    <string name="confirm_clear_bepinex_msg">このゲームのすべての BepInEx ファイルと interop アセンブリが削除されます。次回起動時に再展開が必要です。</string>
+    <string name="confirm_clear_dotnet_title">.NET データをクリアしますか？</string>
+    <string name="confirm_clear_dotnet_msg">このゲームの .NET ランタイムとコピーされたゲームデータが削除されます。次回起動時にファイルが再展開されます。</string>
+    <string name="confirm_copy_resources_title">ゲームリソースをコピーしますか？</string>
+    <string name="confirm_copy_resources_msg">APK からゲームのアセットデータをローカルストレージにコピーします。</string>
+    <string name="confirm_yes">はい</string>
+    <string name="confirm_no">いいえ</string>
+    <string name="confirm_cancel">キャンセル</string>
+    <string name="confirm_delete">削除</string>
+
+    <!-- Theme -->
+    <string name="theme_dark">ダーク</string>
+    <string name="theme_light">ライト</string>
+    <string name="theme_system">システムのデフォルト</string>
+
+    <!-- Language -->
+    <string name="lang_english">English</string>
+    <string name="lang_chinese">简体中文</string>
+    <string name="lang_system">システムのデフォルト</string>
+
+    <!-- About -->
+    <string name="about_title">BepInEx ランチャー</string>
+    <string name="about_description">Android をサポートする BepInEx ローダー</string>
+    <string name="about_version">バージョン %1$s (ビルド %2$d)</string>
+    <string name="about_disclaimer">⚠ BepInEx ランチャーは BepInEx プロジェクトによって公式にサポートされていません。</string>
+    <string name="about_projects_section">使用・参照プロジェクト</string>
+    <string name="about_project_bepinex_name">BepInEx</string>
+    <string name="about_project_bepinex_desc">Unity IL2CPP modding framework — the core plugin loader. BepInEx 6.0.0-pre.2 by BepInEx team.</string>
+    <string name="about_project_fusioncore_name">FusionCore</string>
+    <string name="about_project_fusioncore_desc">Starlight team\'s Android Unity IL2CPP Runtime Container. Main reference for injection chain, Pine hooks, and NativeLoader architecture.</string>
+    <string name="about_project_nextbep_name">NextBep (BepInEx.Android)</string>
+    <string name="about_project_nextbep_desc">Our custom BepInEx fork for Android. Adapts BepInEx 6 for embedded CoreCLR + IL2CPP interop.</string>
+    <string name="about_project_dotnet_name">dotnet/runtime</string>
+    <string name="about_project_dotnet_desc">Microsoft .NET Runtime v10.0.5. Built from source with OpenSSL crypto backend to fix BoringSSL SIGSEGV on Android 16 / Xiaomi HyperOS.</string>
+    <string name="about_project_openssl_name">OpenSSL</string>
+    <string name="about_project_openssl_desc">OpenSSL 3.4.0 — replacing BoringSSL for ARM64 Android crypto. libcrypto.so + libssl.so.</string>
+    <string name="about_project_pine_name">Pine</string>
+    <string name="about_project_pine_desc">ART Java method hook framework (top.canyie.pine:core:0.3.0). Used for ClassLoader, PackageManager, and UnityPlayer hooks.</string>
+    <string name="about_project_dobby_name">Dobby</string>
+    <string name="about_project_dobby_desc">Native hook framework for ARM64. Used for il2cpp_init hook in libfusion.</string>
+    <string name="about_project_bepinexandroid_name">BepInEx.Android.Launcher</string>
+    <string name="about_project_bepinexandroid_desc">Generic BepInEx Android launcher — supports multiple games with modpack management.</string>
+    <string name="about_project_cpp2il_name">Cpp2IL</string>
+    <string name="about_project_cpp2il_desc">IL2CPP reverse engineering tool. Used for interop assembly generation.</string>
+    <string name="about_dev_section">メイン開発者</string>
+    <string name="about_dev_names">HayashiUme · HexCat · Celestynka</string>
+    <string name="about_footer">©2026 NextBep</string>
+
+    <string name="about_url_bepinex">https://github.com/BepInEx/BepInEx</string>
+    <string name="about_url_fusioncore">https://github.com/All-Of-Us-Mods/FusionCore</string>
+    <string name="about_url_nextbep">https://github.com/NextBep/BepInEx.Android</string>
+    <string name="about_url_bepinexandroid">https://github.com/NextBep/BepInEx.Android.Launcher</string>
+    <string name="about_url_dotnet">https://github.com/dotnet/runtime</string>
+    <string name="about_url_openssl">https://github.com/openssl/openssl</string>
+    <string name="about_url_pine">https://github.com/canyie/Pine</string>
+    <string name="about_url_dobby">https://github.com/jmpews/Dobby</string>
+    <string name="about_url_cpp2il">https://github.com/SamboyCoding/Cpp2IL</string>
+
+    <!-- Log -->
+    <string name="log_title">BepInEx ログ</string>
+    <string name="log_share">共有</string>
+    <string name="log_copy">コピー</string>
+    <string name="log_clear">クリア</string>
+    <string name="log_empty">ログエントリがありません。ゲームを起動して BepInEx ログを確認してください。</string>
+    <string name="log_copied">ログをクリップボードにコピーしました</string>
+    <string name="log_filter_all">すべて</string>
+    <string name="log_filter_errors">エラー</string>
+    <string name="log_filter_warnings">警告</string>
+    <string name="log_auto_scroll">自動スクロール</string>
+
+    <!-- Storage Permission -->
+    <string name="storage_permission_title">ストレージの許可が必要です</string>
+    <string name="storage_permission_message">BepInEx ランチャーは BepInEx を展開し Mod を管理するためにすべてのファイルへのアクセスが必要です。</string>
+    <string name="storage_permission_grant">許可を与える</string>
+
+    <!-- In-Game Settings -->
+    <string name="settings_ingame_section">ゲーム内</string>
+    <string name="settings_floating_log">ゲーム内のフローティングログ</string>
+    <string name="settings_floating_log_desc">ゲームの上にフローティングログボタンを表示します。タップでリアルタイムの BepInEx ログを確認できます。</string>
+    <string name="settings_block_unity_kill">Unity 起動時の終了をブロック</string>
+    <string name="settings_block_unity_kill_desc">起動中に UnityPlayer.kill() を一時的にブロックします。インジェクション中に終了するゲームのみ有効にしてください。</string>
+
+    <!-- Launch -->
+    <string name="launch_failed">起動に失敗しました</string>
+    <string name="launch_wait_extraction">お待ちください — BepInEx はまだ展開中です</string>
+    <string name="launch_no_game">ゲームが選択されていません</string>
+
+    <!-- Generic -->
+    <string name="ok">OK</string>
+    <string name="back">戻る</string>
+    <string name="close">閉じる</string>
+    <string name="loading">読み込み中…</string>
+    <string name="error">エラー</string>
+    <string name="done">完了</string>
+    <string name="share_saved">メッセージを保存しました。ゲームに戻ってください</string>
+    <string name="crash_detected_title">前回のゲーム起動が戻ってきていません</string>
+    <string name="crash_detected_message">%1$s の前回の起動がクラッシュした可能性があります。トラブルシューティングのために診断情報をエクスポートできます。</string>
+    <string name="crash_export">診断情報をエクスポート</string>
+    <string name="crash_export_failed">診断情報のエクスポートに失敗しました</string>
+
+    <!-- Bootstrap Loading -->
+    <string name="bootstrap_title">選択したゲームを起動中</string>
+    <string name="bootstrap_status_preparing">ターゲットパッケージを準備中…</string>
+    <string name="bootstrap_status_copy_assets">Unity データをコピー中…</string>
+    <string name="bootstrap_status_detecting_version">Unity バージョンを検出中…</string>
+    <string name="bootstrap_status_downloading_libunity">ストリップされていない libunity をダウンロード中…</string>
+    <string name="bootstrap_status_extracting_runtime">ランタイムファイルを展開中…</string>
+    <string name="bootstrap_status_registering_libraries">ネイティブライブラリを登録中…</string>
+    <string name="bootstrap_status_installing_hooks">フックをインストール中…</string>
+    <string name="bootstrap_status_launching">ゲームを起動中…</string>
+    <string name="bootstrap_status_error">起動に失敗しました</string>
+    <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
+</resources>

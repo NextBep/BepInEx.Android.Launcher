@@ -28,6 +28,7 @@ fun SettingsScreen(
     language: AppSettings.Language,
     floatingLogInGame: Boolean,
     blockUnityKill: Boolean,
+    useUnstrippedLibUnity: Boolean,
     dynamicColor: Boolean,
     animationDisabled: Boolean,
     onNavigateBack: () -> Unit,
@@ -36,10 +37,12 @@ fun SettingsScreen(
     onLanguageChanged: (AppSettings.Language) -> Unit,
     onFloatingLogInGameChanged: (Boolean) -> Unit,
     onBlockUnityKillChanged: (Boolean) -> Unit,
+    onUseUnstrippedLibUnityChanged: (Boolean) -> Unit,
     onDynamicColorChanged: (Boolean) -> Unit,
     onAnimationDisabledChanged: (Boolean) -> Unit,
     onClearBepInEx: () -> Unit,
     onClearDotnet: () -> Unit,
+    onClearLibUnity: () -> Unit,
     onCopyGameResources: () -> Unit
 ) {
     var showThemeMenu by remember { mutableStateOf(false) }
@@ -190,6 +193,24 @@ fun SettingsScreen(
                 )
             }
 
+            // libunity
+            item {
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.settings_unstripped_libunity)) },
+                    supportingContent = { Text(stringResource(R.string.settings_unstripped_libunity_desc)) },
+                    leadingContent = {
+                        Icon(Icons.Outlined.Code, null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    },
+                    trailingContent = {
+                        Switch(
+                            checked = useUnstrippedLibUnity,
+                            onCheckedChange = onUseUnstrippedLibUnityChanged
+                        )
+                    }
+                )
+            }
+
             // Maintenance section
             item {
                 Text(
@@ -221,6 +242,18 @@ fun SettingsScreen(
                             tint = MaterialTheme.colorScheme.error)
                     },
                     modifier = Modifier.clickable { confirmAction = "dotnet" }
+                )
+            }
+
+            item {
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.settings_clear_libunity)) },
+                    supportingContent = { Text(stringResource(R.string.settings_clear_libunity_desc)) },
+                    leadingContent = {
+                        Icon(Icons.Outlined.Delete, null,
+                            tint = MaterialTheme.colorScheme.error)
+                    },
+                    modifier = Modifier.clickable { confirmAction = "libunity" }
                 )
             }
 
@@ -319,6 +352,11 @@ fun SettingsScreen(
                 stringResource(R.string.confirm_copy_resources_title),
                 stringResource(R.string.confirm_copy_resources_msg),
                 { onCopyGameResources(); confirmAction = null }
+            )
+            "libunity" -> Triple(
+                stringResource(R.string.confirm_clear_libunity_title),
+                stringResource(R.string.confirm_clear_libunity_msg),
+                { onClearLibUnity(); confirmAction = null }
             )
             else -> Triple("", "", { confirmAction = null })
         }

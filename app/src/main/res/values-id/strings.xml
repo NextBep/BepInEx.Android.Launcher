@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">BepInEx Launcher</string>
+    <string name="app_tagline">BepInEx Launcher</string>
+
+    <!-- Navigation -->
+    <string name="nav_games">Game</string>
+    <string name="nav_modpacks">Paket Mod</string>
+    <string name="nav_settings">Pengaturan</string>
+    <string name="nav_about">Tentang</string>
+
+    <!-- Game Detection -->
+    <string name="scan_title">Game Terdeteksi</string>
+    <string name="scanning">Mencari game Unity IL2CPP…</string>
+    <string name="no_games_found">Tidak Ada Game Unity IL2CPP yang Ditemukan</string>
+    <string name="no_games_hint">Instal game Unity IL2CPP untuk memulai</string>
+    <string name="scan_again">Pindai Lagi</string>
+    <string name="rescan">Pindai Ulang</string>
+
+    <!-- Framework Status -->
+    <string name="framework_ready">BepInEx Siap</string>
+    <string name="framework_setting_up">Menyiapkan…</string>
+    <string name="extracting">Mengekstrak BepInEx…</string>
+    <string name="mod_count">%d mod</string>
+
+    <!-- Actions -->
+    <string name="import_mod">Impor Mod</string>
+    <string name="launch">Luncurkan</string>
+    <string name="refresh">Segarkan</string>
+    <string name="delete">Hapus</string>
+
+    <!-- Mods -->
+    <string name="installed_mods">Mod Terinstal</string>
+    <string name="no_mods_installed">Tidak Ada Mod Terinstal</string>
+    <string name="no_mods_hint">Ketuk Impor Mod untuk menambahkan file .dll</string>
+    <string name="mod_deleted">Dihapus: %s</string>
+    <string name="mod_imported">Diimpor: %s</string>
+    <string name="import_failed">Impor gagal</string>
+
+    <!-- Modpacks -->
+    <string name="modpack_title">Paket Mod</string>
+    <string name="modpack_create">Buat Paket Mod</string>
+    <string name="modpack_delete">Hapus Paket Mod</string>
+    <string name="modpack_rename">Ganti Nama</string>
+    <string name="modpack_export">Ekspor</string>
+    <string name="modpack_import">Impor Paket Mod</string>
+    <string name="modpack_select_active">Aktifkan</string>
+    <string name="modpack_vanilla">Vanilla (Tanpa Mod)</string>
+    <string name="modpack_name_hint">Nama paket mod</string>
+    <string name="modpack_confirm_delete_title">Hapus Paket Mod</string>
+    <string name="modpack_confirm_delete_msg">Hapus \"%s\" dan semua mod-nya? Tindakan ini tidak dapat dibatalkan.</string>
+    <string name="modpack_created">Paket mod dibuat: %s</string>
+    <string name="modpack_deleted">Paket mod dihapus: %s</string>
+    <string name="modpack_exported">Diekspor: %s</string>
+    <string name="modpack_imported">Diimpor: %s</string>
+    <string name="modpack_no_mods">Tidak ada mod dalam paket ini</string>
+    <string name="modpack_add_mod">Tambah Mod</string>
+    <string name="modpack_target_game">Untuk: %s</string>
+    <string name="modpack_mod_count">%d mod</string>
+    <string name="modpack_active">Aktif</string>
+
+    <!-- Config Editor -->
+    <string name="config_editor_title">Editor Konfigurasi</string>
+    <string name="config_editor_save">Simpan</string>
+    <string name="config_editor_save_failed">Gagal menyimpan file</string>
+    <string name="config_editor_unsaved">Perubahan belum disimpan</string>
+    <string name="config_editor_discard_title">Buang Perubahan?</string>
+    <string name="config_editor_discard_msg">Anda memiliki perubahan yang belum disimpan. Buang?</string>
+    <string name="config_editor_no_configs">Tidak ada file konfigurasi</string>
+
+    <!-- Mod File Browser -->
+    <string name="mod_file_browser_title">File Mod</string>
+    <string name="mod_file_browser_empty">Direktori ini kosong</string>
+    <string name="mod_file_browser_missing">Direktori paket mod tidak ada</string>
+    <string name="mod_file_browser_directory">Direktori</string>
+    <string name="mod_file_browser_editable_file">%1$s · Ketuk untuk melihat atau mengedit</string>
+    <string name="mod_file_browser_unsupported_file">%1$s · Pratinjau tidak didukung</string>
+    <string name="mod_file_browser_edit_file">Lihat atau edit file</string>
+    <string name="mod_file_browser_delete_file">Hapus file</string>
+    <string name="mod_file_browser_delete_title">Hapus file?</string>
+    <string name="mod_file_browser_delete_message">Hapus \"%1$s\"? Tindakan ini tidak dapat dibatalkan.</string>
+    <string name="mod_file_browser_delete_failed">Gagal menghapus file</string>
+    <string name="mod_file_browser_protected">File dilindungi</string>
+    <string name="mod_file_browser_protected_file">Metadata paket mod dilindungi · Tidak dapat diedit atau dihapus</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Pengaturan</string>
+    <string name="settings_section_appearance">Tampilan</string>
+    <string name="settings_section_ingame">Dalam Game</string>
+    <string name="settings_section_maintenance">Pemeliharaan</string>
+    <string name="settings_section_config">File Konfigurasi</string>
+    <string name="settings_clear_bepinex">Hapus File BepInEx</string>
+    <string name="settings_clear_bepinex_desc">Hapus semua file BepInEx dan assembly interop. Diperlukan untuk ekstraksi ulang pada peluncuran berikutnya.</string>
+    <string name="settings_clear_dotnet">Hapus Data .NET</string>
+    <string name="settings_clear_dotnet_desc">Hapus runtime .NET dan data game yang disalin. File akan diekstrak ulang pada peluncuran berikutnya.</string>
+    <string name="settings_copy_resources">Salin Sumber Daya Game</string>
+    <string name="settings_copy_resources_desc">Salin data aset game ke penyimpanan lokal untuk pembuatan interop.</string>
+    <string name="settings_theme">Tema</string>
+    <string name="settings_language">Bahasa</string>
+    <string name="settings_dynamic_color">Warna dinamis</string>
+    <string name="settings_dynamic_color_desc">Gunakan warna Android Monet jika tersedia.</string>
+    <string name="settings_animation_disabled">Nonaktifkan animasi</string>
+    <string name="settings_animation_disabled_desc">Nonaktifkan animasi navigasi dan transisi halaman.</string>
+    <string name="settings_about">Tentang</string>
+
+    <!-- Confirm Dialogs -->
+    <string name="confirm_clear_bepinex_title">Hapus File BepInEx?</string>
+    <string name="confirm_clear_bepinex_msg">Ini akan menghapus semua file BepInEx dan assembly interop untuk game ini. Anda perlu mengekstrak ulang pada peluncuran berikutnya.</string>
+    <string name="confirm_clear_dotnet_title">Hapus Data .NET?</string>
+    <string name="confirm_clear_dotnet_msg">Ini akan menghapus runtime .NET dan data game yang disalin untuk game ini. File akan diekstrak ulang pada peluncuran berikutnya.</string>
+    <string name="confirm_copy_resources_title">Salin Sumber Daya Game?</string>
+    <string name="confirm_copy_resources_msg">Ini akan menyalin data aset game dari APK ke penyimpanan lokal.</string>
+    <string name="confirm_yes">Ya</string>
+    <string name="confirm_no">Tidak</string>
+    <string name="confirm_cancel">Batal</string>
+    <string name="confirm_delete">Hapus</string>
+
+    <!-- Theme -->
+    <string name="theme_dark">Gelap</string>
+    <string name="theme_light">Terang</string>
+    <string name="theme_system">Default Sistem</string>
+
+    <!-- Language -->
+    <string name="lang_english">English</string>
+    <string name="lang_chinese">简体中文</string>
+    <string name="lang_system">Default Sistem</string>
+
+    <!-- About -->
+    <string name="about_title">BepInEx Launcher</string>
+    <string name="about_description">Pemuat BepInEx yang mendukung Android</string>
+    <string name="about_version">Versi %1$s (Build %2$d)</string>
+    <string name="about_disclaimer">⚠ BepInEx Launcher tidak didukung secara resmi oleh proyek BepInEx.</string>
+    <string name="about_projects_section">Proyek yang Digunakan &amp; Dirujuk</string>
+    <string name="about_project_bepinex_name">BepInEx</string>
+    <string name="about_project_bepinex_desc">Unity IL2CPP modding framework — the core plugin loader. BepInEx 6.0.0-pre.2 by BepInEx team.</string>
+    <string name="about_project_fusioncore_name">FusionCore</string>
+    <string name="about_project_fusioncore_desc">Starlight team\'s Android Unity IL2CPP Runtime Container. Main reference for injection chain, Pine hooks, and NativeLoader architecture.</string>
+    <string name="about_project_nextbep_name">NextBep (BepInEx.Android)</string>
+    <string name="about_project_nextbep_desc">Our custom BepInEx fork for Android. Adapts BepInEx 6 for embedded CoreCLR + IL2CPP interop.</string>
+    <string name="about_project_dotnet_name">dotnet/runtime</string>
+    <string name="about_project_dotnet_desc">Microsoft .NET Runtime v10.0.5. Built from source with OpenSSL crypto backend to fix BoringSSL SIGSEGV on Android 16 / Xiaomi HyperOS.</string>
+    <string name="about_project_openssl_name">OpenSSL</string>
+    <string name="about_project_openssl_desc">OpenSSL 3.4.0 — replacing BoringSSL for ARM64 Android crypto. libcrypto.so + libssl.so.</string>
+    <string name="about_project_pine_name">Pine</string>
+    <string name="about_project_pine_desc">ART Java method hook framework (top.canyie.pine:core:0.3.0). Used for ClassLoader, PackageManager, and UnityPlayer hooks.</string>
+    <string name="about_project_dobby_name">Dobby</string>
+    <string name="about_project_dobby_desc">Native hook framework for ARM64. Used for il2cpp_init hook in libfusion.</string>
+    <string name="about_project_bepinexandroid_name">BepInEx.Android.Launcher</string>
+    <string name="about_project_bepinexandroid_desc">Generic BepInEx Android launcher — supports multiple games with modpack management.</string>
+    <string name="about_project_cpp2il_name">Cpp2IL</string>
+    <string name="about_project_cpp2il_desc">IL2CPP reverse engineering tool. Used for interop assembly generation.</string>
+    <string name="about_dev_section">Pengembang Utama</string>
+    <string name="about_dev_names">HayashiUme · HexCat · Celestynka</string>
+    <string name="about_footer">©2026 NextBep</string>
+
+    <string name="about_url_bepinex">https://github.com/BepInEx/BepInEx</string>
+    <string name="about_url_fusioncore">https://github.com/All-Of-Us-Mods/FusionCore</string>
+    <string name="about_url_nextbep">https://github.com/NextBep/BepInEx.Android</string>
+    <string name="about_url_bepinexandroid">https://github.com/NextBep/BepInEx.Android.Launcher</string>
+    <string name="about_url_dotnet">https://github.com/dotnet/runtime</string>
+    <string name="about_url_openssl">https://github.com/openssl/openssl</string>
+    <string name="about_url_pine">https://github.com/canyie/Pine</string>
+    <string name="about_url_dobby">https://github.com/jmpews/Dobby</string>
+    <string name="about_url_cpp2il">https://github.com/SamboyCoding/Cpp2IL</string>
+
+    <!-- Log -->
+    <string name="log_title">Log BepInEx</string>
+    <string name="log_share">Bagikan</string>
+    <string name="log_copy">Salin</string>
+    <string name="log_clear">Hapus</string>
+    <string name="log_empty">Belum ada entri log. Luncurkan game untuk melihat log BepInEx.</string>
+    <string name="log_copied">Log disalin ke clipboard</string>
+    <string name="log_filter_all">Semua</string>
+    <string name="log_filter_errors">Kesalahan</string>
+    <string name="log_filter_warnings">Peringatan</string>
+    <string name="log_auto_scroll">Gulir otomatis</string>
+
+    <!-- Storage Permission -->
+    <string name="storage_permission_title">Izin Penyimpanan Diperlukan</string>
+    <string name="storage_permission_message">BepInEx Launcher membutuhkan akses ke semua file untuk mengekstrak BepInEx dan mengelola mod.</string>
+    <string name="storage_permission_grant">Berikan Izin</string>
+
+    <!-- In-Game Settings -->
+    <string name="settings_ingame_section">Dalam Game</string>
+    <string name="settings_floating_log">Log Mengambang dalam Game</string>
+    <string name="settings_floating_log_desc">Tampilkan tombol log mengambang di atas game. Ketuk untuk melihat log BepInEx secara real-time.</string>
+    <string name="settings_block_unity_kill">Blokir keluar startup Unity</string>
+    <string name="settings_block_unity_kill_desc">Blokir UnityPlayer.kill() sementara saat startup. Hanya aktifkan untuk game yang keluar selama injeksi.</string>
+
+    <!-- Launch -->
+    <string name="launch_failed">Peluncuran gagal</string>
+    <string name="launch_wait_extraction">Harap tunggu — BepInEx masih dalam proses ekstraksi</string>
+    <string name="launch_no_game">Tidak ada game yang dipilih</string>
+
+    <!-- Generic -->
+    <string name="ok">OK</string>
+    <string name="back">Kembali</string>
+    <string name="close">Tutup</string>
+    <string name="loading">Memuat…</string>
+    <string name="error">Kesalahan</string>
+    <string name="done">Selesai</string>
+    <string name="share_saved">Pesan tersimpan, kembali ke game</string>
+    <string name="crash_detected_title">Peluncuran game sebelumnya tidak kembali</string>
+    <string name="crash_detected_message">Peluncuran sebelumnya dari %1$s mungkin crash. Anda dapat mengekspor data diagnostik untuk pemecahan masalah.</string>
+    <string name="crash_export">Ekspor data diagnostik</string>
+    <string name="crash_export_failed">Gagal mengekspor data diagnostik</string>
+
+    <!-- Bootstrap Loading -->
+    <string name="bootstrap_title">Meluncurkan game yang dipilih</string>
+    <string name="bootstrap_status_preparing">Menyiapkan paket target…</string>
+    <string name="bootstrap_status_copy_assets">Menyalin data Unity…</string>
+    <string name="bootstrap_status_detecting_version">Mendeteksi versi Unity…</string>
+    <string name="bootstrap_status_downloading_libunity">Mengunduh libunity tanpa strip…</string>
+    <string name="bootstrap_status_extracting_runtime">Mengekstrak file runtime…</string>
+    <string name="bootstrap_status_registering_libraries">Mendaftarkan pustaka native…</string>
+    <string name="bootstrap_status_installing_hooks">Memasang hook…</string>
+    <string name="bootstrap_status_launching">Meluncurkan game…</string>
+    <string name="bootstrap_status_error">Peluncuran gagal</string>
+    <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
+</resources>

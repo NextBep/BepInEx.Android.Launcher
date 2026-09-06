@@ -21,7 +21,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import com.bepinex.android.ui.components.CrashRecoveryDialog
+import com.bepinex.android.ui.components.UpdateDialog
 import com.bepinex.android.log.BepInExLogReader
+import com.bepinex.android.update.UpdateChecker
 import com.bepinex.android.settings.AppSettings
 import com.bepinex.android.ui.navigation.BepInExNavHost
 import com.bepinex.android.ui.theme.BepInExTheme
@@ -48,6 +50,7 @@ class MainActivity : ComponentActivity() {
     private var storagePermissionGranted = false
     private var pendingCrash: CrashDiagnostics.PendingLaunch? = null
     private var leftLauncher = false
+    private var updateInfo: UpdateChecker.UpdateInfo? = null
 
     // Settings state
     private var themeMode = AppSettings.ThemeMode.SYSTEM
@@ -97,6 +100,7 @@ class MainActivity : ComponentActivity() {
 
         checkStoragePermission()
         handleSharedText(intent)
+        checkForUpdates()
     }
 
     // Storage permission
@@ -286,7 +290,8 @@ class MainActivity : ComponentActivity() {
             CrashDiagnostics.markLaunch(this, game.packageName)
             val intent = Intent(this, BootstrapActivity::class.java).apply {
                 putExtra(BootstrapActivity.EXTRA_TARGET_PACKAGE, game.packageName)
-                putExtra(BootstrapActivity.EXTRA_USE_ORIGINAL_LIBUNITY, true)
+                putExtra(BootstrapActivity.EXTRA_USE_ORIGINAL_LIBUNITY,
+                    !AppSettings.isUseUnstrippedLibUnity(this@MainActivity, game.packageName))
                 putExtra(
                     BootstrapActivity.EXTRA_BLOCK_UNITY_KILL,
                     AppSettings.isUnityKillBlockEnabled(this@MainActivity, game.packageName)
@@ -367,6 +372,20 @@ class MainActivity : ComponentActivity() {
         Toast.makeText(this, getString(R.string.done), Toast.LENGTH_SHORT).show()
     }
 
+    private fun onClearLibUnity(packageName: String) {
+        val appDataDir = BepInExPaths.getAppDataDir(filesDir, packageName)
+        val libunityDir = java.io.File(appDataDir, "libunity")
+        val resId = if (libunityDir.exists()) {
+            libunityDir.deleteRecursively()
+            BepInExLog.i("Cleared libunity cache: ${libunityDir.absolutePath}")
+            R.string.clear_libunity_done
+        } else {
+            BepInExLog.i("Clear libunity: nothing to clear at ${libunityDir.absolutePath}")
+            R.string.clear_libunity_none
+        }
+        Toast.makeText(this, getString(resId), Toast.LENGTH_SHORT).show()
+    }
+
     private fun onCopyGameResources(packageName: String) {
         scope.launch(Dispatchers.IO) {
             try {
@@ -386,6 +405,23 @@ class MainActivity : ComponentActivity() {
                 BepInExLog.e("Failed to copy resources", e)
                 withContext(Dispatchers.Main) {
                     Toast.makeText(this@MainActivity, "Failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun checkForUpdates() {
+        scope.launch(Dispatchers.IO) {
+            val info = UpdateChecker.fetchLatestRelease()
+            withContext(Dispatchers.Main) {
+                if (info != null) {
+                    val currentVersion = try {
+                        packageManager.getPackageInfo(packageName, 0).versionName ?: ""
+                    } catch (_: Exception) { "" }
+
+                    if (UpdateChecker.hasUpdate(currentVersion, info.version)) {
+                        updateInfo = info
+                    }
                 }
             }
         }
@@ -429,6 +465,7 @@ class MainActivity : ComponentActivity() {
                     },
                     onClearBepInEx = { onClearBepInEx(it) },
                     onClearDotnet = { onClearDotnet(it) },
+                    onClearLibUnity = { onClearLibUnity(it) },
                     onCopyGameResources = { onCopyGameResources(it) }
                 )
                 if (crash != null) {
@@ -442,6 +479,17 @@ class MainActivity : ComponentActivity() {
                             pendingCrash = null
                             CrashDiagnostics.clearPending(this@MainActivity)
                         }
+                    )
+                }
+                val currentUpdateInfo = updateInfo
+                if (currentUpdateInfo != null) {
+                    val currentVersion = try {
+                        packageManager.getPackageInfo(packageName, 0).versionName ?: ""
+                    } catch (_: Exception) { "" }
+                    UpdateDialog(
+                        updateInfo = currentUpdateInfo,
+                        currentVersion = currentVersion,
+                        onDismiss = { updateInfo = null }
                     )
                 }
             }

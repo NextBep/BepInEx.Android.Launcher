@@ -63,6 +63,7 @@ fun BepInExNavHost(
     onAnimationDisabledChanged: (Boolean) -> Unit,
     onClearBepInEx: (String) -> Unit,
     onClearDotnet: (String) -> Unit,
+    onClearLibUnity: (String) -> Unit,
     onCopyGameResources: (String) -> Unit
 ) {
     val navController = rememberNavController()
@@ -264,6 +265,7 @@ fun BepInExNavHost(
                         },
                         onClearBepInEx = { selectedGame?.let { onClearBepInEx(it.packageName) } },
                         onClearDotnet = { selectedGame?.let { onClearDotnet(it.packageName) } },
+                        onClearLibUnity = { selectedGame?.let { onClearLibUnity(it.packageName) } },
                         onCopyGameResources = { selectedGame?.let { onCopyGameResources(it.packageName) } },
                         onCreateModpack = { name ->
                             selectedGame?.let { game ->
@@ -304,17 +306,19 @@ fun BepInExNavHost(
                         },
                         onExportModpack = { name ->
                             selectedGame?.let { game ->
-                                val file = File(context.cacheDir, "$name.zip")
-                                if (modpackManager.exportModpack(game.packageName, name, file)) {
-                                    val uri = androidx.core.content.FileProvider.getUriForFile(
-                                        context, "${context.packageName}.provider", file
-                                    )
-                                    val share = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
-                                        type = "application/zip"
-                                        putExtra(android.content.Intent.EXTRA_STREAM, uri)
-                                        addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                kotlinx.coroutines.MainScope().launch(kotlinx.coroutines.Dispatchers.IO) {
+                                    val file = File(context.cacheDir, "$name.zip")
+                                    if (modpackManager.exportModpack(game.packageName, name, file)) {
+                                        val uri = androidx.core.content.FileProvider.getUriForFile(
+                                            context, "${context.packageName}.provider", file
+                                        )
+                                        val share = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+                                            type = "application/zip"
+                                            putExtra(android.content.Intent.EXTRA_STREAM, uri)
+                                            addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                        }
+                                        context.startActivity(android.content.Intent.createChooser(share, name))
                                     }
-                                    context.startActivity(android.content.Intent.createChooser(share, name))
                                 }
                             }
                         },
@@ -371,12 +375,14 @@ fun BepInExNavHost(
                             navController.navigate(NavRoutes.modpackDetail(packageName, name))
                         },
                         onExportModpack = { name ->
-                            val outputFile = java.io.File(
-                                android.os.Environment.getExternalStorageDirectory(),
-                        "BepInEx_Android/export/${name}.zip"
-                            )
-                            outputFile.parentFile?.mkdirs()
-                            modpackManager.exportModpack(packageName, name, outputFile)
+                            kotlinx.coroutines.MainScope().launch(kotlinx.coroutines.Dispatchers.IO) {
+                                val outputFile = java.io.File(
+                                    android.os.Environment.getExternalStorageDirectory(),
+                                    "BepInEx_Android/export/${name}.zip"
+                                )
+                                outputFile.parentFile?.mkdirs()
+                                modpackManager.exportModpack(packageName, name, outputFile)
+                            }
                         },
                         onImportModpack = { importModpackTrigger = true }
                     )
@@ -419,27 +425,31 @@ fun BepInExNavHost(
                             navController.navigate(NavRoutes.logViewer(packageName, modpackName))
                         },
                         onExportModpack = {
-                            val outputFile = java.io.File(
-                                context.cacheDir,
-                                "${modpackName}.zip"
-                            )
-                            outputFile.parentFile?.mkdirs()
-                            val success = modpackManager.exportModpack(packageName, modpackName, outputFile)
-                            if (success) {
-                                val uri = androidx.core.content.FileProvider.getUriForFile(
-                                    context,
-                                    "${context.packageName}.provider",
-                                    outputFile
+                            kotlinx.coroutines.MainScope().launch(kotlinx.coroutines.Dispatchers.IO) {
+                                val outputFile = java.io.File(
+                                    context.cacheDir,
+                                    "${modpackName}.zip"
                                 )
-                                val shareIntent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
-                                    type = "application/zip"
-                                    putExtra(android.content.Intent.EXTRA_STREAM, uri)
-                                    putExtra(android.content.Intent.EXTRA_SUBJECT, modpackName)
-                                    addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                outputFile.parentFile?.mkdirs()
+                                val success = modpackManager.exportModpack(packageName, modpackName, outputFile)
+                                kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main) {
+                                    if (success) {
+                                        val uri = androidx.core.content.FileProvider.getUriForFile(
+                                            context,
+                                            "${context.packageName}.provider",
+                                            outputFile
+                                        )
+                                        val shareIntent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+                                            type = "application/zip"
+                                            putExtra(android.content.Intent.EXTRA_STREAM, uri)
+                                            putExtra(android.content.Intent.EXTRA_SUBJECT, modpackName)
+                                            addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                        }
+                                        context.startActivity(android.content.Intent.createChooser(shareIntent, "Share Modpack"))
+                                    } else {
+                                        android.widget.Toast.makeText(context, "Export failed", android.widget.Toast.LENGTH_SHORT).show()
+                                    }
                                 }
-                                context.startActivity(android.content.Intent.createChooser(shareIntent, "Share Modpack"))
-                            } else {
-                                android.widget.Toast.makeText(context, "Export failed", android.widget.Toast.LENGTH_SHORT).show()
                             }
                         }
                     )
@@ -461,12 +471,16 @@ fun BepInExNavHost(
                     var blockUnityKill by remember(packageName) {
                         mutableStateOf(AppSettings.isUnityKillBlockEnabled(settingsContext, packageName))
                     }
+                    var useUnstrippedLibUnity by remember(packageName) {
+                        mutableStateOf(AppSettings.isUseUnstrippedLibUnity(settingsContext, packageName))
+                    }
                     SettingsScreen(
                         packageName = packageName,
                         themeMode = themeMode,
                         language = language,
                         floatingLogInGame = floatingLogInGame,
                         blockUnityKill = blockUnityKill,
+                        useUnstrippedLibUnity = useUnstrippedLibUnity,
                         onNavigateBack = { navController.popBackStack() },
                         onNavigateToAbout = { navController.navigate(NavRoutes.ABOUT) },
                         onThemeChanged = onThemeChanged,
@@ -475,9 +489,13 @@ fun BepInExNavHost(
                             AppSettings.setFloatingLogInGameEnabled(settingsContext, enabled)
                             floatingLogInGame = enabled
                         },
-    onBlockUnityKillChanged = { enabled ->
+                        onBlockUnityKillChanged = { enabled ->
                             AppSettings.setUnityKillBlockEnabled(settingsContext, packageName, enabled)
                             blockUnityKill = enabled
+                        },
+                        onUseUnstrippedLibUnityChanged = { enabled ->
+                            AppSettings.setUseUnstrippedLibUnity(settingsContext, packageName, enabled)
+                            useUnstrippedLibUnity = enabled
                         },
                         dynamicColor = dynamicColor,
                         animationDisabled = animationDisabled,
@@ -485,6 +503,7 @@ fun BepInExNavHost(
                         onAnimationDisabledChanged = onAnimationDisabledChanged,
                         onClearBepInEx = { onClearBepInEx(packageName) },
                         onClearDotnet = { onClearDotnet(packageName) },
+                        onClearLibUnity = { onClearLibUnity(packageName) },
                         onCopyGameResources = { onCopyGameResources(packageName) }
                     )
                 }
@@ -523,7 +542,7 @@ fun BepInExNavHost(
                         onDismiss = { navController.popBackStack() },
                         onSave = { f, content ->
                             f.writeText(content)
-                            navController.popBackStack()
+                            true
                         }
                     )
                 }

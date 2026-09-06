@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">BepInEx 런처</string>
+    <string name="app_tagline">BepInEx 런처</string>
+
+    <!-- Navigation -->
+    <string name="nav_games">게임</string>
+    <string name="nav_modpacks">Mod 팩</string>
+    <string name="nav_settings">설정</string>
+    <string name="nav_about">정보</string>
+
+    <!-- Game Detection -->
+    <string name="scan_title">감지된 게임</string>
+    <string name="scanning">Unity IL2CPP 게임 검색 중…</string>
+    <string name="no_games_found">Unity IL2CPP 게임을 찾을 수 없음</string>
+    <string name="no_games_hint">Unity IL2CPP 게임을 설치하여 시작하세요</string>
+    <string name="scan_again">다시 스캔</string>
+    <string name="rescan">재스캔</string>
+
+    <!-- Framework Status -->
+    <string name="framework_ready">BepInEx 준비 완료</string>
+    <string name="framework_setting_up">설정 중…</string>
+    <string name="extracting">BepInEx 압축 해제 중…</string>
+    <string name="mod_count">%d 개의 mod</string>
+
+    <!-- Actions -->
+    <string name="import_mod">Mod 가져오기</string>
+    <string name="launch">시작</string>
+    <string name="refresh">새로고침</string>
+    <string name="delete">삭제</string>
+
+    <!-- Mods -->
+    <string name="installed_mods">설치된 Mod</string>
+    <string name="no_mods_installed">설치된 Mod 없음</string>
+    <string name="no_mods_hint">Mod 가져오기 탭하여 .dll 파일 추가</string>
+    <string name="mod_deleted">삭제됨: %s</string>
+    <string name="mod_imported">가져옴: %s</string>
+    <string name="import_failed">가져오기 실패</string>
+
+    <!-- Modpacks -->
+    <string name="modpack_title">Mod 팩</string>
+    <string name="modpack_create">Mod 팩 만들기</string>
+    <string name="modpack_delete">Mod 팩 삭제</string>
+    <string name="modpack_rename">이름 변경</string>
+    <string name="modpack_export">내보내기</string>
+    <string name="modpack_import">Mod 팩 가져오기</string>
+    <string name="modpack_select_active">활성화</string>
+    <string name="modpack_vanilla">바닐라 (Mod 없음)</string>
+    <string name="modpack_name_hint">Mod 팩 이름</string>
+    <string name="modpack_confirm_delete_title">Mod 팩 삭제</string>
+    <string name="modpack_confirm_delete_msg">\"%s\" 및 모든 Mod를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.</string>
+    <string name="modpack_created">Mod 팩 생성됨: %s</string>
+    <string name="modpack_deleted">Mod 팩 삭제됨: %s</string>
+    <string name="modpack_exported">내보냄: %s</string>
+    <string name="modpack_imported">가져옴: %s</string>
+    <string name="modpack_no_mods">이 Mod 팩에 Mod가 없습니다</string>
+    <string name="modpack_add_mod">Mod 추가</string>
+    <string name="modpack_target_game">대상: %s</string>
+    <string name="modpack_mod_count">%d 개의 mod</string>
+    <string name="modpack_active">활성</string>
+
+    <!-- Config Editor -->
+    <string name="config_editor_title">설정 편집기</string>
+    <string name="config_editor_save">저장</string>
+    <string name="config_editor_save_failed">파일 저장 실패</string>
+    <string name="config_editor_unsaved">저장되지 않은 변경 사항</string>
+    <string name="config_editor_discard_title">변경 사항을 버리시겠습니까?</string>
+    <string name="config_editor_discard_msg">저장되지 않은 변경 사항이 있습니다. 버리시겠습니까?</string>
+    <string name="config_editor_no_configs">설정 파일 없음</string>
+
+    <!-- Mod File Browser -->
+    <string name="mod_file_browser_title">Mod 파일</string>
+    <string name="mod_file_browser_empty">이 디렉토리는 비어 있습니다</string>
+    <string name="mod_file_browser_missing">Mod 팩 디렉토리가 존재하지 않습니다</string>
+    <string name="mod_file_browser_directory">디렉토리</string>
+    <string name="mod_file_browser_editable_file">%1$s · 탭하여 보거나 편집</string>
+    <string name="mod_file_browser_unsupported_file">%1$s · 미리보기 지원되지 않음</string>
+    <string name="mod_file_browser_edit_file">파일 보기 또는 편집</string>
+    <string name="mod_file_browser_delete_file">파일 삭제</string>
+    <string name="mod_file_browser_delete_title">파일을 삭제하시겠습니까?</string>
+    <string name="mod_file_browser_delete_message">\"%1$s\"를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.</string>
+    <string name="mod_file_browser_delete_failed">파일 삭제 실패</string>
+    <string name="mod_file_browser_protected">보호된 파일</string>
+    <string name="mod_file_browser_protected_file">보호된 Mod 팩 메타데이터 · 편집 또는 삭제 불가</string>
+
+    <!-- Settings -->
+    <string name="settings_title">설정</string>
+    <string name="settings_section_appearance">모양</string>
+    <string name="settings_section_ingame">게임 내</string>
+    <string name="settings_section_maintenance">유지보수</string>
+    <string name="settings_section_config">설정 파일</string>
+    <string name="settings_clear_bepinex">BepInEx 파일 지우기</string>
+    <string name="settings_clear_bepinex_desc">모든 BepInEx 파일 및 interop 어셈블리를 삭제합니다. 다음 시작 시 재압축 해제가 필요합니다.</string>
+    <string name="settings_clear_dotnet">.NET 데이터 지우기</string>
+    <string name="settings_clear_dotnet_desc">.NET 런타임 및 복사된 게임 데이터를 삭제합니다. 다음 시작 시 파일이 재압축 해제됩니다.</string>
+    <string name="settings_copy_resources">게임 리소스 복사</string>
+    <string name="settings_copy_resources_desc">게임의 에셋 데이터를 로컬 스토리지에 복사하여 interop를 생성합니다.</string>
+    <string name="settings_theme">테마</string>
+    <string name="settings_language">언어</string>
+    <string name="settings_dynamic_color">다이나믹 컬러</string>
+    <string name="settings_dynamic_color_desc">사용 가능한 경우 Android Monet 색상을 사용합니다.</string>
+    <string name="settings_animation_disabled">애니메이션 비활성화</string>
+    <string name="settings_animation_disabled_desc">탐색 및 페이지 전환 애니메이션을 비활성화합니다.</string>
+    <string name="settings_about">정보</string>
+
+    <!-- Confirm Dialogs -->
+    <string name="confirm_clear_bepinex_title">BepInEx 파일을 지우시겠습니까?</string>
+    <string name="confirm_clear_bepinex_msg">이 게임의 모든 BepInEx 파일 및 interop 어셈블리가 삭제됩니다. 다음 시작 시 재압축 해제가 필요합니다.</string>
+    <string name="confirm_clear_dotnet_title">.NET 데이터를 지우시겠습니까?</string>
+    <string name="confirm_clear_dotnet_msg">이 게임의 .NET 런타임 및 복사된 게임 데이터가 삭제됩니다. 다음 시작 시 파일이 재압축 해제됩니다.</string>
+    <string name="confirm_copy_resources_title">게임 리소스를 복사하시겠습니까?</string>
+    <string name="confirm_copy_resources_msg">APK에서 게임의 에셋 데이터를 로컬 스토리지로 복사합니다.</string>
+    <string name="confirm_yes">예</string>
+    <string name="confirm_no">아니오</string>
+    <string name="confirm_cancel">취소</string>
+    <string name="confirm_delete">삭제</string>
+
+    <!-- Theme -->
+    <string name="theme_dark">다크</string>
+    <string name="theme_light">라이트</string>
+    <string name="theme_system">시스템 기본값</string>
+
+    <!-- Language -->
+    <string name="lang_english">English</string>
+    <string name="lang_chinese">简体中文</string>
+    <string name="lang_system">시스템 기본값</string>
+
+    <!-- About -->
+    <string name="about_title">BepInEx 런처</string>
+    <string name="about_description">Android를 지원하는 BepInEx 로더</string>
+    <string name="about_version">버전 %1$s (빌드 %2$d)</string>
+    <string name="about_disclaimer">⚠ BepInEx 런처는 BepInEx 프로젝트에서 공식적으로 지원하지 않습니다.</string>
+    <string name="about_projects_section">사용 및 참조 프로젝트</string>
+    <string name="about_project_bepinex_name">BepInEx</string>
+    <string name="about_project_bepinex_desc">Unity IL2CPP modding framework — the core plugin loader. BepInEx 6.0.0-pre.2 by BepInEx team.</string>
+    <string name="about_project_fusioncore_name">FusionCore</string>
+    <string name="about_project_fusioncore_desc">Starlight team\'s Android Unity IL2CPP Runtime Container. Main reference for injection chain, Pine hooks, and NativeLoader architecture.</string>
+    <string name="about_project_nextbep_name">NextBep (BepInEx.Android)</string>
+    <string name="about_project_nextbep_desc">Our custom BepInEx fork for Android. Adapts BepInEx 6 for embedded CoreCLR + IL2CPP interop.</string>
+    <string name="about_project_dotnet_name">dotnet/runtime</string>
+    <string name="about_project_dotnet_desc">Microsoft .NET Runtime v10.0.5. Built from source with OpenSSL crypto backend to fix BoringSSL SIGSEGV on Android 16 / Xiaomi HyperOS.</string>
+    <string name="about_project_openssl_name">OpenSSL</string>
+    <string name="about_project_openssl_desc">OpenSSL 3.4.0 — replacing BoringSSL for ARM64 Android crypto. libcrypto.so + libssl.so.</string>
+    <string name="about_project_pine_name">Pine</string>
+    <string name="about_project_pine_desc">ART Java method hook framework (top.canyie.pine:core:0.3.0). Used for ClassLoader, PackageManager, and UnityPlayer hooks.</string>
+    <string name="about_project_dobby_name">Dobby</string>
+    <string name="about_project_dobby_desc">Native hook framework for ARM64. Used for il2cpp_init hook in libfusion.</string>
+    <string name="about_project_bepinexandroid_name">BepInEx.Android.Launcher</string>
+    <string name="about_project_bepinexandroid_desc">Generic BepInEx Android launcher — supports multiple games with modpack management.</string>
+    <string name="about_project_cpp2il_name">Cpp2IL</string>
+    <string name="about_project_cpp2il_desc">IL2CPP reverse engineering tool. Used for interop assembly generation.</string>
+    <string name="about_dev_section">주요 개발자</string>
+    <string name="about_dev_names">HayashiUme · HexCat · Celestynka</string>
+    <string name="about_footer">©2026 NextBep</string>
+
+    <string name="about_url_bepinex">https://github.com/BepInEx/BepInEx</string>
+    <string name="about_url_fusioncore">https://github.com/All-Of-Us-Mods/FusionCore</string>
+    <string name="about_url_nextbep">https://github.com/NextBep/BepInEx.Android</string>
+    <string name="about_url_bepinexandroid">https://github.com/NextBep/BepInEx.Android.Launcher</string>
+    <string name="about_url_dotnet">https://github.com/dotnet/runtime</string>
+    <string name="about_url_openssl">https://github.com/openssl/openssl</string>
+    <string name="about_url_pine">https://github.com/canyie/Pine</string>
+    <string name="about_url_dobby">https://github.com/jmpews/Dobby</string>
+    <string name="about_url_cpp2il">https://github.com/SamboyCoding/Cpp2IL</string>
+
+    <!-- Log -->
+    <string name="log_title">BepInEx 로그</string>
+    <string name="log_share">공유</string>
+    <string name="log_copy">복사</string>
+    <string name="log_clear">지우기</string>
+    <string name="log_empty">로그 항목이 없습니다. 게임을 시작하여 BepInEx 로그를 확인하세요.</string>
+    <string name="log_copied">로그가 클립보드에 복사됨</string>
+    <string name="log_filter_all">모두</string>
+    <string name="log_filter_errors">오류</string>
+    <string name="log_filter_warnings">경고</string>
+    <string name="log_auto_scroll">자동 스크롤</string>
+
+    <!-- Storage Permission -->
+    <string name="storage_permission_title">저장소 권한 필요</string>
+    <string name="storage_permission_message">BepInEx 런처는 BepInEx를 압축 해제하고 Mod를 관리하기 위해 모든 파일에 대한 접근이 필요합니다.</string>
+    <string name="storage_permission_grant">권한 부여</string>
+
+    <!-- In-Game Settings -->
+    <string name="settings_ingame_section">게임 내</string>
+    <string name="settings_floating_log">게임 내 플로팅 로그</string>
+    <string name="settings_floating_log_desc">게임 위에 플로팅 로그 버튼을 표시합니다. 탭하여 실시간 BepInEx 로그를 확인하세요.</string>
+    <string name="settings_block_unity_kill">Unity 시작 종료 차단</string>
+    <string name="settings_block_unity_kill_desc">시작 시 UnityPlayer.kill()을 일시적으로 차단합니다. 주입 중에 종료되는 게임에만 활성화하세요.</string>
+
+    <!-- Launch -->
+    <string name="launch_failed">시작 실패</string>
+    <string name="launch_wait_extraction">잠시만 기다려주세요 — BepInEx가 아직 압축 해제 중입니다</string>
+    <string name="launch_no_game">게임이 선택되지 않음</string>
+
+    <!-- Generic -->
+    <string name="ok">확인</string>
+    <string name="back">뒤로</string>
+    <string name="close">닫기</string>
+    <string name="loading">로딩 중…</string>
+    <string name="error">오류</string>
+    <string name="done">완료</string>
+    <string name="share_saved">메시지가 저장되었습니다. 게임으로 돌아가세요</string>
+    <string name="crash_detected_title">이전 게임 시작이 반환되지 않음</string>
+    <string name="crash_detected_message">%1$s의 이전 시작이 충돌했을 수 있습니다. 문제 해결을 위해 진단 정보를 내보낼 수 있습니다.</string>
+    <string name="crash_export">진단 정보 내보내기</string>
+    <string name="crash_export_failed">진단 정보 내보내기 실패</string>
+
+    <!-- Bootstrap Loading -->
+    <string name="bootstrap_title">선택한 게임 시작 중</string>
+    <string name="bootstrap_status_preparing">대상 패키지 준비 중…</string>
+    <string name="bootstrap_status_copy_assets">Unity 데이터 복사 중…</string>
+    <string name="bootstrap_status_detecting_version">Unity 버전 감지 중…</string>
+    <string name="bootstrap_status_downloading_libunity">스트립되지 않은 libunity 다운로드 중…</string>
+    <string name="bootstrap_status_extracting_runtime">런타임 파일 압축 해제 중…</string>
+    <string name="bootstrap_status_registering_libraries">네이티브 라이브러리 등록 중…</string>
+    <string name="bootstrap_status_installing_hooks">훅 설치 중…</string>
+    <string name="bootstrap_status_launching">게임 시작 중…</string>
+    <string name="bootstrap_status_error">시작 실패</string>
+    <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
+</resources>

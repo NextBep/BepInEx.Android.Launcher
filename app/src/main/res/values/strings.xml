@@ -63,10 +63,26 @@
     <!-- Config Editor -->
     <string name="config_editor_title">Config Editor</string>
     <string name="config_editor_save">Save</string>
+    <string name="config_editor_save_failed">Failed to save the file</string>
     <string name="config_editor_unsaved">Unsaved changes</string>
     <string name="config_editor_discard_title">Discard Changes?</string>
     <string name="config_editor_discard_msg">You have unsaved changes. Discard them?</string>
     <string name="config_editor_no_configs">No config files</string>
+
+    <!-- Mod File Browser -->
+    <string name="mod_file_browser_title">Mod Files</string>
+    <string name="mod_file_browser_empty">This directory is empty</string>
+    <string name="mod_file_browser_missing">The modpack directory does not exist</string>
+    <string name="mod_file_browser_directory">Directory</string>
+    <string name="mod_file_browser_editable_file">%1$s · Tap to view or edit</string>
+    <string name="mod_file_browser_unsupported_file">%1$s · Preview not supported</string>
+    <string name="mod_file_browser_edit_file">View or edit file</string>
+    <string name="mod_file_browser_delete_file">Delete file</string>
+    <string name="mod_file_browser_delete_title">Delete file?</string>
+    <string name="mod_file_browser_delete_message">Delete "%1$s"? This cannot be undone.</string>
+    <string name="mod_file_browser_delete_failed">Failed to delete the file</string>
+    <string name="mod_file_browser_protected">Protected file</string>
+    <string name="mod_file_browser_protected_file">Protected modpack metadata · Cannot edit or delete</string>
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>
@@ -78,6 +94,10 @@
     <string name="settings_clear_bepinex_desc">Delete all BepInEx files and interop assemblies. Required for re-extraction on next launch.</string>
     <string name="settings_clear_dotnet">Clear .NET Data</string>
     <string name="settings_clear_dotnet_desc">Delete the .NET runtime and copied game data. Files will be re-extracted on next launch.</string>
+    <string name="settings_unstripped_libunity">Use Unstripped libunity</string>
+    <string name="settings_unstripped_libunity_desc">Download and use unstripped libunity.so with full icalls.</string>
+    <string name="settings_clear_libunity">Clear libunity Cache</string>
+    <string name="settings_clear_libunity_desc">Delete the downloaded unstripped libunity.so files. Will be re-downloaded on next launch.</string>
     <string name="settings_copy_resources">Copy Game Resources</string>
     <string name="settings_copy_resources_desc">Copy the game\'s asset data to local storage for interop generation.</string>
     <string name="settings_theme">Theme</string>
@@ -95,6 +115,10 @@
     <string name="confirm_clear_dotnet_msg">This will delete the .NET runtime and copied game data for this game. Files will be re-extracted on next launch.</string>
     <string name="confirm_copy_resources_title">Copy Game Resources?</string>
     <string name="confirm_copy_resources_msg">This will copy the game\'s asset data from the APK to local storage.</string>
+    <string name="confirm_clear_libunity_title">Clear libunity Cache?</string>
+    <string name="confirm_clear_libunity_msg">This will delete the downloaded unstripped libunity.so files. They will be re-downloaded on next launch.</string>
+    <string name="clear_libunity_done">libunity cache cleared</string>
+    <string name="clear_libunity_none">No libunity cache to clear</string>
     <string name="confirm_yes">Yes</string>
     <string name="confirm_no">No</string>
     <string name="confirm_cancel">Cancel</string>
@@ -189,6 +213,14 @@
     <string name="crash_detected_message">The previous launch of %1$s may have crashed. You can export diagnostics for troubleshooting.</string>
     <string name="crash_export">Export diagnostics</string>
     <string name="crash_export_failed">Failed to export diagnostics</string>
+
+    <!-- Update -->
+    <string name="update_title">Update Available</string>
+    <string name="update_current_version">Current: %1$s</string>
+    <string name="update_latest_version">Latest: %1$s</string>
+    <string name="update_release_notes">Release Notes</string>
+    <string name="update_download">Download</string>
+    <string name="update_later">Later</string>
 
     <!-- Bootstrap Loading -->
     <string name="bootstrap_title">Launching selected game</string>
