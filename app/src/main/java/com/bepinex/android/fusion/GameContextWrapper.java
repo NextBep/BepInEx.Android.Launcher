@@ -5,6 +5,7 @@ import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.view.Display;
+import android.hardware.display.DisplayManager;
 
 import androidx.annotation.Nullable;
 
@@ -72,7 +73,19 @@ public class GameContextWrapper extends ContextWrapper {
     @Override
     public Display getDisplay() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            return this.fusionContext.getDisplay();
+            Display display = this.fusionContext.getDisplay();
+            if (display != null) return display;
+
+            // Some Huawei/HarmonyOS builds temporarily return null from a
+            // window context during rotation. The original Activity and the
+            // display manager remain valid during that transition.
+            if (this.fusionContext instanceof android.app.Activity) {
+                display = ((android.app.Activity) this.fusionContext).getDisplay();
+                if (display != null) return display;
+            }
+            DisplayManager manager = (DisplayManager) this.fusionContext
+                    .getSystemService(Context.DISPLAY_SERVICE);
+            if (manager != null) return manager.getDisplay(Display.DEFAULT_DISPLAY);
         }
         return null;
     }

@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import android.os.Build
 import android.view.Display
+import android.hardware.display.DisplayManager
 import java.io.File
 
 /**
@@ -91,6 +92,9 @@ class CustomContextWrapper(
     override fun getDisplay(): Display? =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             fusionContext.display
+                ?: (fusionContext as? android.app.Activity)?.display
+                ?: (fusionContext.getSystemService(Context.DISPLAY_SERVICE) as? DisplayManager)
+                    ?.getDisplay(Display.DEFAULT_DISPLAY)
         } else null
 
     override fun getSystemService(name: String): Any? =
