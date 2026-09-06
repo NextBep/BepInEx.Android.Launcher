@@ -95,7 +95,7 @@
     <string name="settings_clear_dotnet">Netéla dati .NET</string>
     <string name="settings_clear_dotnet_desc">Cancéla el runtime .NET e i dati de gioco copiài. I fili sarà re-estrar al prossimo avìo.</string>
     <string name="settings_copy_resources">Cópia risorse de gioco</string>
-    <string name="settings_copy_resources_desc">Cópia i dati de risorse de gioco par l'archivio local par la generazion interop.</string>
+    <string name="settings_copy_resources_desc">Copy game asset data to local storage for interop generation.</string>
     <string name="settings_theme">Tema</string>
     <string name="settings_language">Lìngoa</string>
     <string name="settings_dynamic_color">Colór dinamico</string>
@@ -110,7 +110,7 @@
     <string name="confirm_clear_dotnet_title">Netéla dati .NET?</string>
     <string name="confirm_clear_dotnet_msg">Sto cancélarà el runtime .NET e i dati de gioco copiài par sto gioco. I fili sarà re-estrar al prossimo avìo.</string>
     <string name="confirm_copy_resources_title">Cópia risorse de gioco?</string>
-    <string name="confirm_copy_resources_msg">Sto cópierà i dati de risorse de gioco da el APK par l'archivio local.</string>
+    <string name="confirm_copy_resources_msg">This will copy game asset data from the APK to local storage.</string>
     <string name="confirm_yes">Sì</string>
     <string name="confirm_no">No</string>
     <string name="confirm_cancel">Anula</string>
