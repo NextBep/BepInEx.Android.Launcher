@@ -4,11 +4,9 @@ import java.io.File
 import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.regex.Pattern
 
 /**
- * Downloads Unity base libraries from unity.bepinex.dev using Android's
- * [HttpURLConnection]  -- mirroring FusionCore's [LibUnityDownloader] pattern.
+ * Downloads Unity base libraries using Android's [HttpURLConnection].
  *
  * ## Why this exists
  *
@@ -24,16 +22,18 @@ import java.util.regex.Pattern
  * Important: we only download the ZIP  -- BepInEx handles extraction itself
  * (see `Il2CppInteropManager.DownloadUnityAssemblies` lines 293-295).
  *
- * FusionCore does the same thing for `libunity.so`  -- see `LibUnityDownloader.java`.
+ * The primary source is NextBep/AndroidNativeLibraries. The BepInEx mirror is
+ * retained as a per-version fallback because the native library repository does
+ * not contain every Unity patch release.
  */
 object UnityLibsDownloader {
 
     private const val TAG = "UnityLibsDownloader"
-    private const val BASE_URL = "https://unity.bepinex.dev/libraries/"
-
-    // Same pattern as FusionCore LibUnityDownloader.java line 25
-    // Extracts "2022.3.62" from "2022.3.62f3"
-    private val UNITY_BASE_VERSION_PATTERN = Pattern.compile("^(\\d+\\.\\d+\\.\\d+)")
+    private const val NEXTBEP_RAW_BASE_URL =
+        "https://raw.githubusercontent.com/NextBep/AndroidNativeLibraries/main/"
+    private const val NEXTBEP_PROXY_BASE_URL =
+        "https://gh-proxy.org/https://raw.githubusercontent.com/NextBep/AndroidNativeLibraries/main/"
+    private const val BEPINEX_BASE_URL = "https://unity.bepinex.dev/libraries/"
 
     /**
      * Ensure the unity base libraries ZIP is cached in [outputDir].
@@ -53,7 +53,7 @@ object UnityLibsDownloader {
         }
 
         // Normalize version same way FusionCore does (2022.3.62f3  -> 2022.3.62)
-        val downloadVersion = normalizeVersionForDownload(version)
+        val downloadVersion = UnityVersionLookup.normalize(version)
         if (version != downloadVersion) {
             BepInExLog.i("$TAG: Normalized Unity version for download: $version  -> $downloadVersion")
         }
@@ -68,7 +68,12 @@ object UnityLibsDownloader {
         // Remove any partial download before starting
         zipFile.delete()
 
-        return downloadZip(zipFile, downloadVersion, onProgress)
+        val sources = listOf(
+            "${NEXTBEP_PROXY_BASE_URL}${downloadVersion}.zip",
+            "${NEXTBEP_RAW_BASE_URL}${downloadVersion}.zip",
+            "${BEPINEX_BASE_URL}${downloadVersion}.zip"
+        )
+        return sources.any { url -> downloadZip(zipFile, url, downloadVersion, onProgress) }
     }
 
     /**
@@ -76,18 +81,14 @@ object UnityLibsDownloader {
      * Mirrors FusionCore LibUnityDownloader.java lines 271-277.
      * e.g. "2022.3.62f3"  -> "2022.3.62", "2017.1.0p4"  -> "2017.1.0"
      */
-    private fun normalizeVersionForDownload(version: String): String {
-        val matcher = UNITY_BASE_VERSION_PATTERN.matcher(version)
-        if (matcher.find()) {
-            return matcher.group(1)
-        }
-        return version
-    }
-
     // Download
 
-    private fun downloadZip(destFile: File, version: String, onProgress: (String) -> Unit = {}): Boolean {
-        val url = BASE_URL + "$version.zip"
+    private fun downloadZip(
+        destFile: File,
+        url: String,
+        version: String,
+        onProgress: (String) -> Unit = {}
+    ): Boolean {
         BepInExLog.i("$TAG: Downloading $url")
         onProgress("Connecting to server...")
 
@@ -102,8 +103,8 @@ object UnityLibsDownloader {
 
             val status = connection.responseCode
             if (status !in 200..299) {
-                BepInExLog.e("$TAG: HTTP $status  -- cannot download unity base libraries")
-                onProgress("Download failed (HTTP $status)")
+                BepInExLog.w("$TAG: HTTP $status for $url")
+                onProgress("Trying another library source...")
                 return false
             }
 
@@ -133,13 +134,13 @@ object UnityLibsDownloader {
                 }
             }
 
-            if (!tempFile.renameTo(destFile)) {
+            if (tempFile.length() < 4 || !tempFile.renameTo(destFile)) {
                 BepInExLog.e("$TAG: Failed to rename temp file to ${destFile.name}")
                 tempFile.delete()
                 return false
             }
 
-            BepInExLog.i("$TAG: Download complete (${formatSize(destFile.length())})")
+            BepInExLog.i("$TAG: Download complete for Unity $version (${formatSize(destFile.length())})")
             return true
 
         } catch (e: Exception) {

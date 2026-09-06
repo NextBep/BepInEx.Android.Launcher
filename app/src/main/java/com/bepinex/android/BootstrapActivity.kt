@@ -17,9 +17,7 @@ import com.bepinex.android.settings.AppSettings
 import top.canyie.pine.Pine
 import top.canyie.pine.callback.MethodHook
 import java.io.File
-import java.io.RandomAccessFile
 import java.util.concurrent.atomic.AtomicBoolean
-import java.util.regex.Pattern
 
 /**
  * Bootstrap activity that injects BepInEx into the target game process
@@ -35,16 +33,6 @@ class BootstrapActivity : Activity() {
         private const val BACKUP_UNITY_VERSION = "2017.0.0"
         private const val GLOBAL_METADATA_FILE = "global-metadata.dat"
 
-        // Unity version pattern: X.Y.Z[abcfp]N... optionally with suffix
-        private val UNITY_VERSION_PATTERN =
-            Pattern.compile("^\\d+\\.\\d+\\.\\d+(?:[abcfp]\\d+.*|rc\\d+.*)?$")
-
-        // Known offsets in Unity data files where version strings appear
-        private val VERSION_LOOKUP_MAP = mapOf(
-            "globalgamemanagers" to intArrayOf(0x14, 0x30),
-            "data.unity3d" to intArrayOf(0x12),
-            "mainData" to intArrayOf(0x14)
-        )
     }
 
     private val hookInstalled = AtomicBoolean(false)
@@ -331,7 +319,7 @@ class BootstrapActivity : Activity() {
 
         // Detect Unity version from game data (FusionCore VersionLookup)
         updateProgress(getString(R.string.bootstrap_status_detecting_version), "", 45)
-        val unityVersion = tryLookupUnityVersion(copiedData)
+        val unityVersion = UnityVersionLookup.find(copiedData)
             ?: BACKUP_UNITY_VERSION.also {
                 BepInExLog.w("Failed to detect Unity version, using fallback: $BACKUP_UNITY_VERSION")
             }
@@ -390,46 +378,6 @@ class BootstrapActivity : Activity() {
             unityVersion = unityVersion,
             useOriginalLibUnity = useOriginalLibUnity
         )
-    }
-
-    // Unity version detection
-
-    /**
-     * Try to detect Unity version from game data files.
-     * Ported from FusionCore's VersionLookup.java.
-     */
-    private fun tryLookupUnityVersion(dataFolder: File): String? {
-        for ((fileName, offsets) in VERSION_LOOKUP_MAP) {
-            val file = File(dataFolder, fileName)
-            if (!file.isFile) continue
-
-            try {
-                RandomAccessFile(file, "r").use { reader ->
-                    for (offset in offsets) {
-                        if (offset < 0 || offset >= reader.length()) continue
-                        reader.seek(offset.toLong())
-                        val candidate = readAsciiString(reader, 32)
-                        if (candidate != null && UNITY_VERSION_PATTERN.matcher(candidate).matches()) {
-                            return candidate
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                // Try next file
-            }
-        }
-        return null
-    }
-
-    private fun readAsciiString(reader: RandomAccessFile, maxLength: Int): String? {
-        val builder = StringBuilder(maxLength)
-        for (i in 0 until maxLength) {
-            val b = reader.read()
-            if (b == -1 || b == 0) break
-            if (b < 0x20 || b > 0x7E) break
-            builder.append(b.toChar())
-        }
-        return builder.toString().trim().ifEmpty { null }
     }
 
     // Asset copying
