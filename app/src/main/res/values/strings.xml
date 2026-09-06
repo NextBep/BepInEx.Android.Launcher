@@ -181,6 +181,10 @@
     <string name="error">Error</string>
     <string name="done">Done</string>
     <string name="share_saved">Message saved, switch back to game</string>
+    <string name="crash_detected_title">Previous game launch did not return</string>
+    <string name="crash_detected_message">The previous launch of %1$s may have crashed. You can export diagnostics for troubleshooting.</string>
+    <string name="crash_export">Export diagnostics</string>
+    <string name="crash_export_failed">Failed to export diagnostics</string>
 
     <!-- Bootstrap Loading -->
     <string name="bootstrap_title">Launching selected game</string>

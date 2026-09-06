@@ -181,6 +181,10 @@
     <string name="error">错误</string>
     <string name="done">完成</string>
     <string name="share_saved">消息已保存，切回游戏继续</string>
+    <string name="crash_detected_title">上次游戏启动未正常返回</string>
+    <string name="crash_detected_message">上次启动 %1$s 可能发生了崩溃。你可以导出诊断信息以便排查。</string>
+    <string name="crash_export">导出诊断信息</string>
+    <string name="crash_export_failed">诊断信息导出失败</string>
 
     <!-- Bootstrap Loading -->
     <string name="bootstrap_title">正在启动游戏</string>

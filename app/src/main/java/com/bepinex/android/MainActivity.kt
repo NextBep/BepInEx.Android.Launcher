@@ -14,6 +14,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import com.bepinex.android.ui.components.CrashRecoveryDialog
 import com.bepinex.android.log.BepInExLogReader
 import com.bepinex.android.settings.AppSettings
 import com.bepinex.android.ui.navigation.BepInExNavHost
@@ -39,6 +46,8 @@ class MainActivity : ComponentActivity() {
     private var isExtracting = false
     private var extractionStatus = ""
     private var storagePermissionGranted = false
+    private var pendingCrash: CrashDiagnostics.PendingLaunch? = null
+    private var leftLauncher = false
 
     // Settings state
     private var themeMode = AppSettings.ThemeMode.SYSTEM
@@ -80,6 +89,7 @@ class MainActivity : ComponentActivity() {
         BepInExLog.i("Device: ${android.os.Build.MODEL}, Android ${android.os.Build.VERSION.SDK_INT}")
 
         fileExtractor = FileExtractor(this)
+        pendingCrash = CrashDiagnostics.pending(this)
 
         checkStoragePermission()
         handleSharedText(intent)
@@ -122,6 +132,20 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         handleSharedText(intent)
+    }
+
+    override fun onPause() {
+        leftLauncher = true
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (leftLauncher) {
+            CrashDiagnostics.clearPending(this)
+            pendingCrash = null
+            leftLauncher = false
+        }
     }
 
     override fun onDestroy() {
@@ -255,6 +279,7 @@ class MainActivity : ComponentActivity() {
         BepInExLog.i("=== Launching ${game.label} (modpack: ${modpackName ?: "vanilla"}) via BootstrapActivity ===")
 
         try {
+            CrashDiagnostics.markLaunch(this, game.packageName)
             val intent = Intent(this, BootstrapActivity::class.java).apply {
                 putExtra(BootstrapActivity.EXTRA_TARGET_PACKAGE, game.packageName)
                 putExtra(BootstrapActivity.EXTRA_USE_ORIGINAL_LIBUNITY, true)
@@ -268,6 +293,38 @@ class MainActivity : ComponentActivity() {
         } catch (e: Exception) {
             BepInExLog.e("Launch failed", e)
             Toast.makeText(this, getString(R.string.launch_failed), Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun exportCrashDiagnostics(packageName: String) {
+        scope.launch(Dispatchers.IO) {
+            try {
+                val file = CrashDiagnostics.export(this@MainActivity, packageName)
+                CrashDiagnostics.clearPending(this@MainActivity)
+                withContext(Dispatchers.Main) {
+                    val uri = FileProvider.getUriForFile(
+                        this@MainActivity,
+                        "${applicationContext.packageName}.provider",
+                        file
+                    )
+                    val share = Intent(Intent.ACTION_SEND).apply {
+                        type = "application/zip"
+                        putExtra(Intent.EXTRA_STREAM, uri)
+                        putExtra(Intent.EXTRA_SUBJECT, "BepInEx diagnostics: $packageName")
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+                    startActivity(Intent.createChooser(share, getString(R.string.crash_export)))
+                }
+            } catch (e: Exception) {
+                BepInExLog.e("Failed to export diagnostics", e)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        this@MainActivity,
+                        getString(R.string.crash_export_failed),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
         }
     }
 
@@ -335,6 +392,7 @@ class MainActivity : ComponentActivity() {
     private fun render() {
         setContent {
             BepInExTheme(themeMode = themeMode) {
+                val crash = pendingCrash
                 BepInExNavHost(
                     scope = scope,
                     detectedGames = detectedGames,
@@ -359,6 +417,19 @@ class MainActivity : ComponentActivity() {
                     onClearDotnet = { onClearDotnet(it) },
                     onCopyGameResources = { onCopyGameResources(it) }
                 )
+                if (crash != null) {
+                    CrashRecoveryDialog(
+                        packageName = crash.packageName,
+                        onExport = {
+                            pendingCrash = null
+                            exportCrashDiagnostics(crash.packageName)
+                        },
+                        onDismiss = {
+                            pendingCrash = null
+                            CrashDiagnostics.clearPending(this@MainActivity)
+                        }
+                    )
+                }
             }
         }
     }
