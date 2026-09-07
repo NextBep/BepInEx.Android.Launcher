@@ -25,7 +25,6 @@ import androidx.compose.ui.res.stringResource
 import com.bepinex.android.GameDetector
 import com.bepinex.android.R
 import com.bepinex.android.modpack.ModpackMeta
-import com.bepinex.android.settings.AppSettings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -72,6 +71,7 @@ fun MainPagerScreen(
 ) {
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { 3 })
     val pageScope = scope
+    val context = LocalContext.current
 
     LaunchedEffect(pagerState.currentPage) {
         // Page state is intentionally kept in the pager; deep routes are
@@ -152,7 +152,7 @@ fun MainPagerScreen(
                     language = language,
                     floatingLogInGame = floatingLogInGame,
                     blockUnityKill = blockUnityKill,
-                    useUnstrippedLibUnity = AppSettings.isUseUnstrippedLibUnity(LocalContext.current, selectedGame?.packageName ?: ""),
+                    useUnstrippedLibUnity = AppSettings.isUseUnstrippedLibUnity(context, selectedGame?.packageName ?: ""),
                     dynamicColor = dynamicColor,
                     animationDisabled = animationDisabled,
                     onNavigateBack = {
@@ -165,7 +165,7 @@ fun MainPagerScreen(
                     onBlockUnityKillChanged = onBlockUnityKillChanged,
                     onUseUnstrippedLibUnityChanged = { enabled ->
                         selectedGame?.let { game ->
-                            AppSettings.setUseUnstrippedLibUnity(LocalContext.current, game.packageName, enabled)
+                            AppSettings.setUseUnstrippedLibUnity(context, game.packageName, enabled)
                         }
                     },
                     onDynamicColorChanged = onDynamicColorChanged,

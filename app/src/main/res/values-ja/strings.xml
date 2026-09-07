@@ -12,7 +12,7 @@
 
     <!-- Game Detection -->
     <string name="scan_title">検出されたゲーム</string>
-    <string name="scanning">Unity IL2CPP ゲームをスキャン中…</string>
+    <string name="scanning">Unity IL2CPP ゲームをスキャン中...</string>
     <string name="no_games_found">Unity IL2CPP ゲームが見つかりません</string>
     <string name="no_games_hint">Unity IL2CPP ゲームをインストールして開始してください</string>
     <string name="scan_again">再スキャン</string>
@@ -20,8 +20,8 @@
 
     <!-- Framework Status -->
     <string name="framework_ready">BepInEx 準備完了</string>
-    <string name="framework_setting_up">セットアップ中…</string>
-    <string name="extracting">BepInEx を展開中…</string>
+    <string name="framework_setting_up">セットアップ中...</string>
+    <string name="extracting">BepInEx を展開中...</string>
     <string name="mod_count">%d 件の mod</string>
 
     <!-- Actions -->
@@ -197,7 +197,7 @@
     <string name="ok">OK</string>
     <string name="back">戻る</string>
     <string name="close">閉じる</string>
-    <string name="loading">読み込み中…</string>
+    <string name="loading">読み込み中...</string>
     <string name="error">エラー</string>
     <string name="done">完了</string>
     <string name="share_saved">メッセージを保存しました。ゲームに戻ってください</string>
@@ -208,14 +208,14 @@
 
     <!-- Bootstrap Loading -->
     <string name="bootstrap_title">選択したゲームを起動中</string>
-    <string name="bootstrap_status_preparing">ターゲットパッケージを準備中…</string>
-    <string name="bootstrap_status_copy_assets">Unity データをコピー中…</string>
-    <string name="bootstrap_status_detecting_version">Unity バージョンを検出中…</string>
-    <string name="bootstrap_status_downloading_libunity">ストリップされていない libunity をダウンロード中…</string>
-    <string name="bootstrap_status_extracting_runtime">ランタイムファイルを展開中…</string>
-    <string name="bootstrap_status_registering_libraries">ネイティブライブラリを登録中…</string>
-    <string name="bootstrap_status_installing_hooks">フックをインストール中…</string>
-    <string name="bootstrap_status_launching">ゲームを起動中…</string>
+    <string name="bootstrap_status_preparing">ターゲットパッケージを準備中...</string>
+    <string name="bootstrap_status_copy_assets">Unity データをコピー中...</string>
+    <string name="bootstrap_status_detecting_version">Unity バージョンを検出中...</string>
+    <string name="bootstrap_status_downloading_libunity">ストリップされていない libunity をダウンロード中...</string>
+    <string name="bootstrap_status_extracting_runtime">ランタイムファイルを展開中...</string>
+    <string name="bootstrap_status_registering_libraries">ネイティブライブラリを登録中...</string>
+    <string name="bootstrap_status_installing_hooks">フックをインストール中...</string>
+    <string name="bootstrap_status_launching">ゲームを起動中...</string>
     <string name="bootstrap_status_error">起動に失敗しました</string>
     <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
 </resources>

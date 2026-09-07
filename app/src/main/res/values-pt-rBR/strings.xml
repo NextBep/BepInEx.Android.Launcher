@@ -32,6 +32,7 @@
     <string name="mod_deleted">Excluído: %s</string>
     <string name="mod_imported">Importado: %s</string>
     <string name="import_failed">Falha na importação</string>
+
     <!-- Modpacks -->
     <string name="modpack_title">Pacotes de Mods</string>
     <string name="modpack_create">Criar Pacote de Mods</string>
@@ -61,6 +62,7 @@
     <string name="config_editor_discard_title">Descartar Alterações?</string>
     <string name="config_editor_discard_msg">Você tem alterações não salvas. Descartar?</string>
     <string name="config_editor_no_configs">Nenhum arquivo de configuração</string>
+
     <!-- Mod File Browser -->
     <string name="mod_file_browser_title">Arquivos de Mods</string>
     <string name="mod_file_browser_empty">Este diretório está vazio</string>
@@ -75,6 +77,7 @@
     <string name="mod_file_browser_delete_failed">Falha ao excluir o arquivo</string>
     <string name="mod_file_browser_protected">Arquivo protegido</string>
     <string name="mod_file_browser_protected_file">Metadados do pacote de mods protegidos · Não é possível editar ou excluir</string>
+
     <!-- Settings -->
     <string name="settings_title">Configurações</string>
     <string name="settings_section_appearance">Aparência</string>
@@ -85,10 +88,6 @@
     <string name="settings_clear_bepinex_desc">Excluir todos os arquivos BepInEx e assemblies interop. Necessário para re-extrair na próxima inicialização.</string>
     <string name="settings_clear_dotnet">Limpar Dados .NET</string>
     <string name="settings_clear_dotnet_desc">Excluir o runtime .NET e os dados do jogo copiados. Os arquivos serão re-extraídos na próxima inicialização.</string>
-    <string name="settings_unstripped_libunity">Use Unstripped libunity</string>
-    <string name="settings_unstripped_libunity_desc">Download and use unstripped libunity.so with full icalls.</string>
-    <string name="settings_clear_libunity">Clear libunity Cache</string>
-    <string name="settings_clear_libunity_desc">Delete the downloaded unstripped libunity.so files. Will be re-downloaded on next launch.</string>
     <string name="settings_copy_resources">Copiar Recursos do Jogo</string>
     <string name="settings_copy_resources_desc">Copiar os dados de recursos do jogo para o armazenamento local para geração de interop.</string>
     <string name="settings_theme">Tema</string>
@@ -105,10 +104,6 @@
     <string name="confirm_clear_dotnet_msg">Isso excluirá o runtime .NET e os dados do jogo copiados para este jogo. Os arquivos serão re-extraídos na próxima inicialização.</string>
     <string name="confirm_copy_resources_title">Copiar Recursos do Jogo?</string>
     <string name="confirm_copy_resources_msg">Isso copiará os dados de recursos do jogo do APK para o armazenamento local.</string>
-    <string name="confirm_clear_libunity_title">Clear libunity Cache?</string>
-    <string name="confirm_clear_libunity_msg">This will delete the downloaded unstripped libunity.so files. They will be re-downloaded on next launch.</string>
-    <string name="clear_libunity_done">libunity cache cleared</string>
-    <string name="clear_libunity_none">No libunity cache to clear</string>
     <string name="confirm_yes">Sim</string>
     <string name="confirm_no">Não</string>
     <string name="confirm_cancel">Cancelar</string>
@@ -117,10 +112,12 @@
     <string name="theme_dark">Escuro</string>
     <string name="theme_light">Claro</string>
     <string name="theme_system">Padrão do Sistema</string>
+
     <!-- Language -->
     <string name="lang_english">English</string>
     <string name="lang_chinese">简体中文</string>
     <string name="lang_system">Padrão do Sistema</string>
+
     <!-- About -->
     <string name="about_title">BepInEx Launcher</string>
     <string name="about_description">Um carregador BepInEx com suporte Android</string>
@@ -148,6 +145,7 @@
     <string name="about_dev_section">Desenvolvedores Principais</string>
     <string name="about_dev_names">HayashiUme · HexCat · Celestynka</string>
     <string name="about_footer">©2026 NextBep</string>
+
     <string name="about_url_bepinex">https://github.com/BepInEx/BepInEx</string>
     <string name="about_url_fusioncore">https://github.com/All-Of-Us-Mods/FusionCore</string>
     <string name="about_url_nextbep">https://github.com/NextBep/BepInEx.Android</string>
@@ -168,16 +166,19 @@
     <string name="log_filter_errors">Erros</string>
     <string name="log_filter_warnings">Avisos</string>
     <string name="log_auto_scroll">Rolagem automática</string>
+
     <!-- Storage Permission -->
     <string name="storage_permission_title">Permissão de Armazenamento Necessária</string>
     <string name="storage_permission_message">O BepInEx Launcher precisa de acesso a todos os arquivos para extrair o BepInEx e gerenciar mods.</string>
     <string name="storage_permission_grant">Conceder Permissão</string>
+
     <!-- In-Game Settings -->
     <string name="settings_ingame_section">No Jogo</string>
     <string name="settings_floating_log">Registro Flutuante no Jogo</string>
     <string name="settings_floating_log_desc">Mostrar um botão de registro flutuante sobre o jogo. Toque para ver os registros BepInEx em tempo real.</string>
     <string name="settings_block_unity_kill">Bloquear saída de inicialização Unity</string>
     <string name="settings_block_unity_kill_desc">Bloquear UnityPlayer.kill() brevemente durante a inicialização. Ativar apenas para jogos que saem durante a injeção.</string>
+
     <!-- Launch -->
     <string name="launch_failed">Falha ao iniciar</string>
     <string name="launch_wait_extraction">Aguarde ...BepInEx ainda está extraindo</string>
@@ -194,13 +195,7 @@
     <string name="crash_detected_message">A inicialização anterior de %1$s pode ter travado. Você pode exportar diagnósticos para solução de problemas.</string>
     <string name="crash_export">Exportar diagnósticos</string>
     <string name="crash_export_failed">Falha ao exportar diagnósticos</string>
-    <!-- Update -->
-    <string name="update_title">Update Available</string>
-    <string name="update_current_version">Current: %1$s</string>
-    <string name="update_latest_version">Latest: %1$s</string>
-    <string name="update_release_notes">Release Notes</string>
-    <string name="update_download">Download</string>
-    <string name="update_later">Later</string>
+
     <!-- Bootstrap Loading -->
     <string name="bootstrap_title">Iniciando o jogo selecionado</string>
     <string name="bootstrap_status_preparing">Preparando pacote alvo...</string>

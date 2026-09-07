@@ -56,12 +56,6 @@ private fun fileTypeLabel(file: File): String = when {
     else -> "FILE"
 }
 
-fun formatFileSize(bytes: Long): String = when {
-    bytes < 1024 -> "$bytes B"
-    bytes < 1024 * 1024 -> "${bytes / 1024} KB"
-    else -> "%.1f MB".format(bytes.toDouble() / (1024 * 1024))
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ModFileBrowserScreen(
