@@ -3,13 +3,11 @@
     <!-- App -->
     <string name="app_name">BepInEx Launcher</string>
     <string name="app_tagline">BepInEx Launcher</string>
-
     <!-- Navigation -->
     <string name="nav_games">Jogos</string>
     <string name="nav_modpacks">Pacotes de Mods</string>
     <string name="nav_settings">Configurações</string>
     <string name="nav_about">Sobre</string>
-
     <!-- Game Detection -->
     <string name="scan_title">Jogos Detectados</string>
     <string name="scanning">Procurando jogos Unity IL2CPP...</string>
@@ -17,19 +15,16 @@
     <string name="no_games_hint">Instale um jogo Unity IL2CPP para começar</string>
     <string name="scan_again">Procurar Novamente</string>
     <string name="rescan">Nova Busca</string>
-
     <!-- Framework Status -->
     <string name="framework_ready">BepInEx Pronto</string>
     <string name="framework_setting_up">Configurando...</string>
     <string name="extracting">Extraindo BepInEx...</string>
     <string name="mod_count">%d mod(s)</string>
-
     <!-- Actions -->
     <string name="import_mod">Importar Mod</string>
     <string name="launch">Iniciar</string>
     <string name="refresh">Atualizar</string>
     <string name="delete">Excluir</string>
-
     <!-- Mods -->
     <string name="installed_mods">Mods Instalados</string>
     <string name="no_mods_installed">Nenhum Mod Instalado</string>
@@ -59,7 +54,6 @@
     <string name="modpack_target_game">Para: %s</string>
     <string name="modpack_mod_count">%d mod(s)</string>
     <string name="modpack_active">Ativo</string>
-
     <!-- Config Editor -->
     <string name="config_editor_title">Editor de Configuração</string>
     <string name="config_editor_save">Salvar</string>
@@ -103,7 +97,6 @@
     <string name="settings_animation_disabled">Desativar animações</string>
     <string name="settings_animation_disabled_desc">Desativar animações de navegação e transição de páginas.</string>
     <string name="settings_about">Sobre</string>
-
     <!-- Confirm Dialogs -->
     <string name="confirm_clear_bepinex_title">Limpar Arquivos BepInEx?</string>
     <string name="confirm_clear_bepinex_msg">Isso excluirá todos os arquivos BepInEx e assemblies interop para este jogo. Você precisará re-extrair na próxima inicialização.</string>
@@ -115,7 +108,6 @@
     <string name="confirm_no">Não</string>
     <string name="confirm_cancel">Cancelar</string>
     <string name="confirm_delete">Excluir</string>
-
     <!-- Theme -->
     <string name="theme_dark">Escuro</string>
     <string name="theme_light">Claro</string>
@@ -163,7 +155,6 @@
     <string name="about_url_pine">https://github.com/canyie/Pine</string>
     <string name="about_url_dobby">https://github.com/jmpews/Dobby</string>
     <string name="about_url_cpp2il">https://github.com/SamboyCoding/Cpp2IL</string>
-
     <!-- Log -->
     <string name="log_title">Registro BepInEx</string>
     <string name="log_share">Compartilhar</string>
@@ -192,7 +183,6 @@
     <string name="launch_failed">Falha ao iniciar</string>
     <string name="launch_wait_extraction">Aguarde ...BepInEx ainda está extraindo</string>
     <string name="launch_no_game">Nenhum jogo selecionado</string>
-
     <!-- Generic -->
     <string name="ok">OK</string>
     <string name="back">Voltar</string>
@@ -219,4 +209,3 @@
     <string name="bootstrap_status_error">Falha ao iniciar</string>
     <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
 </resources>
-

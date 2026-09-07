@@ -3,13 +3,11 @@
     <!-- App -->
     <string name="app_name">BepInEx Launcher</string>
     <string name="app_tagline">BepInEx Launcher</string>
-
     <!-- Navigation -->
     <string name="nav_games">الألعاب</string>
     <string name="nav_modpacks">مجموعات المودات</string>
     <string name="nav_settings">الإعدادات</string>
     <string name="nav_about">عن التطبيق</string>
-
     <!-- Game Detection -->
     <string name="scan_title">الألعاب المكتشفة</string>
     <string name="scanning">جاري البحث عن ألعاب Unity IL2CPP...</string>
@@ -17,19 +15,16 @@
     <string name="no_games_hint">نزل لعبة Unity IL2CPP عشان تبدأ</string>
     <string name="scan_again">امسح تاني</string>
     <string name="rescan">إعادة المسح</string>
-
     <!-- Framework Status -->
     <string name="framework_ready">BepInEx جاهز</string>
     <string name="framework_setting_up">جاري الإعداد...</string>
     <string name="extracting">جاري استخراج BepInEx...</string>
     <string name="mod_count">%d مودات</string>
-
     <!-- Actions -->
     <string name="import_mod">استيراد مود</string>
     <string name="launch">شغل</string>
     <string name="refresh">تحديث</string>
     <string name="delete">مسح</string>
-
     <!-- Mods -->
     <string name="installed_mods">المودات المتنشأة</string>
     <string name="no_mods_installed">مفيش مودات اتنشأت</string>
@@ -37,7 +32,6 @@
     <string name="mod_deleted">اتمسح: %s</string>
     <string name="mod_imported">اتنشأ: %s</string>
     <string name="import_failed">الاستيراد فشل</string>
-
     <!-- Modpacks -->
     <string name="modpack_title">مجموعات المودات</string>
     <string name="modpack_create">إنشاء مجموعة مودات</string>
@@ -59,7 +53,6 @@
     <string name="modpack_target_game">لـ: %s</string>
     <string name="modpack_mod_count">%d مودات</string>
     <string name="modpack_active">نشط</string>
-
     <!-- Config Editor -->
     <string name="config_editor_title">محرر الإعدادات</string>
     <string name="config_editor_save">احفظ</string>
@@ -68,7 +61,6 @@
     <string name="config_editor_discard_title">تسAttributed تجاهل التغييرات؟</string>
     <string name="config_editor_discard_msg">فيه تغييرات متمسحتش. تتجاهلها؟</string>
     <string name="config_editor_no_configs">مفيش ملفات إعدادات</string>
-
     <!-- Mod File Browser -->
     <string name="mod_file_browser_title">ملفات المودات</string>
     <string name="mod_file_browser_empty">الملف ده فاضي</string>
@@ -83,7 +75,6 @@
     <string name="mod_file_browser_delete_failed">المسح فشل</string>
     <string name="mod_file_browser_protected">ملف محمي</string>
     <string name="mod_file_browser_protected_file">بيانات مجموعة المودات المحمية · مفيش تعديل أو مسح</string>
-
     <!-- Settings -->
     <string name="settings_title">الإعدادات</string>
     <string name="settings_section_appearance">المظهر</string>
@@ -94,6 +85,10 @@
     <string name="settings_clear_bepinex_desc">مسح كل ملفات BepInEx و مكتبات الربط. محتاج تعيد الاستخراج في المرة الجاية.</string>
     <string name="settings_clear_dotnet">مسح بيانات .NET</string>
     <string name="settings_clear_dotnet_desc">مسح بيئة تشغيل .NET و بيانات اللعبة المنقولة. الملفات هتتستخرج تاني في المرة الجاية.</string>
+    <string name="settings_unstripped_libunity">Use Unstripped libunity</string>
+    <string name="settings_unstripped_libunity_desc">Download and use unstripped libunity.so with full icalls.</string>
+    <string name="settings_clear_libunity">Clear libunity Cache</string>
+    <string name="settings_clear_libunity_desc">Delete the downloaded unstripped libunity.so files. Will be re-downloaded on next launch.</string>
     <string name="settings_copy_resources">نسخ موارد اللعبة</string>
     <string name="settings_copy_resources_desc">نسخ بياناتأصول اللعبة على التخزين المحلي عشان توليد الربط.</string>
     <string name="settings_theme">السمة</string>
@@ -103,7 +98,6 @@
     <string name="settings_animation_disabled">عطّل الرسوم المتحركة</string>
     <string name="settings_animation_disabled_desc">عطّل رسوم حركة التنقل وانتقال الصفحات.</string>
     <string name="settings_about">عن التطبيق</string>
-
     <!-- Confirm Dialogs -->
     <string name="confirm_clear_bepinex_title">تمسح ملفات BepInEx؟</string>
     <string name="confirm_clear_bepinex_msg">هتمسح كل ملفات BepInEx و مكتبات الربط للعبة دي. هتحتاج تعيد الاستخراج في المرة الجاية.</string>
@@ -111,21 +105,22 @@
     <string name="confirm_clear_dotnet_msg">هتمسح بيئة تشغيل .NET و بيانات اللعبة المنقولة للعبة دي. الملفات هتتستخرج تاني في المرة الجاية.</string>
     <string name="confirm_copy_resources_title">تمسح موارد اللعبة؟</string>
     <string name="confirm_copy_resources_msg">هتنسخ بيانات أصول اللعبة من الـ APK على التخزين المحلي.</string>
+    <string name="confirm_clear_libunity_title">Clear libunity Cache?</string>
+    <string name="confirm_clear_libunity_msg">This will delete the downloaded unstripped libunity.so files. They will be re-downloaded on next launch.</string>
+    <string name="clear_libunity_done">libunity cache cleared</string>
+    <string name="clear_libunity_none">No libunity cache to clear</string>
     <string name="confirm_yes">أيوه</string>
     <string name="confirm_no">لأ</string>
     <string name="confirm_cancel">إلغاء</string>
     <string name="confirm_delete">مسح</string>
-
     <!-- Theme -->
     <string name="theme_dark">داكن</string>
     <string name="theme_light">فاتح</string>
     <string name="theme_system">النظام الافتراضي</string>
-
     <!-- Language -->
     <string name="lang_english">English</string>
     <string name="lang_chinese">简体中文</string>
     <string name="lang_system">النظام الافتراضي</string>
-
     <!-- About -->
     <string name="about_title">BepInEx Launcher</string>
     <string name="about_description">محمّل BepInEx بيدعم Android</string>
@@ -153,7 +148,6 @@
     <string name="about_dev_section">المطورين الرئيسيين</string>
     <string name="about_dev_names">HayashiUme · HexCat · Celestynka</string>
     <string name="about_footer">©2026 NextBep</string>
-
     <string name="about_url_bepinex">https://github.com/BepInEx/BepInEx</string>
     <string name="about_url_fusioncore">https://github.com/All-Of-Us-Mods/FusionCore</string>
     <string name="about_url_nextbep">https://github.com/NextBep/BepInEx.Android</string>
@@ -163,7 +157,6 @@
     <string name="about_url_pine">https://github.com/canyie/Pine</string>
     <string name="about_url_dobby">https://github.com/jmpews/Dobby</string>
     <string name="about_url_cpp2il">https://github.com/SamboyCoding/Cpp2IL</string>
-
     <!-- Log -->
     <string name="log_title">سجل BepInEx</string>
     <string name="log_share">مشاركة</string>
@@ -175,24 +168,20 @@
     <string name="log_filter_errors">أخطاء</string>
     <string name="log_filter_warnings">تحذيرات</string>
     <string name="log_auto_scroll">تمرير تلقائي</string>
-
     <!-- Storage Permission -->
     <string name="storage_permission_title">إذن التخزين مطلوب</string>
     <string name="storage_permission_message">BepInEx Launcher محتاج يوصل لكل الملفات عشان يستخرج BepInEx و يدير المودات.</string>
     <string name="storage_permission_grant">امنح الإذن</string>
-
     <!-- In-Game Settings -->
     <string name="settings_ingame_section">في اللعبة</string>
     <string name="settings_floating_log">سجل عائم في اللعبة</string>
     <string name="settings_floating_log_desc">ถ้จัดแสดงปุ่มบันทึกแบบลอยอยู่เหนือเกม แตะเพื่อดูบันทึก BepInEx แบบเรียลไทม์</string>
     <string name="settings_block_unity_kill">حظر خروج بدء تشغيل Unity</string>
     <string name="settings_block_unity_kill_desc">حظر UnityPlayer.kill() مؤقتًا أثناء بدء التشغيل. فعّل بس للألعاب اللي بت退出 أثناء الحقن.</string>
-
     <!-- Launch -->
     <string name="launch_failed">التشغيل فشل</string>
     <string name="launch_wait_extraction">استنى شوية — BepInEx لسه بيتستخرج</string>
     <string name="launch_no_game">مفيش لعبة اتناخت</string>
-
     <!-- Generic -->
     <string name="ok">تمام</string>
     <string name="back">رجوع</string>
@@ -205,7 +194,13 @@
     <string name="crash_detected_message">التشغيل السابق لـ %s ممكن يكون تعطل. تقدر تصدر بيانات تشخيصية عشان تحل المشكلة.</string>
     <string name="crash_export">تصدير البيانات التشخيصية</string>
     <string name="crash_export_failed">التصدير فشل</string>
-
+    <!-- Update -->
+    <string name="update_title">Update Available</string>
+    <string name="update_current_version">Current: %1$s</string>
+    <string name="update_latest_version">Latest: %1$s</string>
+    <string name="update_release_notes">Release Notes</string>
+    <string name="update_download">Download</string>
+    <string name="update_later">Later</string>
     <!-- Bootstrap Loading -->
     <string name="bootstrap_title">جاري تشغيل اللعبة المختارة</string>
     <string name="bootstrap_status_preparing">جاري تحضير الحزمة المستهدفة...</string>

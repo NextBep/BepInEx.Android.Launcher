@@ -3,13 +3,11 @@
     <!-- App -->
     <string name="app_name">BepInEx Launcher</string>
     <string name="app_tagline">BepInEx 启动器</string>
-
     <!-- Navigation -->
     <string name="nav_games">游戏</string>
     <string name="nav_modpacks">整合包</string>
     <string name="nav_settings">设置</string>
     <string name="nav_about">关于</string>
-
     <!-- Game Detection -->
     <string name="scan_title">已检测到的游戏</string>
     <string name="scanning">正在扫描 Unity IL2CPP 游戏...</string>
@@ -17,27 +15,23 @@
     <string name="no_games_hint">安装一个 Unity IL2CPP 游戏即可开始</string>
     <string name="scan_again">重新扫描</string>
     <string name="rescan">刷新</string>
-
     <!-- Framework Status -->
     <string name="framework_ready">BepInEx 就绪</string>
     <string name="framework_setting_up">正在设置...</string>
     <string name="extracting">正在解压 BepInEx...</string>
     <string name="mod_count">%d 个模组</string>
-
     <!-- Actions -->
     <string name="import_mod">导入模组</string>
     <string name="launch">启动</string>
     <string name="refresh">刷新</string>
     <string name="delete">删除</string>
-
     <!-- Mods -->
     <string name="installed_mods">已安装的模组</string>
     <string name="no_mods_installed">暂无模组</string>
-    <string name="no_mods_hint">点击"导入模组"添加 .dll 文件</string>
+    <string name="no_mods_hint">点击\"导入模组\"添加 .dll 文件</string>
     <string name="mod_deleted">已删除: %s</string>
     <string name="mod_imported">已导入: %s</string>
     <string name="import_failed">导入失败</string>
-
     <!-- Modpacks -->
     <string name="modpack_title">整合包</string>
     <string name="modpack_create">创建整合包</string>
@@ -49,7 +43,7 @@
     <string name="modpack_vanilla">纯净模式（无模组）</string>
     <string name="modpack_name_hint">整合包名称</string>
     <string name="modpack_confirm_delete_title">删除整合包</string>
-    <string name="modpack_confirm_delete_msg">确定要删除"%s"及其所有模组吗？此操作不可撤销。</string>
+    <string name="modpack_confirm_delete_msg">确定要删除\"%s\"及其所有模组吗？此操作不可撤销。</string>
     <string name="modpack_created">已创建整合包: %s</string>
     <string name="modpack_deleted">已删除整合包: %s</string>
     <string name="modpack_exported">已导出: %s</string>
@@ -59,7 +53,6 @@
     <string name="modpack_target_game">目标游戏：%s</string>
     <string name="modpack_mod_count">%d 个模组</string>
     <string name="modpack_active">已激活</string>
-
     <!-- Config Editor -->
     <string name="config_editor_title">配置编辑器</string>
     <string name="config_editor_save">保存</string>
@@ -68,7 +61,6 @@
     <string name="config_editor_discard_title">放弃更改？</string>
     <string name="config_editor_discard_msg">您有未保存的更改，确定要放弃吗？</string>
     <string name="config_editor_no_configs">无配置文件</string>
-
     <!-- Mod File Browser -->
     <string name="mod_file_browser_title">模组文件</string>
     <string name="mod_file_browser_empty">此目录为空</string>
@@ -79,11 +71,10 @@
     <string name="mod_file_browser_edit_file">查看或编辑文件</string>
     <string name="mod_file_browser_delete_file">删除文件</string>
     <string name="mod_file_browser_delete_title">删除文件？</string>
-    <string name="mod_file_browser_delete_message">确定要删除"%1$s"吗？此操作不可撤销。</string>
+    <string name="mod_file_browser_delete_message">确定要删除\"%1$s\"吗？此操作不可撤销。</string>
     <string name="mod_file_browser_delete_failed">删除文件失败</string>
     <string name="mod_file_browser_protected">受保护文件</string>
     <string name="mod_file_browser_protected_file">整合包元数据 · 无法编辑或删除</string>
-
     <!-- Settings -->
     <string name="settings_title">设置</string>
     <string name="settings_section_appearance">外观</string>
@@ -107,7 +98,6 @@
     <string name="settings_animation_disabled">禁用动画</string>
     <string name="settings_animation_disabled_desc">禁用导航和页面转场动画。</string>
     <string name="settings_about">关于</string>
-
     <!-- Confirm Dialogs -->
     <string name="confirm_clear_bepinex_title">清除 BepInEx 文件？</string>
     <string name="confirm_clear_bepinex_msg">这将删除此游戏的所有 BepInEx 文件和 interop 程序集。下次启动需要重新解压。</string>
@@ -123,17 +113,14 @@
     <string name="confirm_no">取消</string>
     <string name="confirm_cancel">取消</string>
     <string name="confirm_delete">删除</string>
-
     <!-- Theme -->
     <string name="theme_dark">深色</string>
     <string name="theme_light">浅色</string>
     <string name="theme_system">跟随系统</string>
-
     <!-- Language -->
     <string name="lang_english">English</string>
     <string name="lang_chinese">简体中文</string>
     <string name="lang_system">跟随系统</string>
-
     <!-- About -->
     <string name="about_title">BepInEx Launcher</string>
     <string name="about_description">一个支持 Android 的 BepInEx 加载器</string>
@@ -161,7 +148,6 @@
     <string name="about_dev_section">主要开发者</string>
     <string name="about_dev_names">HayashiUme · HexCat · Celestynka</string>
     <string name="about_footer">©2026 NextBep</string>
-
     <string name="about_url_bepinex">https://github.com/BepInEx/BepInEx</string>
     <string name="about_url_fusioncore">https://github.com/All-Of-Us-Mods/FusionCore</string>
     <string name="about_url_nextbep">https://github.com/NextBep/BepInEx.Android</string>
@@ -171,7 +157,6 @@
     <string name="about_url_pine">https://github.com/canyie/Pine</string>
     <string name="about_url_dobby">https://github.com/jmpews/Dobby</string>
     <string name="about_url_cpp2il">https://github.com/SamboyCoding/Cpp2IL</string>
-
     <!-- Log -->
     <string name="log_title">BepInEx 日志</string>
     <string name="log_share">分享</string>
@@ -183,24 +168,20 @@
     <string name="log_filter_errors">错误</string>
     <string name="log_filter_warnings">警告</string>
     <string name="log_auto_scroll">自动滚动</string>
-
     <!-- Storage Permission -->
     <string name="storage_permission_title">需要存储权限</string>
     <string name="storage_permission_message">BepInEx Launcher 需要访问所有文件以解压 BepInEx 和管理模组。</string>
     <string name="storage_permission_grant">授予权限</string>
-
     <!-- In-Game Settings -->
     <string name="settings_ingame_section">游戏内</string>
     <string name="settings_floating_log">游戏内悬浮日志</string>
     <string name="settings_floating_log_desc">在游戏画面上显示一个悬浮日志按钮。点击可查看实时 BepInEx 日志。</string>
     <string name="settings_block_unity_kill">阻止 Unity 启动退出</string>
     <string name="settings_block_unity_kill_desc">在启动阶段短暂拦截 UnityPlayer.kill()。仅在游戏因注入而退出时开启。</string>
-
     <!-- Launch -->
     <string name="launch_failed">启动失败</string>
     <string name="launch_wait_extraction">请等待 — BepInEx 正在解压中</string>
     <string name="launch_no_game">未选择游戏</string>
-
     <!-- Generic -->
     <string name="ok">确定</string>
     <string name="back">返回</string>
@@ -213,7 +194,6 @@
     <string name="crash_detected_message">上次启动 %1$s 可能发生了崩溃。你可以导出诊断信息以便排查。</string>
     <string name="crash_export">导出诊断信息</string>
     <string name="crash_export_failed">诊断信息导出失败</string>
-
     <!-- Update -->
     <string name="update_title">有新版本可用</string>
     <string name="update_current_version">当前版本：%1$s</string>
@@ -221,7 +201,6 @@
     <string name="update_release_notes">更新日志</string>
     <string name="update_download">下载</string>
     <string name="update_later">稍后</string>
-
     <!-- Bootstrap Loading -->
     <string name="bootstrap_title">正在启动游戏</string>
     <string name="bootstrap_status_preparing">正在准备目标包...</string>
