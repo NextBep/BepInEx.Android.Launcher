@@ -49,11 +49,14 @@
 
         <meta-data android:name="com.google.android.gms.version" android:value="12451000" />
 
-        <!-- Bootstrap activity (FusionCore injection entry point) -->
+        <!-- Bootstrap activity (FusionCore injection entry point).
+             Runs in :game so the game's native runtime (Unity/il2cpp) gets a
+             fresh process every launch; exiting the game kills only :game. -->
         <activity
             android:name="com.bepinex.android.BootstrapActivity"
             android:exported="false"
-            android:launchMode="singleTop"
+            android:process=":game"
+            android:launchMode="standard"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <!-- Main launcher activity (Compose UI) -->
@@ -77,13 +80,15 @@
 
         <!-- Placeholder for unregistered game launcher activities.
              InstrumentationHooks rewrites startActivity to this stub, then
-             restores the real game Activity in Instrumentation.newActivity. -->
+             restores the real game Activity in Instrumentation.newActivity.
+             Runs in :game (same process as BootstrapActivity). -->
         <activity
             android:name="com.bepinex.android.StubActivity"
             android:theme="@style/UnityThemeSelector"
+            android:process=":game"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale|layoutDirection|density"
             android:hardwareAccelerated="true"
-            android:launchMode="singleTask"
+            android:launchMode="standard"
             android:exported="false" />
 
         <!-- File provider for DLL sharing -->

@@ -22,18 +22,15 @@ import java.net.URL
  * Important: we only download the ZIP  -- BepInEx handles extraction itself
  * (see `Il2CppInteropManager.DownloadUnityAssemblies` lines 293-295).
  *
- * The primary source is NextBep/AndroidNativeLibraries. The BepInEx mirror is
- * retained as a per-version fallback because the native library repository does
- * not contain every Unity patch release.
+ * The primary source is `unity.bepinex.dev` (managed DLLs). NextBep/AndroidNativeLibraries
+ * provides **native** `.so` files and must NOT be used for this slot.
  */
 object UnityLibsDownloader {
 
     private const val TAG = "UnityLibsDownloader"
-    private const val NEXTBEP_RAW_BASE_URL =
-        "https://raw.githubusercontent.com/NextBep/AndroidNativeLibraries/main/"
-    private const val NEXTBEP_PROXY_BASE_URL =
-        "https://gh-proxy.org/https://raw.githubusercontent.com/NextBep/AndroidNativeLibraries/main/"
     private const val BEPINEX_BASE_URL = "https://unity.bepinex.dev/libraries/"
+    private const val BEPINEX_PROXY_URL =
+        "https://gh-proxy.org/https://unity.bepinex.dev/libraries/"
 
     /**
      * Ensure the unity base libraries ZIP is cached in [outputDir].
@@ -52,36 +49,55 @@ object UnityLibsDownloader {
             return false
         }
 
-        // Normalize version same way FusionCore does (2022.3.62f3  -> 2022.3.62)
         val downloadVersion = UnityVersionLookup.normalize(version)
         if (version != downloadVersion) {
             BepInExLog.i("$TAG: Normalized Unity version for download: $version  -> $downloadVersion")
         }
 
         val zipFile = File(outputDir, "$downloadVersion.zip")
-        if (zipFile.exists() && zipFile.length() > 0) {
+        if (zipFile.exists() && zipFile.length() > 1024 && zipLooksValid(zipFile)) {
             BepInExLog.i("$TAG: Unity base libraries already cached (${formatSize(zipFile.length())})")
             onProgress("Unity libraries cached")
             return true
         }
 
-        // Remove any partial download before starting
+        // Cached file is corrupt or wrong artifact — remove it
         zipFile.delete()
 
+        // Primary source: unity.bepinex.dev (managed DLLs — the correct artifact)
+        // Fallback: gh-proxy mirror for China-reachable downloads
         val sources = listOf(
-            "${NEXTBEP_PROXY_BASE_URL}${downloadVersion}.zip",
-            "${NEXTBEP_RAW_BASE_URL}${downloadVersion}.zip",
-            "${BEPINEX_BASE_URL}${downloadVersion}.zip"
+            "${BEPINEX_BASE_URL}${downloadVersion}.zip",
+            "${BEPINEX_PROXY_URL}${downloadVersion}.zip"
         )
         return sources.any { url -> downloadZip(zipFile, url, downloadVersion, onProgress) }
     }
 
     /**
-     * Extracts the base version (Major.Minor.Build) from a full Unity version string.
-     * Mirrors FusionCore LibUnityDownloader.java lines 271-277.
-     * e.g. "2022.3.62f3"  -> "2022.3.62", "2017.1.0p4"  -> "2017.1.0"
+     * Validates that a ZIP contains managed Unity assemblies (*.dll) and not
+     * native libraries (*.so). The unity-libs slot is consumed by BepInEx's
+     * Il2CppInteropManager which expects UnityEngine.*.dll files.
      */
-    // Download
+    private fun zipLooksValid(zipFile: File): Boolean {
+        return try {
+            java.util.zip.ZipFile(zipFile).use { zip ->
+                val entries = zip.entries().asSequence().toList()
+                val hasDll = entries.any { it.name.endsWith(".dll") && !it.isDirectory }
+                val hasNativeLib = entries.any {
+                    it.name.matches(Regex(".*/lib.*\\.so")) && !it.isDirectory
+                }
+                if (hasNativeLib && !hasDll) {
+                    BepInExLog.w("$TAG: ZIP contains native .so but no managed DLLs — wrong artifact")
+                    false
+                } else {
+                    hasDll
+                }
+            }
+        } catch (e: Exception) {
+            BepInExLog.w("$TAG: Cannot validate ZIP content: ${e.message}")
+            false
+        }
+    }
 
     private fun downloadZip(
         destFile: File,

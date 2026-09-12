@@ -18,17 +18,26 @@ import java.io.File;
 public class GameContextWrapper extends ContextWrapper {
     Context fusionContext;
     Context appContext;
+    private android.content.pm.ApplicationInfo modifiedAppInfo;
 
     public GameContextWrapper(Context gameContext, Context fusionContext, Context appContext) {
         super(gameContext);
         this.fusionContext = fusionContext;
-        this.getApplicationInfo().dataDir = appContext.getApplicationInfo().dataDir;
-        // Keep the generic FusionCore behavior: hide the game's native
-        // directory so System.loadLibrary is routed through findLibrary.
-        // Do not replace it with the launcher directory; that changes the
-        // game's native namespace and breaks Unity's own JNI registration.
-        this.getApplicationInfo().nativeLibraryDir = "";
         this.appContext = fusionContext;
+        // Create a copy of ApplicationInfo and modify it — do NOT mutate the
+        // original instance (it is shared with the real Activity and modifying
+        // it corrupts the package context for the entire process).
+        this.modifiedAppInfo = new android.content.pm.ApplicationInfo(gameContext.getApplicationInfo());
+        this.modifiedAppInfo.dataDir = appContext.getApplicationInfo().dataDir;
+        // Hide the game's native library dir so System.loadLibrary is routed
+        // through findLibrary. Use an empty string (not the launcher dir) to
+        // avoid changing the game's native namespace.
+        this.modifiedAppInfo.nativeLibraryDir = "";
+    }
+
+    @Override
+    public android.content.pm.ApplicationInfo getApplicationInfo() {
+        return modifiedAppInfo;
     }
 
     @Override

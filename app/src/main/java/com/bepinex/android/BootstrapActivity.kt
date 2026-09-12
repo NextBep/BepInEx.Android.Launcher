@@ -34,10 +34,14 @@ class BootstrapActivity : Activity() {
         private const val BACKUP_UNITY_VERSION = "2017.0.0"
         private const val GLOBAL_METADATA_FILE = "global-metadata.dat"
 
+        /** Per-process: guard against re-installing Pine hooks on 2nd launch */
+        private val hookInstalled = AtomicBoolean(false)
+        /** Per-process: guard against re-running initializeFusion on 2nd launch */
+        private val fusionInitialized = AtomicBoolean(false)
+        /** Per-process: guard against re-installing base hooks on 2nd launch */
+        private val baseHooksInstalled = AtomicBoolean(false)
     }
 
-    private val hookInstalled = AtomicBoolean(false)
-    private val fusionInitialized = AtomicBoolean(false)
     private var preparedConfig: FusionConfig? = null
     private var targetPackage: String? = null
 
@@ -108,7 +112,7 @@ class BootstrapActivity : Activity() {
         BepInExLog.i("Game context: ${gameContext.packageCodePath}")
 
         // 3. Prepare Fusion state (paths, extract zips, copy data, detect version)
-        val useOriginalLibUnity = intent.getBooleanExtra(EXTRA_USE_ORIGINAL_LIBUNITY, true)
+        val useOriginalLibUnity = intent.getBooleanExtra(EXTRA_USE_ORIGINAL_LIBUNITY, false)
         val blockUnityKill = intent.getBooleanExtra(
             EXTRA_BLOCK_UNITY_KILL,
             AppSettings.isUnityKillBlockEnabled(this, targetPackage)
@@ -117,7 +121,17 @@ class BootstrapActivity : Activity() {
 
         // 4. Register game native libraries (match FusionCore: no exclusions)
         updateProgress(getString(R.string.bootstrap_status_registering_libraries), "", 60)
-        val gameLibDir = gameContext.applicationInfo.nativeLibraryDir
+        var gameLibDir = gameContext.applicationInfo.nativeLibraryDir
+        if (gameLibDir.isNullOrEmpty()) {
+            // createPackageContext sometimes yields an ApplicationInfo with an
+            // empty nativeLibraryDir (observed on 2nd launch). Fall back to the
+            // game's APK native dir derived from packageManager.
+            BepInExLog.w("nativeLibraryDir is empty; falling back to packageManager path")
+            gameLibDir = try {
+                val appInfo = packageManager.getApplicationInfo(targetPackage, 0)
+                appInfo.nativeLibraryDir
+            } catch (_: Exception) { gameContext.applicationInfo.nativeLibraryDir }
+        }
         File(gameLibDir).listFiles()?.forEach { file ->
             val name = file.name
             if (name.startsWith("lib") && name.endsWith(".so") && name.length > 6) {
@@ -126,23 +140,35 @@ class BootstrapActivity : Activity() {
             }
         }
 
-        // 5. Install base Pine hooks
+        // 5. Install base Pine hooks (per-process guard)
         updateProgress(getString(R.string.bootstrap_status_installing_hooks), "", 70)
-        BepInExLog.i("Installing Pine hooks...")
-        try {
-            ClassLoaderHooks.installHooks(gameContext.classLoader)
-            PackageManagerHooks.installHooks(packageManager)
-            InstrumentationHooks.install()
-            UnityPlayerHooks.installHooks(gameContext, blockUnityKill)
-            BepInExLog.i("Base hooks installed")
-        } catch (e: Exception) {
-            throw IllegalStateException("Failed to install base hooks", e)
+        if (!baseHooksInstalled.get()) {
+            BepInExLog.i("Installing Pine hooks...")
+            try {
+                ClassLoaderHooks.installHooks(gameContext.classLoader)
+                PackageManagerHooks.installHooks(packageManager)
+                InstrumentationHooks.install()
+                UnityPlayerHooks.installHooks(gameContext, blockUnityKill)
+                baseHooksInstalled.set(true)
+                BepInExLog.i("Base hooks installed")
+            } catch (e: Exception) {
+                throw IllegalStateException("Failed to install base hooks", e)
+            }
+        } else {
+            BepInExLog.i("Base hooks already installed (same process)")
         }
 
         // 5. Hook game launcher's onCreate (optional — some launchers inherit it)
         updateProgress(getString(R.string.bootstrap_status_installing_hooks), "", 85)
         val launcherClassName = launcher.className
         installLauncherOnCreateHook(gameContext, gameContext.classLoader, launcherClassName)
+
+        // 5b. Start logcat capture in :game process (so MainActivity can read it after a crash)
+        try {
+            com.bepinex.android.log.GameLogcatCapture.start(targetPackage)
+        } catch (e: Exception) {
+            BepInExLog.w("GameLogcatCapture start failed (non-fatal): ${e.message}")
+        }
 
         // 6. Start the registered stub. InstrumentationHooks restores the
         // target class in this process and UnityPlayerHooks supplies its
@@ -346,6 +372,32 @@ class BootstrapActivity : Activity() {
             patchBepInExConfigDisableDownload(bepInExDir)
         }
 
+        // Download unstripped libunity.so if the user opted in
+        val unityVersionKnown = unityVersion != BACKUP_UNITY_VERSION
+        if (!useOriginalLibUnity && unityVersionKnown) {
+            updateProgress(getString(R.string.bootstrap_status_downloading_libunity), "Unstripped libunity", 52)
+            val targetGameAbi = resolveTargetGameAbi(gameLibDir)
+            val unstrippedDir = File(appDataDir, "libunity")
+            val libReady = LibUnityDownloader.ensureLibUnity(
+                unstrippedDir, unityVersion, targetGameAbi
+            ) { detail ->
+                updateProgress(getString(R.string.bootstrap_status_downloading_libunity), detail, 52)
+            }
+            if (libReady) {
+                // Copy unstripped libunity.so to appDataDir where NativeLibraryManager will look
+                val srcFile = File(unstrippedDir, "${unityVersion}-${targetGameAbi}/libunity.so")
+                val destFile = File(appDataDir, "libunity.so")
+                if (srcFile.exists() && !destFile.exists()) {
+                    srcFile.copyTo(destFile, overwrite = true)
+                    BepInExLog.i("Copied unstripped libunity to ${destFile.absolutePath}")
+                }
+            } else {
+                BepInExLog.w("Unstripped libunity unavailable; using the game's original libunity.so")
+            }
+        } else if (!unityVersionKnown) {
+            BepInExLog.w("Unity version unknown; skipping unstripped libunity download")
+        }
+
         // Apply active modpack (or clear for vanilla mode) with per-modpack state persistence
         updateProgress(getString(R.string.bootstrap_status_preparing), "", 55)
         val activeModpack = intent.getStringExtra(EXTRA_ACTIVE_MODPACK)
@@ -442,6 +494,29 @@ class BootstrapActivity : Activity() {
                 BepInExLog.w("Copy asset $childPath: ${e.message}")
             }
         }
+    }
+
+    /**
+     * Resolves the target game's ABI by scanning its nativeLibraryDir.
+     * Used by LibUnityDownloader to pick the right unstripped libunity.so.
+     */
+    private fun resolveTargetGameAbi(gameLibDir: String): String {
+        val gameLibFile = File(gameLibDir)
+        if (gameLibFile.exists()) {
+            val soFiles = gameLibFile.listFiles()?.filter { it.name.endsWith(".so") } ?: emptyList()
+            if (soFiles.isNotEmpty()) {
+                // Infer ABI from filename prefix
+                val firstLib = soFiles.first().name
+                return when {
+                    firstLib.contains("arm64") || firstLib.contains("aarch64") -> "arm64-v8a"
+                    firstLib.contains("armeabi") -> "armeabi-v7a"
+                    firstLib.contains("x86_64") || firstLib.contains("x64") -> "x86_64"
+                    firstLib.contains("x86") || firstLib.contains("i686") -> "x86"
+                    else -> android.os.Build.SUPPORTED_ABIS.firstOrNull() ?: "arm64-v8a"
+                }
+            }
+        }
+        return android.os.Build.SUPPORTED_ABIS.firstOrNull() ?: "arm64-v8a"
     }
 
     // Config fixup
