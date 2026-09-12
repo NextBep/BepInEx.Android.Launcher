@@ -165,8 +165,7 @@ fun SettingsScreen(
                                 checked = dynamicColor,
                                 onCheckedChange = { checked -> onDynamicColorChanged(checked) }
                             )
-                        },
-                        onClick = { onDynamicColorChanged(!dynamicColor) }
+                        }
                     )
                 }
             }
@@ -183,10 +182,6 @@ fun SettingsScreen(
                                 showAnimationRestartDialog = true
                             }
                         )
-                    },
-                    onClick = {
-                        pendingAnimationValue = !animationDisabled
-                        showAnimationRestartDialog = true
                     }
                 )
             }
@@ -202,8 +197,7 @@ fun SettingsScreen(
                             checked = floatingLogInGame,
                             onCheckedChange = { checked -> onFloatingLogInGameChanged(checked) }
                         )
-                    },
-                    onClick = { onFloatingLogInGameChanged(!floatingLogInGame) }
+                    }
                 )
             }
             item {
@@ -216,8 +210,7 @@ fun SettingsScreen(
                             checked = blockUnityKill,
                             onCheckedChange = { checked -> onBlockUnityKillChanged(checked) }
                         )
-                    },
-                    onClick = { onBlockUnityKillChanged(!blockUnityKill) }
+                    }
                 )
             }
             item {
@@ -230,8 +223,7 @@ fun SettingsScreen(
                             checked = useUnstrippedLibUnity,
                             onCheckedChange = { checked -> onUseUnstrippedLibUnityChanged(checked) }
                         )
-                    },
-                    onClick = { onUseUnstrippedLibUnityChanged(!useUnstrippedLibUnity) }
+                    }
                 )
             }
 
@@ -441,14 +433,19 @@ private fun SettingListItem(
     summary: String? = null,
     icon: @Composable () -> Unit,
     trailing: (@Composable () -> Unit)? = null,
-    onClick: () -> Unit
+    onClick: (() -> Unit)? = null
 ) {
+    val modifier = if (onClick != null) {
+        Modifier.fillMaxWidth().clickable(onClick = onClick)
+    } else {
+        Modifier.fillMaxWidth()
+    }
     ListItem(
         headlineContent = { Text(title) },
         supportingContent = summary?.let { { Text(it) } },
         leadingContent = icon,
         trailingContent = trailing,
-        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick)
+        modifier = modifier
     )
 }
 
