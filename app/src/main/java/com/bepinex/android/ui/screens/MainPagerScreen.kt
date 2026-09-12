@@ -26,7 +26,6 @@ import com.bepinex.android.GameDetector
 import com.bepinex.android.R
 import com.bepinex.android.modpack.ModpackMeta
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -70,12 +69,14 @@ fun MainPagerScreen(
     onImportModpack: () -> Unit
 ) {
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { 3 })
-    val pageScope = scope
     val context = LocalContext.current
+    var targetPage by remember { mutableStateOf<Int?>(null) }
 
-    LaunchedEffect(pagerState.currentPage) {
-        // Page state is intentionally kept in the pager; deep routes are
-        // handled by the parent navigation host.
+    LaunchedEffect(targetPage) {
+        targetPage?.let { page ->
+            if (animationDisabled) pagerState.scrollToPage(page) else pagerState.animateScrollToPage(page)
+            targetPage = null
+        }
     }
 
     androidx.compose.material3.Scaffold(
@@ -84,21 +85,21 @@ fun MainPagerScreen(
             NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
                 NavigationBarItem(
                     selected = pagerState.currentPage == 0,
-                    onClick = { pageScope.launch { selectPage(pagerState, 0, animationDisabled) } },
+                    onClick = { targetPage = 0 },
                     icon = { Icon(Icons.Filled.SportsEsports, stringResource(R.string.nav_games)) },
                     label = { Text(stringResource(R.string.nav_games)) }
                 )
                 NavigationBarItem(
                     selected = pagerState.currentPage == 1,
                     enabled = selectedGame != null,
-                    onClick = { pageScope.launch { selectPage(pagerState, 1, animationDisabled) } },
+                    onClick = { targetPage = 1 },
                     icon = { Icon(Icons.Filled.FolderZip, stringResource(R.string.nav_modpacks)) },
                     label = { Text(stringResource(R.string.nav_modpacks)) }
                 )
                 NavigationBarItem(
                     selected = pagerState.currentPage == 2,
                     enabled = selectedGame != null,
-                    onClick = { pageScope.launch { selectPage(pagerState, 2, animationDisabled) } },
+                    onClick = { targetPage = 2 },
                     icon = { Icon(Icons.Filled.Settings, stringResource(R.string.nav_settings)) },
                     label = { Text(stringResource(R.string.nav_settings)) }
                 )
@@ -124,10 +125,10 @@ fun MainPagerScreen(
                     onRescan = onRescan,
                     onLaunch = onLaunch,
                     onNavigateToSettings = {
-                        pageScope.launch { selectPage(pagerState, 2, animationDisabled) }
+                        targetPage = 2
                     },
                     onNavigateToModpacks = {
-                        pageScope.launch { selectPage(pagerState, 1, animationDisabled) }
+                        targetPage = 1
                     }
                 )
                 1 -> ModpackListScreen(
@@ -136,7 +137,7 @@ fun MainPagerScreen(
                     modpacks = modpacks,
                     activeModpackName = activeModpackName,
                     onNavigateBack = {
-                        pageScope.launch { selectPage(pagerState, 0, animationDisabled) }
+                        targetPage = 0
                     },
                     onCreateModpack = onCreateModpack,
                     onDeleteModpack = onDeleteModpack,
@@ -156,7 +157,7 @@ fun MainPagerScreen(
                     dynamicColor = dynamicColor,
                     animationDisabled = animationDisabled,
                     onNavigateBack = {
-                        pageScope.launch { selectPage(pagerState, 0, animationDisabled) }
+                        targetPage = 0
                     },
                     onNavigateToAbout = onNavigateToAbout,
                     onThemeChanged = onThemeChanged,
@@ -178,9 +179,4 @@ fun MainPagerScreen(
             }
         }
     }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-private suspend fun selectPage(state: PagerState, page: Int, disabled: Boolean) {
-    if (disabled) state.scrollToPage(page) else state.animateScrollToPage(page)
 }
