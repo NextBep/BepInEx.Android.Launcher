@@ -230,7 +230,6 @@ fun BepInExNavHost(
                     exitTransition = { slideOutHorizontally(tween(160, easing = androidx.compose.animation.core.LinearOutSlowInEasing)) { -it / 6 } + fadeOut(tween(120)) }
                 ) {
                     MainPagerScreen(
-                        scope = scope,
                         detectedGames = detectedGames,
                         selectedGame = selectedGame,
                         isScanning = isScanning,

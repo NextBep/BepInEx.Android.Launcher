@@ -42,21 +42,21 @@ class MainActivity : ComponentActivity() {
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     // Per-game state
-    private var detectedGames = listOf<GameDetector.DetectedGame>()
-    private var selectedGame: GameDetector.DetectedGame? = null
-    private var isScanning = true
-    private var isExtracting = false
-    private var extractionStatus = ""
-    private var storagePermissionGranted = false
+    private var detectedGames by mutableStateOf(listOf<GameDetector.DetectedGame>())
+    private var selectedGame by mutableStateOf<GameDetector.DetectedGame?>(null)
+    private var isScanning by mutableStateOf(true)
+    private var isExtracting by mutableStateOf(false)
+    private var extractionStatus by mutableStateOf("")
+    private var storagePermissionGranted by mutableStateOf(false)
     private var pendingCrash: CrashDiagnostics.PendingLaunch? = null
     private var leftLauncher = false
-    private var updateInfo: UpdateChecker.UpdateInfo? = null
+    private var updateInfo by mutableStateOf<UpdateChecker.UpdateInfo?>(null)
 
     // Settings state
-    private var themeMode = AppSettings.ThemeMode.SYSTEM
-    private var language = AppSettings.Language.SYSTEM
-    private var dynamicColor = true
-    private var animationDisabled = false
+    private var themeMode by mutableStateOf(AppSettings.ThemeMode.SYSTEM)
+    private var language by mutableStateOf(AppSettings.Language.SYSTEM)
+    private var dynamicColor by mutableStateOf(true)
+    private var animationDisabled by mutableStateOf(false)
 
     private val storagePermissionLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -118,6 +118,7 @@ class MainActivity : ComponentActivity() {
         checkStoragePermission()
         handleSharedText(intent)
         checkForUpdates()
+        setupContent()
     }
 
     // Storage permission
@@ -136,8 +137,6 @@ class MainActivity : ComponentActivity() {
         } else {
             BepInExLog.i("Storage permission granted")
             startGameDetection()
-            // Initial render
-            render()
         }
     }
 
@@ -227,7 +226,6 @@ class MainActivity : ComponentActivity() {
     private fun startGameDetection() {
         scope.launch {
             isScanning = true
-            render()
 
             try {
                 detectedGames = GameDetector.detectGames(this@MainActivity)
@@ -241,7 +239,6 @@ class MainActivity : ComponentActivity() {
             }
 
             isScanning = false
-            render()
 
             // Restore selected game after activity recreation (e.g. language switch)
             val saved = savedPackageName
@@ -259,8 +256,6 @@ class MainActivity : ComponentActivity() {
         if (!fileExtractor.isFrameworkReady(game.packageName)) {
             startExtraction(game.packageName)
         }
-
-        render()
     }
 
     // Framework extraction
@@ -268,7 +263,6 @@ class MainActivity : ComponentActivity() {
     private fun startExtraction(packageName: String) {
         isExtracting = true
         extractionStatus = getString(R.string.extracting)
-        render()
 
         scope.launch(Dispatchers.IO) {
             try {
@@ -285,7 +279,6 @@ class MainActivity : ComponentActivity() {
             withContext(Dispatchers.Main) {
                 isExtracting = false
                 extractionStatus = ""
-                render()
             }
         }
     }
@@ -359,8 +352,6 @@ class MainActivity : ComponentActivity() {
     private fun onThemeChanged(mode: AppSettings.ThemeMode) {
         themeMode = mode
         AppSettings.setThemeMode(this, mode)
-        // Re-render with new theme
-        runOnUiThread { render() }
     }
 
     private fun onLanguageChanged(lang: AppSettings.Language) {
@@ -377,7 +368,6 @@ class MainActivity : ComponentActivity() {
             BepInExLog.i("Cleared BepInEx: ${dir.absolutePath}")
             Toast.makeText(this, getString(R.string.done), Toast.LENGTH_SHORT).show()
         }
-        render()
     }
 
     private fun onClearDotnet(packageName: String) {
@@ -446,7 +436,7 @@ class MainActivity : ComponentActivity() {
 
     // UI render
 
-    private fun render() {
+    private fun setupContent() {
         setContent {
             BepInExTheme(themeMode = themeMode, dynamicColor = dynamicColor) {
                 val crash = pendingCrash
@@ -475,12 +465,10 @@ class MainActivity : ComponentActivity() {
                     onDynamicColorChanged = {
                         dynamicColor = it
                         AppSettings.setDynamicColorEnabled(this@MainActivity, it)
-                        render()
                     },
                     onAnimationDisabledChanged = {
                         animationDisabled = it
                         AppSettings.setAnimationDisabled(this@MainActivity, it)
-                        render()
                     },
                     onClearBepInEx = { onClearBepInEx(it) },
                     onClearDotnet = { onClearDotnet(it) },

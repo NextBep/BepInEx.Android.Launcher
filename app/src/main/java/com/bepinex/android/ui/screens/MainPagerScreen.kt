@@ -26,12 +26,12 @@ import androidx.compose.ui.res.stringResource
 import com.bepinex.android.GameDetector
 import com.bepinex.android.R
 import com.bepinex.android.modpack.ModpackMeta
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import androidx.compose.runtime.rememberCoroutineScope
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainPagerScreen(
-    scope: CoroutineScope,
     detectedGames: List<GameDetector.DetectedGame>,
     selectedGame: GameDetector.DetectedGame?,
     isScanning: Boolean,
@@ -71,14 +71,7 @@ fun MainPagerScreen(
 ) {
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { 3 })
     val context = LocalContext.current
-    var targetPage by remember { mutableStateOf<Int?>(null) }
-
-    LaunchedEffect(targetPage) {
-        targetPage?.let { page ->
-            if (animationDisabled) pagerState.scrollToPage(page) else pagerState.animateScrollToPage(page)
-            targetPage = null
-        }
-    }
+    val composeScope = rememberCoroutineScope()
 
     androidx.compose.material3.Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -86,21 +79,42 @@ fun MainPagerScreen(
             NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
                 NavigationBarItem(
                     selected = pagerState.currentPage == 0,
-                    onClick = { targetPage = 0 },
+                    onClick = {
+                        if (pagerState.currentPage != 0) {
+                            composeScope.launch {
+                                if (animationDisabled) pagerState.scrollToPage(0)
+                                else pagerState.animateScrollToPage(0)
+                            }
+                        }
+                    },
                     icon = { Icon(Icons.Filled.SportsEsports, stringResource(R.string.nav_games)) },
                     label = { Text(stringResource(R.string.nav_games)) }
                 )
                 NavigationBarItem(
                     selected = pagerState.currentPage == 1,
                     enabled = selectedGame != null,
-                    onClick = { targetPage = 1 },
+                    onClick = {
+                        if (pagerState.currentPage != 1) {
+                            composeScope.launch {
+                                if (animationDisabled) pagerState.scrollToPage(1)
+                                else pagerState.animateScrollToPage(1)
+                            }
+                        }
+                    },
                     icon = { Icon(Icons.Filled.FolderZip, stringResource(R.string.nav_modpacks)) },
                     label = { Text(stringResource(R.string.nav_modpacks)) }
                 )
                 NavigationBarItem(
                     selected = pagerState.currentPage == 2,
                     enabled = selectedGame != null,
-                    onClick = { targetPage = 2 },
+                    onClick = {
+                        if (pagerState.currentPage != 2) {
+                            composeScope.launch {
+                                if (animationDisabled) pagerState.scrollToPage(2)
+                                else pagerState.animateScrollToPage(2)
+                            }
+                        }
+                    },
                     icon = { Icon(Icons.Filled.Settings, stringResource(R.string.nav_settings)) },
                     label = { Text(stringResource(R.string.nav_settings)) }
                 )
@@ -125,10 +139,16 @@ fun MainPagerScreen(
                     onRescan = onRescan,
                     onLaunch = onLaunch,
                     onNavigateToSettings = {
-                        targetPage = 2
+                        composeScope.launch {
+                            if (animationDisabled) pagerState.scrollToPage(2)
+                            else pagerState.animateScrollToPage(2)
+                        }
                     },
                     onNavigateToModpacks = {
-                        targetPage = 1
+                        composeScope.launch {
+                            if (animationDisabled) pagerState.scrollToPage(1)
+                            else pagerState.animateScrollToPage(1)
+                        }
                     }
                 )
                 1 -> ModpackListScreen(
@@ -137,7 +157,10 @@ fun MainPagerScreen(
                     modpacks = modpacks,
                     activeModpackName = activeModpackName,
                     onNavigateBack = {
-                        targetPage = 0
+                        composeScope.launch {
+                            if (animationDisabled) pagerState.scrollToPage(0)
+                            else pagerState.animateScrollToPage(0)
+                        }
                     },
                     onCreateModpack = onCreateModpack,
                     onDeleteModpack = onDeleteModpack,
@@ -157,7 +180,10 @@ fun MainPagerScreen(
                     dynamicColor = dynamicColor,
                     animationDisabled = animationDisabled,
                     onNavigateBack = {
-                        targetPage = 0
+                        composeScope.launch {
+                            if (animationDisabled) pagerState.scrollToPage(0)
+                            else pagerState.animateScrollToPage(0)
+                        }
                     },
                     onNavigateToAbout = onNavigateToAbout,
                     onThemeChanged = onThemeChanged,
