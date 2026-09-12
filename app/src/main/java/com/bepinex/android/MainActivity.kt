@@ -55,8 +55,8 @@ class MainActivity : ComponentActivity() {
     // Settings state
     private var themeMode = AppSettings.ThemeMode.SYSTEM
     private var language = AppSettings.Language.SYSTEM
-    private var dynamicColor = AppSettings.isDynamicColorEnabled(this)
-    private var animationDisabled = AppSettings.isAnimationDisabled(this)
+    private var dynamicColor = true
+    private var animationDisabled = false
 
     private val storagePermissionLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
