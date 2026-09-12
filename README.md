@@ -1,58 +1,127 @@
 # BepInEx Android Launcher
 
-通用 BepInEx Android 启动器，支持在 Unity IL2CPP 游戏中注入 mod 框架。
+通用 BepInEx Android 启动器，支持在任意 Unity IL2CPP 游戏中注入 mod 框架。
 
-## 功能
+## Features
 
 - 一键注入 BepInEx 到 Unity IL2CPP 游戏
-- Modpack 管理：创建、导入/导出、启用/禁用 mod 组合
-- 配置文件编辑器（带语法高亮）
+- 自动检测已安装的 Unity IL2CPP 游戏
+- Modpack 管理：创建、导入/导出（.rhp/.zip）、启用/禁用 mod 组合
+- 每个游戏独立设置：浮动日志、未剥离 libunity、Unity Kill 阻断
+- 配置文件编辑器（JSON/Lua 语法高亮）
 - 游戏日志查看器（logcat 集成）
 - 崩溃检测与诊断导出
 - 动态主题色（Material You / Monet）
+- 桌面快捷方式创建
 - 多语言支持（18 种语言）
-- 每个游戏独立的 libunity 配置
 
-## 技术原理
+## Target
 
-启动器使用 Pine（ART hook 框架）拦截游戏的 ClassLoader、native library 加载和 UnityPlayer 初始化。自定义的 `libmain.so` 和 `libfusion.so` 控制 dlopen 顺序，在 Unity 启动前安装 `il2cpp_init` hook。该 hook 启动 CoreCLR 和 BepInEx preloader。
+- Launcher package: `com.bepinex.android.launcher`
+- ABI: `arm64-v8a`
+- Min SDK: 28 (Android 9)
 
-## 系统要求
+## Credits
 
-- Android 9+（API 28+）
-- arm64-v8a 设备
-- 已安装 Unity IL2CPP 游戏
+### Projects Used & Referenced
 
-## 构建
+- [BepInEx](https://github.com/BepInEx/BepInEx) — Unity IL2CPP modding framework, the core plugin loader
+- [FusionCore](https://github.com/All-Of-Us-Mods/FusionCore) — Android Unity IL2CPP Runtime Container by Starlight team
+- [NextBep (BepInEx.Android)](https://github.com/NextBep/BepInEx.Android) — Custom BepInEx fork for Android
+- [dotnet/runtime](https://github.com/dotnet/runtime) — .NET Runtime, built from source with OpenSSL crypto backend
+- [OpenSSL](https://github.com/openssl/openssl) — OpenSSL 3.4.0, replacing BoringSSL for ARM64 Android crypto
+- [Pine](https://github.com/canyie/Pine) — ART Java method hook framework
+- [Dobby](https://github.com/jmpews/Dobby) — Native hook framework for ARM64
+- [Cpp2IL](https://github.com/SamboyCoding/Cpp2IL) — IL2CPP reverse engineering tool
 
-```bash
-MSYS_NO_PATHCONV=1 ./gradlew assembleDebug
+### Lead Developers
+
+HayashiUme · Gaoshu · NextBep
+
+©2026 NextBep
+
+## Guide
+
+- [Documentation](https://nextbep.github.io) — Full usage guide
+- [Contributing](CONTRIBUTING.md) — How to contribute to the project
+- [Translate](TRANSLATING.md) — Help translate the launcher into your language
+- [Troubleshooting](https://nextbep.github.io/guide/troubleshooting) — Common issues and fixes
+
+## Build
+
+There is a CI build in the GitHub Actions page.
+
+Run from this directory:
+
+```powershell
+.\gradlew.bat assembleDebug
 ```
 
-环境要求：Android SDK 35、NDK 27.0.12077973、CMake 3.22.1、JDK 17。
+The APK is written to:
 
-## 项目结构
-
-```
-app/src/main/
-  cpp/          Native 代码（libmain.so、libfusion.so）
-  java/         Kotlin 启动器 UI 和注入逻辑
-  assets/       BepInEx 框架和 .NET 运行时
-  res/          UI 字符串（18 种语言）
-AuthFixPlugin/  Among Us Google 登录修复（BepInEx 插件）
-build_assets/   BepInEx 核心文件打包
+```text
+app/build/outputs/apk/debug/app-debug.apk
 ```
 
-## 相关项目
+Each build increments `ci-version.txt` and sets the APK version to:
 
-- [NextBep/BepInEx.Android](https://github.com/NextBep/BepInEx.Android) — Android BepInEx 分支
-- [NextBep/runtime](https://github.com/NextBep/runtime) — dotnet/runtime Android 修复分支
-- [NextBep/AndroidNativeLibraries](https://github.com/NextBep/AndroidNativeLibraries) — 未剥离的 libunity.so
+```text
+0.0.1-ci.<number>
+```
 
-## 文档
+## Install
 
-访问 [NextBep 文档站](https://nextbep.github.io) 获取详细使用指南。
+For a clean test installation:
 
-## 许可证
+```powershell
+$adb = "C:\Users\ASUS\AppData\Local\Android\Sdk\platform-tools\adb.exe"
+$apk = "E:\WindowsFile\BepInExt\BepInEx_Android\app\build\outputs\apk\debug\app-debug.apk"
+& $adb uninstall com.bepinex.android.launcher
+& $adb install $apk
+```
 
-GNU General Public License v3.0
+Uninstalling removes launcher-private data and settings. It does not remove the external per-game data directories.
+
+## External Data
+
+Runtime BepInEx data is stored per-game under:
+
+```text
+/storage/emulated/0/BepInEx_Launcher/<game-package>/
+```
+
+Each game directory contains BepInEx/, plugins, configuration, logs, modpacks, and vanilla state.
+
+Internal data (libunity cache, Unity version data) is stored under:
+
+```text
+/data/user/0/com.bepinex.android.launcher/files/<game-package>/
+```
+
+## Injection Model
+
+The launcher injects BepInEx into the game process via native bootstrap libraries and **Pine** (Java method hooking framework):
+
+1. `createPackageContext()` for the target game to obtain its class loader and DEX access.
+2. Install Pine hooks: bidirectional ClassLoader, Instrumentation, PackageManager, native library, and UnityPlayer.
+3. Redirect the game activity to a manifest-registered `StubActivity` via `Instrumentation.execStartActivity` hook.
+4. `Instrumentation.newActivity` restores the real game activity class and original Intent.
+5. `Activity.attachBaseContext` hook wraps the Context with a three-way `GameContextWrapper`:
+   - **Game resources** (Assets, Resources, Theme) → game package context
+   - **File/storage** (getFilesDir, SharedPreferences) → launcher Application
+   - **Window services** (getDisplay, getSystemService) → original Activity base Context
+6. `ClassLoader.findLibrary()` hook redirects native .so loading: game libs from game APK, BepInEx libs from launcher, .NET/il2cpp/unity libs from data directory.
+7. `UnityPlayer` constructor hook sets the activity field.
+8. `UnityPlayer.kill()` hook optionally blocks the first call for 5 seconds (per-game opt-in).
+
+All hooks are installed from Kotlin/Java via Pine — with native `libmain.so`/`libfusion.so` controlling dlopen order and CoreCLR bootstrap.
+
+## Debug Snapshots
+
+After a crash, the next launcher start saves diagnostics under:
+
+```text
+/data/user/0/com.bepinex.android.launcher/files/debug/<timestamp>/
+```
+
+Snapshots include launcher logs, logcat, crash logcat, package/activity state, process exit information, and available BepInEx logs.

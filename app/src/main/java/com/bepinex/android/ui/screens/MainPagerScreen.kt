@@ -49,6 +49,7 @@ fun MainPagerScreen(
     onRescan: () -> Unit,
     onLaunch: () -> Unit,
     onNavigateToAbout: () -> Unit,
+    onNavigateToGameSettings: (GameDetector.DetectedGame) -> Unit,
     onThemeChanged: (AppSettings.ThemeMode) -> Unit,
     onLanguageChanged: (AppSettings.Language) -> Unit,
     onDynamicColorChanged: (Boolean) -> Unit,
@@ -149,7 +150,8 @@ fun MainPagerScreen(
                             if (animationDisabled) pagerState.scrollToPage(1)
                             else pagerState.animateScrollToPage(1)
                         }
-                    }
+                    },
+                    onNavigateToGameSettings = onNavigateToGameSettings
                 )
                 1 -> ModpackListScreen(
                     packageName = selectedGame?.packageName ?: "",

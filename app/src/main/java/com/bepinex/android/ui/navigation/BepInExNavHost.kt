@@ -250,6 +250,9 @@ fun BepInExNavHost(
                         floatingLogInGame = AppSettings.isFloatingLogInGameEnabled(context),
                         blockUnityKill = AppSettings.isUnityKillBlockEnabled(context, selectedGame?.packageName ?: ""),
                         onNavigateToAbout = { navController.navigate(NavRoutes.ABOUT) },
+                        onNavigateToGameSettings = { game ->
+                            navController.navigate(NavRoutes.gameSettings(game.packageName, game.label))
+                        },
                         onThemeChanged = onThemeChanged,
                         onLanguageChanged = onLanguageChanged,
                         onDynamicColorChanged = onDynamicColorChanged,
@@ -507,6 +510,56 @@ fun BepInExNavHost(
                     )
                 }
 
+                // Per-game settings
+                composable(
+                    route = NavRoutes.GAME_SETTINGS,
+                    arguments = listOf(
+                        navArgument("packageName") { type = NavType.StringType },
+                        navArgument("gameLabel") { type = NavType.StringType }
+                    ),
+                    enterTransition = { slideInHorizontally(tween(190, easing = androidx.compose.animation.core.FastOutSlowInEasing)) { it / 4 } + fadeIn(tween(150)) },
+                    popExitTransition = { slideOutHorizontally(tween(160, easing = androidx.compose.animation.core.LinearOutSlowInEasing)) { -it / 6 } + fadeOut(tween(120)) }
+                ) { backStackEntry ->
+                    val pkg = backStackEntry.arguments?.getString("packageName") ?: return@composable
+                    val label = java.net.URLDecoder.decode(
+                        backStackEntry.arguments?.getString("gameLabel") ?: "", "UTF-8"
+                    )
+                    val gsContext = LocalContext.current
+                    var gsFloatingLog by remember {
+                        mutableStateOf(AppSettings.isFloatingLogInGameEnabled(gsContext))
+                    }
+                    var gsBlockKill by remember(pkg) {
+                        mutableStateOf(AppSettings.isUnityKillBlockEnabled(gsContext, pkg))
+                    }
+                    var gsUnstripped by remember(pkg) {
+                        mutableStateOf(AppSettings.isUseUnstrippedLibUnity(gsContext, pkg))
+                    }
+                    GameSettingsScreen(
+                        packageName = pkg,
+                        gameLabel = label,
+                        floatingLogInGame = gsFloatingLog,
+                        blockUnityKill = gsBlockKill,
+                        useUnstrippedLibUnity = gsUnstripped,
+                        onNavigateBack = { navController.popBackStack() },
+                        onFloatingLogInGameChanged = { enabled ->
+                            AppSettings.setFloatingLogInGameEnabled(gsContext, enabled)
+                            gsFloatingLog = enabled
+                        },
+                        onBlockUnityKillChanged = { enabled ->
+                            AppSettings.setUnityKillBlockEnabled(gsContext, pkg, enabled)
+                            gsBlockKill = enabled
+                        },
+                        onUseUnstrippedLibUnityChanged = { enabled ->
+                            AppSettings.setUseUnstrippedLibUnity(gsContext, pkg, enabled)
+                            gsUnstripped = enabled
+                        },
+                        onClearBepInEx = { onClearBepInEx(pkg) },
+                        onClearDotnet = { onClearDotnet(pkg) },
+                        onClearLibUnity = { onClearLibUnity(pkg) },
+                        onCopyGameResources = { onCopyGameResources(pkg) }
+                    )
+                }
+
                 // Log Viewer
                 composable(
                     route = NavRoutes.LOG_VIEWER,
@@ -558,6 +611,18 @@ fun BepInExNavHost(
                     }.getOrDefault("0.170")
                     AboutScreen(
                         versionName = versionName,
+                        onNavigateBack = { navController.popBackStack() },
+                        onNavigateToCredits = { navController.navigate(NavRoutes.CREDITS) }
+                    )
+                }
+
+                // Credits
+                composable(
+                    route = NavRoutes.CREDITS,
+                    enterTransition = { slideInHorizontally(tween(190, easing = androidx.compose.animation.core.FastOutSlowInEasing)) { it / 4 } + fadeIn(tween(150)) },
+                    popExitTransition = { slideOutHorizontally(tween(160, easing = androidx.compose.animation.core.LinearOutSlowInEasing)) { -it / 6 } + fadeOut(tween(120)) }
+                ) {
+                    CreditsScreen(
                         onNavigateBack = { navController.popBackStack() }
                     )
                 }

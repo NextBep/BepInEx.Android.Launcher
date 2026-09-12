@@ -377,15 +377,40 @@ class BootstrapActivity : Activity() {
         if (!useOriginalLibUnity && unityVersionKnown) {
             updateProgress(getString(R.string.bootstrap_status_downloading_libunity), "Unstripped libunity", 52)
             val targetGameAbi = resolveTargetGameAbi(gameLibDir)
-            val unstrippedDir = File(appDataDir, "libunity")
-            val libReady = LibUnityDownloader.ensureLibUnity(
-                unstrippedDir, unityVersion, targetGameAbi
-            ) { detail ->
-                updateProgress(getString(R.string.bootstrap_status_downloading_libunity), detail, 52)
-            }
+            val normalizedAbi = LibUnityDownloader.normalizeAbiPublic(targetGameAbi)
+            val normalizedVersion = unityVersion.trim().replace(Regex("[fp]\\d+$"), "")
+            val unstrippedDir = File(appDataDir, "$normalizedVersion-$normalizedAbi")
+
+            val libReady = LibUnityDownloader.downloadAndCacheSafely(
+                unstrippedDir, unityVersion, targetGameAbi,
+                object : LibUnityDownloader.DownloadProgressListener {
+                    override fun onDownloadStarted(url: String, totalBytes: Long) {
+                        val detail = if (totalBytes > 0) "0 / ${formatBytes(totalBytes)}" else "Connecting..."
+                        updateProgress(getString(R.string.bootstrap_status_downloading_libunity), detail, 52)
+                    }
+                    override fun onDownloadProgress(downloadedBytes: Long, totalBytes: Long) {
+                        val detail = if (totalBytes > 0) {
+                            "${formatBytes(downloadedBytes)} / ${formatBytes(totalBytes)}"
+                        } else {
+                            formatBytes(downloadedBytes)
+                        }
+                        updateProgress(getString(R.string.bootstrap_status_downloading_libunity), detail, 52)
+                    }
+                    override fun onDownloadFinished(success: Boolean, usedCache: Boolean) {
+                        if (usedCache) {
+                            BepInExLog.i("Using cached unstripped libunity")
+                        } else if (success) {
+                            BepInExLog.i("Successfully downloaded unstripped libunity")
+                        } else {
+                            BepInExLog.w("Failed to download unstripped libunity")
+                        }
+                    }
+                }
+            )
+
             if (libReady) {
                 // Copy unstripped libunity.so to appDataDir where NativeLibraryManager will look
-                val srcFile = File(unstrippedDir, "${unityVersion}-${targetGameAbi}/libunity.so")
+                val srcFile = File(unstrippedDir, "libunity.so")
                 val destFile = File(appDataDir, "libunity.so")
                 if (srcFile.exists() && !destFile.exists()) {
                     srcFile.copyTo(destFile, overwrite = true)
@@ -578,5 +603,17 @@ class BootstrapActivity : Activity() {
         } else {
             runOnUiThread(runnable)
         }
+    }
+
+    private fun formatBytes(bytes: Long): String {
+        if (bytes < 1024L) return "$bytes B"
+        val units = arrayOf("B", "KB", "MB", "GB")
+        var value = bytes.toDouble()
+        var unitIndex = 0
+        while (value >= 1024.0 && unitIndex < units.size - 1) {
+            value /= 1024.0
+            unitIndex++
+        }
+        return "%.1f %s".format(value, units[unitIndex])
     }
 }
