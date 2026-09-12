@@ -1,6 +1,5 @@
 package com.bepinex.android
 
-import com.bepinex.android.log.BepInExLog
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL

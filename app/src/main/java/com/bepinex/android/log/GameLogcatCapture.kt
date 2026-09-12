@@ -35,7 +35,7 @@ object GameLogcatCapture {
             return
         }
 
-        val logDir = File(BepInExPaths.getBepInExConfigPath(packageName), "logs")
+        val logDir = File(BepInExPaths.getBepInExDir(packageName), "logs")
         logDir.mkdirs()
         val logFile = File(logDir, "game_crash.log")
 
@@ -68,7 +68,7 @@ object GameLogcatCapture {
      * Returns the log file for the given package, or null if it doesn't exist.
      */
     fun getLogFile(packageName: String): File? {
-        val logFile = File(BepInExPaths.getBepInExConfigPath(packageName), "logs/game_crash.log")
+        val logFile = File(BepInExPaths.getBepInExDir(packageName), "logs/game_crash.log")
         return if (logFile.exists() && logFile.length() > 0) logFile else null
     }
 
