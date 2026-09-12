@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
     private var isExtracting by mutableStateOf(false)
     private var extractionStatus by mutableStateOf("")
     private var storagePermissionGranted by mutableStateOf(false)
-    private var pendingCrash: CrashDiagnostics.PendingLaunch? = null
+    private var pendingCrash by mutableStateOf<CrashDiagnostics.PendingLaunch?>(null)
     private var leftLauncher = false
     private var updateInfo by mutableStateOf<UpdateChecker.UpdateInfo?>(null)
 
