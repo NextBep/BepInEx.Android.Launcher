@@ -53,6 +53,18 @@
     <string name="modpack_target_game">目标游戏：%s</string>
     <string name="modpack_mod_count">%d 个模组</string>
     <string name="modpack_active">已激活</string>
+    <string name="modpack_mod_count_ratio">%1$d enabled / %2$d total</string>
+    <string name="modpack_vanilla_desc">No mods loaded</string>
+    <string name="modpack_empty">No Modpacks Yet</string>
+    <string name="modpack_empty_hint">Create a modpack to organize your mods</string>
+    <string name="modpack_icon">Icon</string>
+    <string name="modpack_icon_hint">Tap to set an icon</string>
+    <string name="modpack_edit">Edit</string>
+    <string name="modpack_shortcut_create">Add to Home Screen</string>
+    <string name="modpack_rename_failed">Name already exists or is invalid</string>
+    <string name="modpack_empty_config">No config files in this modpack</string>
+    <string name="modpack_empty_configs">No config files</string>
+    <string name="modpack_browse_files">Browse Mod Files</string>
     <!-- Config Editor -->
     <string name="config_editor_title">配置编辑器</string>
     <string name="config_editor_save">保存</string>
@@ -97,6 +109,11 @@
     <string name="settings_dynamic_color_desc">在支持的 Android 设备上使用 Monet 配色。</string>
     <string name="settings_animation_disabled">禁用动画</string>
     <string name="settings_animation_disabled_desc">禁用导航和页面转场动画。</string>
+    <string name="animation_restart_title">Restart Required</string>
+    <string name="animation_restart_message">Changing animation settings requires restarting the app. The app will close now.</string>
+    <string name="animation_restart_now">Restart Now</string>
+    <string name="settings_onboarding">Beginner Guide</string>
+    <string name="settings_onboarding_desc">Replay the getting-started guide.</string>
     <string name="settings_about">关于</string>
     <!-- Confirm Dialogs -->
     <string name="confirm_clear_bepinex_title">清除 BepInEx 文件？</string>
@@ -143,6 +160,19 @@
     <string name="about_description">一个支持 Android 的 BepInEx 加载器</string>
     <string name="about_version">版本 %1$s (Build %2$d)</string>
     <string name="about_disclaimer">⚠ BepInEx Launcher 未获得 BepInEx 项目的官方支持。</string>
+    <string name="about_sponsor">Sponsor</string>
+    <string name="about_sponsor_desc">Support the development</string>
+    <string name="about_sponsor_code_desc">Sponsor QR Code</string>
+    <string name="about_sponsor_tipping">If you enjoy using BepInEx Launcher, consider buying us a coffee!</string>
+    <string name="about_sponsor_note">Your support helps us maintain and improve the launcher.</string>
+    <string name="about_credits">Credits</string>
+    <string name="about_credits_desc">Projects and contributors</string>
+    <string name="about_contact">Contact Us</string>
+    <string name="about_contact_desc">Get help or share feedback</string>
+    <string name="about_privacy_policy">Privacy Policy</string>
+    <string name="about_privacy_policy_desc">How we handle your data</string>
+    <string name="about_official_docs">Official Documentation</string>
+    <string name="about_official_docs_desc">Guides, FAQ, and troubleshooting</string>
     <string name="about_projects_section">本项目使用 / 借鉴的项目</string>
     <string name="about_project_bepinex_name">BepInEx</string>
     <string name="about_project_bepinex_desc">Unity IL2CPP 模组框架 — 核心插件加载器。BepInEx 6.0.0-pre.2，由 BepInEx 团队开发。</string>
@@ -207,6 +237,15 @@
     <string name="error">错误</string>
     <string name="done">完成</string>
     <string name="share_saved">消息已保存，切回游戏继续</string>
+    <!-- Shortcut -->
+    <string name="shortcut_permission_title">Permission Required</string>
+    <string name="shortcut_permission_guide">This launcher needs permission to add shortcuts to your home screen. Please grant the permission in the next screen.</string>
+    <string name="shortcut_permission_open_settings">Open Settings</string>
+    <!-- Game -->
+    <string name="game_manage_saves">Saves</string>
+    <string name="crash_export_logs">Export Logs</string>
+    <string name="update_announcement">Announcement</string>
+    <string name="lang_incomplete_message">Some translations are incomplete. You can help translate on GitHub.</string>
     <string name="crash_detected_title">上次游戏启动未正常返回</string>
     <string name="crash_detected_message">上次启动 %1$s 可能发生了崩溃。你可以导出诊断信息以便排查。</string>
     <string name="crash_export">导出诊断信息</string>
