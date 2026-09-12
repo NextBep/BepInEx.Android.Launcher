@@ -2,26 +2,26 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md) | [Português (BR)](README.pt-BR.md) | [Русский](README.ru.md) | [日本語](README.ja.md)
 
-Generic BepInEx Android launcher with modpack management for any Unity IL2CPP game.
+Launcher genérico do BepInEx para Android com gerenciamento de modpacks para qualquer jogo Unity IL2CPP.
 
 ## Features
 
-- One-tap BepInEx injection into Unity IL2CPP games
-- Auto-detect installed Unity IL2CPP games
-- Modpack management: create, import/export (.rhp/.zip), activate/deactivate mod combinations
-- Per-game settings: floating log, unstripped libunity, Unity Kill blocking
-- Built-in config file editor with JSON/Lua syntax highlighting
-- Game log viewer with logcat integration
-- Crash detection with diagnostic export
-- Material You dynamic theming with Monet support
-- Desktop shortcut creation
-- 18 language support
+- Injeção do BepInEx com um toque em jogos Unity IL2CPP
+- Detecção automática de jogos Unity IL2CPP instalados
+- Gerenciamento de modpacks: criar, importar/exportar (.rhp/.zip), ativar/desativar combinações de mods
+- Configurações por jogo: log flutuante, libunity não depurado, bloqueio do Unity Kill
+- Editor de arquivos de configuração integrado com destaque de sintaxe JSON/Lua
+- Visualizador de logs do jogo com integração logcat
+- Detecção de crash com exportação de diagnóstico
+- Tema dinâmico Material You com suporte Monet
+- Criação de atalhos na área de trabalho
+- Suporte a 18 idiomas
 
 ## Target
 
-- Launcher package: `com.bepinex.android.launcher`
+- Pacote do launcher: `com.bepinex.android.launcher`
 - ABI: `arm64-v8a`
-- Min SDK: 28 (Android 9)
+- SDK mínimo: 28 (Android 9)
 
 ## Credits
 
