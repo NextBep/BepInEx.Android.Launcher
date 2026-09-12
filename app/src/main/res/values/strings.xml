@@ -132,6 +132,23 @@
     <!-- Language -->
     <string name="lang_english">English</string>
     <string name="lang_chinese">简体中文</string>
+    <string name="lang_chinese_tw">繁體中文</string>
+    <string name="lang_japanese">日本語</string>
+    <string name="lang_korean">한국어</string>
+    <string name="lang_russian">Русский</string>
+    <string name="lang_portuguese">Português</string>
+    <string name="lang_portuguese_br">Português (BR)</string>
+    <string name="lang_spanish">Español</string>
+    <string name="lang_german">Deutsch</string>
+    <string name="lang_french">Français</string>
+    <string name="lang_italian">Italiano</string>
+    <string name="lang_dutch">Nederlands</string>
+    <string name="lang_arabic">العربية</string>
+    <string name="lang_arabic_eg">العربية (مصر)</string>
+    <string name="lang_indonesian">Bahasa Indonesia</string>
+    <string name="lang_malay">Bahasa Melayu</string>
+    <string name="lang_thai">ไทย</string>
+    <string name="lang_venetian">Vèneto</string>
     <string name="lang_system">System Default</string>
 
     <!-- About -->

@@ -73,6 +73,23 @@ class MainActivity : ComponentActivity() {
         val locale = when (lang) {
             AppSettings.Language.ENGLISH -> Locale.forLanguageTag("en")
             AppSettings.Language.CHINESE -> Locale.forLanguageTag("zh-CN")
+            AppSettings.Language.CHINESE_TW -> Locale.forLanguageTag("zh-TW")
+            AppSettings.Language.JAPANESE -> Locale.forLanguageTag("ja")
+            AppSettings.Language.KOREAN -> Locale.forLanguageTag("ko")
+            AppSettings.Language.RUSSIAN -> Locale.forLanguageTag("ru")
+            AppSettings.Language.PORTUGUESE -> Locale.forLanguageTag("pt")
+            AppSettings.Language.PORTUGUESE_BR -> Locale.forLanguageTag("pt-BR")
+            AppSettings.Language.SPANISH -> Locale.forLanguageTag("es")
+            AppSettings.Language.GERMAN -> Locale.forLanguageTag("de")
+            AppSettings.Language.FRENCH -> Locale.forLanguageTag("fr")
+            AppSettings.Language.ITALIAN -> Locale.forLanguageTag("it")
+            AppSettings.Language.DUTCH -> Locale.forLanguageTag("nl")
+            AppSettings.Language.ARABIC -> Locale.forLanguageTag("ar")
+            AppSettings.Language.ARABIC_EG -> Locale.forLanguageTag("ar-EG")
+            AppSettings.Language.INDONESIAN -> Locale.forLanguageTag("id")
+            AppSettings.Language.MALAY -> Locale.forLanguageTag("ms")
+            AppSettings.Language.THAI -> Locale.forLanguageTag("th")
+            AppSettings.Language.VENETIAN -> Locale.forLanguageTag("vec")
             AppSettings.Language.SYSTEM -> return super.attachBaseContext(newBase)
         }
         val config = Configuration(ctx.resources.configuration)
@@ -458,10 +475,12 @@ class MainActivity : ComponentActivity() {
                     onDynamicColorChanged = {
                         dynamicColor = it
                         AppSettings.setDynamicColorEnabled(this@MainActivity, it)
+                        render()
                     },
                     onAnimationDisabledChanged = {
                         animationDisabled = it
                         AppSettings.setAnimationDisabled(this@MainActivity, it)
+                        render()
                     },
                     onClearBepInEx = { onClearBepInEx(it) },
                     onClearDotnet = { onClearDotnet(it) },

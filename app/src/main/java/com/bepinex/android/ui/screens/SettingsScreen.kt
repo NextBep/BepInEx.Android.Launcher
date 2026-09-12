@@ -128,23 +128,6 @@ fun SettingsScreen(
                 )
             }
 
-            item {
-                ListItem(
-                    headlineContent = { Text(stringResource(R.string.settings_block_unity_kill)) },
-                    supportingContent = { Text(stringResource(R.string.settings_block_unity_kill_desc)) },
-                    leadingContent = {
-                        Icon(Icons.Outlined.Shield, null,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant)
-                    },
-                    trailingContent = {
-                        Switch(
-                            checked = blockUnityKill,
-                            onCheckedChange = onBlockUnityKillChanged
-                        )
-                    }
-                )
-            }
-
             // Language
             item {
                 ListItem(
@@ -153,6 +136,23 @@ fun SettingsScreen(
                         Text(when (language) {
                             AppSettings.Language.ENGLISH -> stringResource(R.string.lang_english)
                             AppSettings.Language.CHINESE -> stringResource(R.string.lang_chinese)
+                            AppSettings.Language.CHINESE_TW -> stringResource(R.string.lang_chinese_tw)
+                            AppSettings.Language.JAPANESE -> stringResource(R.string.lang_japanese)
+                            AppSettings.Language.KOREAN -> stringResource(R.string.lang_korean)
+                            AppSettings.Language.RUSSIAN -> stringResource(R.string.lang_russian)
+                            AppSettings.Language.PORTUGUESE -> stringResource(R.string.lang_portuguese)
+                            AppSettings.Language.PORTUGUESE_BR -> stringResource(R.string.lang_portuguese_br)
+                            AppSettings.Language.SPANISH -> stringResource(R.string.lang_spanish)
+                            AppSettings.Language.GERMAN -> stringResource(R.string.lang_german)
+                            AppSettings.Language.FRENCH -> stringResource(R.string.lang_french)
+                            AppSettings.Language.ITALIAN -> stringResource(R.string.lang_italian)
+                            AppSettings.Language.DUTCH -> stringResource(R.string.lang_dutch)
+                            AppSettings.Language.ARABIC -> stringResource(R.string.lang_arabic)
+                            AppSettings.Language.ARABIC_EG -> stringResource(R.string.lang_arabic_eg)
+                            AppSettings.Language.INDONESIAN -> stringResource(R.string.lang_indonesian)
+                            AppSettings.Language.MALAY -> stringResource(R.string.lang_malay)
+                            AppSettings.Language.THAI -> stringResource(R.string.lang_thai)
+                            AppSettings.Language.VENETIAN -> stringResource(R.string.lang_venetian)
                             AppSettings.Language.SYSTEM -> stringResource(R.string.lang_system)
                         })
                     },
@@ -188,6 +188,24 @@ fun SettingsScreen(
                         Switch(
                             checked = floatingLogInGame,
                             onCheckedChange = onFloatingLogInGameChanged
+                        )
+                    }
+                )
+            }
+
+            // Block Unity Kill
+            item {
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.settings_block_unity_kill)) },
+                    supportingContent = { Text(stringResource(R.string.settings_block_unity_kill_desc)) },
+                    leadingContent = {
+                        Icon(Icons.Outlined.Shield, null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    },
+                    trailingContent = {
+                        Switch(
+                            checked = blockUnityKill,
+                            onCheckedChange = onBlockUnityKillChanged
                         )
                     }
                 )
@@ -318,14 +336,32 @@ fun SettingsScreen(
             title = { Text(stringResource(R.string.settings_language)) },
             text = {
                 Column {
-                    LangOption(stringResource(R.string.lang_english), AppSettings.Language.ENGLISH, language) {
-                        onLanguageChanged(it); showLangMenu = false
-                    }
-                    LangOption(stringResource(R.string.lang_chinese), AppSettings.Language.CHINESE, language) {
-                        onLanguageChanged(it); showLangMenu = false
-                    }
-                    LangOption(stringResource(R.string.lang_system), AppSettings.Language.SYSTEM, language) {
-                        onLanguageChanged(it); showLangMenu = false
+                    val langs = listOf(
+                        AppSettings.Language.SYSTEM to stringResource(R.string.lang_system),
+                        AppSettings.Language.ENGLISH to stringResource(R.string.lang_english),
+                        AppSettings.Language.CHINESE to stringResource(R.string.lang_chinese),
+                        AppSettings.Language.CHINESE_TW to stringResource(R.string.lang_chinese_tw),
+                        AppSettings.Language.JAPANESE to stringResource(R.string.lang_japanese),
+                        AppSettings.Language.KOREAN to stringResource(R.string.lang_korean),
+                        AppSettings.Language.RUSSIAN to stringResource(R.string.lang_russian),
+                        AppSettings.Language.PORTUGUESE to stringResource(R.string.lang_portuguese),
+                        AppSettings.Language.PORTUGUESE_BR to stringResource(R.string.lang_portuguese_br),
+                        AppSettings.Language.SPANISH to stringResource(R.string.lang_spanish),
+                        AppSettings.Language.GERMAN to stringResource(R.string.lang_german),
+                        AppSettings.Language.FRENCH to stringResource(R.string.lang_french),
+                        AppSettings.Language.ITALIAN to stringResource(R.string.lang_italian),
+                        AppSettings.Language.DUTCH to stringResource(R.string.lang_dutch),
+                        AppSettings.Language.ARABIC to stringResource(R.string.lang_arabic),
+                        AppSettings.Language.ARABIC_EG to stringResource(R.string.lang_arabic_eg),
+                        AppSettings.Language.INDONESIAN to stringResource(R.string.lang_indonesian),
+                        AppSettings.Language.MALAY to stringResource(R.string.lang_malay),
+                        AppSettings.Language.THAI to stringResource(R.string.lang_thai),
+                        AppSettings.Language.VENETIAN to stringResource(R.string.lang_venetian)
+                    )
+                    langs.forEach { (lang, label) ->
+                        LangOption(label, lang, language) {
+                            onLanguageChanged(it); showLangMenu = false
+                        }
                     }
                 }
             },

@@ -226,8 +226,8 @@ fun BepInExNavHost(
                 // Main game screen
                 composable(
                     route = NavRoutes.GAMES,
-                    enterTransition = { slideInHorizontally(tween(300)) { it } + fadeIn(tween(300)) },
-                    exitTransition = { slideOutHorizontally(tween(300)) { it } + fadeOut(tween(300)) }
+                    enterTransition = { slideInHorizontally(tween(190, easing = androidx.compose.animation.core.FastOutSlowInEasing)) { it / 4 } + fadeIn(tween(150)) },
+                    exitTransition = { slideOutHorizontally(tween(160, easing = androidx.compose.animation.core.LinearOutSlowInEasing)) { -it / 6 } + fadeOut(tween(120)) }
                 ) {
                     MainPagerScreen(
                         scope = scope,
@@ -330,8 +330,8 @@ fun BepInExNavHost(
                 composable(
                     route = NavRoutes.MODPACKS,
                     arguments = listOf(navArgument("packageName") { type = NavType.StringType }),
-                    enterTransition = { slideInHorizontally(tween(300)) { it } + fadeIn(tween(300)) },
-                    popExitTransition = { slideOutHorizontally(tween(300)) { it } + fadeOut(tween(300)) }
+                    enterTransition = { slideInHorizontally(tween(190, easing = androidx.compose.animation.core.FastOutSlowInEasing)) { it / 4 } + fadeIn(tween(150)) },
+                    popExitTransition = { slideOutHorizontally(tween(160, easing = androidx.compose.animation.core.LinearOutSlowInEasing)) { -it / 6 } + fadeOut(tween(120)) }
                 ) { backStackEntry ->
                     val packageName = backStackEntry.arguments?.getString("packageName") ?: return@composable
                     // Refresh modpacks
@@ -395,8 +395,8 @@ fun BepInExNavHost(
                         navArgument("packageName") { type = NavType.StringType },
                         navArgument("modpackName") { type = NavType.StringType }
                     ),
-                    enterTransition = { slideInHorizontally(tween(300)) { it } + fadeIn(tween(300)) },
-                    popExitTransition = { slideOutHorizontally(tween(300)) { it } + fadeOut(tween(300)) }
+                    enterTransition = { slideInHorizontally(tween(190, easing = androidx.compose.animation.core.FastOutSlowInEasing)) { it / 4 } + fadeIn(tween(150)) },
+                    popExitTransition = { slideOutHorizontally(tween(160, easing = androidx.compose.animation.core.LinearOutSlowInEasing)) { -it / 6 } + fadeOut(tween(120)) }
                 ) { backStackEntry ->
                     val packageName = backStackEntry.arguments?.getString("packageName") ?: return@composable
                     val modpackName = backStackEntry.arguments?.getString("modpackName") ?: return@composable
@@ -460,8 +460,8 @@ fun BepInExNavHost(
                 composable(
                     route = NavRoutes.SETTINGS,
                     arguments = listOf(navArgument("packageName") { type = NavType.StringType }),
-                    enterTransition = { slideInHorizontally(tween(300)) { it } + fadeIn(tween(300)) },
-                    popExitTransition = { slideOutHorizontally(tween(300)) { it } + fadeOut(tween(300)) }
+                    enterTransition = { slideInHorizontally(tween(190, easing = androidx.compose.animation.core.FastOutSlowInEasing)) { it / 4 } + fadeIn(tween(150)) },
+                    popExitTransition = { slideOutHorizontally(tween(160, easing = androidx.compose.animation.core.LinearOutSlowInEasing)) { -it / 6 } + fadeOut(tween(120)) }
                 ) { backStackEntry ->
                     val packageName = backStackEntry.arguments?.getString("packageName") ?: return@composable
                     val settingsContext = LocalContext.current
@@ -515,8 +515,8 @@ fun BepInExNavHost(
                         navArgument("packageName") { type = NavType.StringType },
                         navArgument("modpackName") { type = NavType.StringType }
                     ),
-                    enterTransition = { slideInHorizontally(tween(300)) { it } + fadeIn(tween(300)) },
-                    popExitTransition = { slideOutHorizontally(tween(300)) { it } + fadeOut(tween(300)) }
+                    enterTransition = { slideInHorizontally(tween(190, easing = androidx.compose.animation.core.FastOutSlowInEasing)) { it / 4 } + fadeIn(tween(150)) },
+                    popExitTransition = { slideOutHorizontally(tween(160, easing = androidx.compose.animation.core.LinearOutSlowInEasing)) { -it / 6 } + fadeOut(tween(120)) }
                 ) { backStackEntry ->
                     val pkg = backStackEntry.arguments?.getString("packageName") ?: return@composable
                     val mpName = backStackEntry.arguments?.getString("modpackName") ?: return@composable
@@ -531,8 +531,8 @@ fun BepInExNavHost(
                 composable(
                     route = NavRoutes.CONFIG_EDITOR,
                     arguments = listOf(navArgument("filePath") { type = NavType.StringType }),
-                    enterTransition = { slideInHorizontally(tween(300)) { it } + fadeIn(tween(300)) },
-                    popExitTransition = { slideOutHorizontally(tween(300)) { it } + fadeOut(tween(300)) }
+                    enterTransition = { slideInHorizontally(tween(190, easing = androidx.compose.animation.core.FastOutSlowInEasing)) { it / 4 } + fadeIn(tween(150)) },
+                    popExitTransition = { slideOutHorizontally(tween(160, easing = androidx.compose.animation.core.LinearOutSlowInEasing)) { -it / 6 } + fadeOut(tween(120)) }
                 ) { backStackEntry ->
                     val encodedPath = backStackEntry.arguments?.getString("filePath") ?: return@composable
                     val filePath = java.net.URLDecoder.decode(encodedPath, "UTF-8")
@@ -550,8 +550,8 @@ fun BepInExNavHost(
                 // About
                 composable(
                     route = NavRoutes.ABOUT,
-                    enterTransition = { slideInHorizontally(tween(300)) { it } + fadeIn(tween(300)) },
-                    popExitTransition = { slideOutHorizontally(tween(300)) { it } + fadeOut(tween(300)) }
+                    enterTransition = { slideInHorizontally(tween(190, easing = androidx.compose.animation.core.FastOutSlowInEasing)) { it / 4 } + fadeIn(tween(150)) },
+                    popExitTransition = { slideOutHorizontally(tween(160, easing = androidx.compose.animation.core.LinearOutSlowInEasing)) { -it / 6 } + fadeOut(tween(120)) }
                 ) {
                     val context = LocalContext.current
                     val versionName = runCatching {

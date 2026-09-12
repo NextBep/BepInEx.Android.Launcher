@@ -36,12 +36,46 @@ object AppSettings {
     enum class Language(val key: String) {
         SYSTEM("system"),
         ENGLISH("en"),
-        CHINESE("zh");
+        CHINESE("zh"),
+        CHINESE_TW("zh-TW"),
+        JAPANESE("ja"),
+        KOREAN("ko"),
+        RUSSIAN("ru"),
+        PORTUGUESE("pt"),
+        PORTUGUESE_BR("pt-BR"),
+        SPANISH("es"),
+        GERMAN("de"),
+        FRENCH("fr"),
+        ITALIAN("it"),
+        DUTCH("nl"),
+        ARABIC("ar"),
+        ARABIC_EG("ar-EG"),
+        INDONESIAN("id"),
+        MALAY("ms"),
+        THAI("th"),
+        VENETIAN("vec");
 
         companion object {
             fun fromKey(value: String?): Language = when (value) {
                 "en" -> ENGLISH
                 "zh" -> CHINESE
+                "zh-TW" -> CHINESE_TW
+                "ja" -> JAPANESE
+                "ko" -> KOREAN
+                "ru" -> RUSSIAN
+                "pt" -> PORTUGUESE
+                "pt-BR" -> PORTUGUESE_BR
+                "es" -> SPANISH
+                "de" -> GERMAN
+                "fr" -> FRENCH
+                "it" -> ITALIAN
+                "nl" -> DUTCH
+                "ar" -> ARABIC
+                "ar-EG" -> ARABIC_EG
+                "id" -> INDONESIAN
+                "ms" -> MALAY
+                "th" -> THAI
+                "vec" -> VENETIAN
                 else -> SYSTEM
             }
         }

@@ -2,6 +2,7 @@ package com.bepinex.android.ui.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -108,8 +109,7 @@ fun MainPagerScreen(
     ) { paddingValues ->
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = paddingValues
+            modifier = Modifier.fillMaxSize().padding(bottom = paddingValues.calculateBottomPadding()),
         ) { page ->
             when (page) {
                 0 -> GameScreen(
