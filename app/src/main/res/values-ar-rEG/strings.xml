@@ -53,6 +53,18 @@
     <string name="modpack_target_game">لـ: %s</string>
     <string name="modpack_mod_count">%d مودات</string>
     <string name="modpack_active">نشط</string>
+    <string name="modpack_mod_count_ratio">%1$d enabled / %2$d total</string>
+    <string name="modpack_vanilla_desc">No mods loaded</string>
+    <string name="modpack_empty">No Modpacks Yet</string>
+    <string name="modpack_empty_hint">Create a modpack to organize your mods</string>
+    <string name="modpack_icon">Icon</string>
+    <string name="modpack_icon_hint">Tap to set an icon</string>
+    <string name="modpack_edit">Edit</string>
+    <string name="modpack_shortcut_create">Add to Home Screen</string>
+    <string name="modpack_rename_failed">Name already exists or is invalid</string>
+    <string name="modpack_empty_config">No config files in this modpack</string>
+    <string name="modpack_empty_configs">No config files</string>
+    <string name="modpack_browse_files">Browse Mod Files</string>
     <!-- Config Editor -->
     <string name="config_editor_title">محرر الإعدادات</string>
     <string name="config_editor_save">احفظ</string>
@@ -97,6 +109,11 @@
     <string name="settings_dynamic_color_desc">استخدم ألوان Android Monet لما تكون متاحة.</string>
     <string name="settings_animation_disabled">عطّل الرسوم المتحركة</string>
     <string name="settings_animation_disabled_desc">عطّل رسوم حركة التنقل وانتقال الصفحات.</string>
+    <string name="animation_restart_title">Restart Required</string>
+    <string name="animation_restart_message">Changing animation settings requires restarting the app. The app will close now.</string>
+    <string name="animation_restart_now">Restart Now</string>
+    <string name="settings_onboarding">Beginner Guide</string>
+    <string name="settings_onboarding_desc">Replay the getting-started guide.</string>
     <string name="settings_about">عن التطبيق</string>
     <!-- Confirm Dialogs -->
     <string name="confirm_clear_bepinex_title">تمسح ملفات BepInEx؟</string>
@@ -143,6 +160,19 @@
     <string name="about_description">محمّل BepInEx بيدعم Android</string>
     <string name="about_version">الإصدار %1$s (البناء %2$d)</string>
     <string name="about_disclaimer">⚠ BepInEx Launcher مش مدعوم رسميًا من مشروع BepInEx.</string>
+    <string name="about_sponsor">Sponsor</string>
+    <string name="about_sponsor_desc">Support the development</string>
+    <string name="about_sponsor_code_desc">Sponsor QR Code</string>
+    <string name="about_sponsor_tipping">If you enjoy using BepInEx Launcher, consider buying us a coffee!</string>
+    <string name="about_sponsor_note">Your support helps us maintain and improve the launcher.</string>
+    <string name="about_credits">Credits</string>
+    <string name="about_credits_desc">Projects and contributors</string>
+    <string name="about_contact">Contact Us</string>
+    <string name="about_contact_desc">Get help or share feedback</string>
+    <string name="about_privacy_policy">Privacy Policy</string>
+    <string name="about_privacy_policy_desc">How we handle your data</string>
+    <string name="about_official_docs">Official Documentation</string>
+    <string name="about_official_docs_desc">Guides, FAQ, and troubleshooting</string>
     <string name="about_projects_section">المشاريع المستخدمة والمُرجعية</string>
     <string name="about_project_bepinex_name">BepInEx</string>
     <string name="about_project_bepinex_desc">Unity IL2CPP modding framework — the core plugin loader. BepInEx 6.0.0-pre.2 by BepInEx team.</string>
@@ -207,6 +237,15 @@
     <string name="error">خطأ</string>
     <string name="done">خلص</string>
     <string name="share_saved">الرسالة اتحفظت، روح على اللعبة</string>
+    <!-- Shortcut -->
+    <string name="shortcut_permission_title">Permission Required</string>
+    <string name="shortcut_permission_guide">This launcher needs permission to add shortcuts to your home screen. Please grant the permission in the next screen.</string>
+    <string name="shortcut_permission_open_settings">Open Settings</string>
+    <!-- Game -->
+    <string name="game_manage_saves">Saves</string>
+    <string name="crash_export_logs">Export Logs</string>
+    <string name="update_announcement">Announcement</string>
+    <string name="lang_incomplete_message">Some translations are incomplete. You can help translate on GitHub.</string>
     <string name="crash_detected_title">التشغيل السابق للعبة مش رجع</string>
     <string name="crash_detected_message">التشغيل السابق لـ %s ممكن يكون تعطل. تقدر تصدر بيانات تشخيصية عشان تحل المشكلة.</string>
     <string name="crash_export">تصدير البيانات التشخيصية</string>
