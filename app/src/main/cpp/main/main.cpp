@@ -1,9 +1,9 @@
 /*
- * BepInEx.Android 鈥?libmain.so (FusionCore main branch pattern)
+ * BepInEx.Android — libmain.so, bridges Unity native loading to BepInEx.
  *
  * This is a CUSTOM libmain.so that replaces the game's original libmain.so.
  * It is loaded BY the game's ClassLoader (via findLibrary Pine hook redirect),
- * so JNI FindClass here searches the GAME's DEX 鈥?therefore we can find
+ * so JNI FindClass here searches the GAME's DEX —therefore we can find
  * com.unity3d.player.NativeLoader directly.
  *
  * Architecture:
@@ -449,7 +449,7 @@ unload(JNIEnv *env, jclass activityObject)
     return JNI_TRUE;
 }
 
-// Constructor runs before JNI_OnLoad 鈥?verifies library code executes at all
+// Constructor runs before JNI_OnLoad —verifies library code executes at all
 __attribute__((constructor)) static void libmain_ctor() {
     nlog("libmain constructor");
 }

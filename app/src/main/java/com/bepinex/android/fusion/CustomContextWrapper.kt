@@ -25,7 +25,6 @@ import java.io.File
  * the findLibrary Pine hook (in NativeLibraryManager), we redirect
  * "main"  -> OUR libmain.so from our APK's lib directory.
  *
- * @see CustomContextWrapper.java in FusionCore main branch
  */
 class CustomContextWrapper(
     private val fusionContext: Context,

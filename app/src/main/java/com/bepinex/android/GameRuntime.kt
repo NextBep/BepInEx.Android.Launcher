@@ -1,7 +1,7 @@
 package com.bepinex.android
 
 /**
- * Describes a target Unity IL2CPP game for the FusionCore launcher.
+ * Describes a target Unity IL2CPP game for the launcher.
  *
  * Each runtime specifies the game's identity, Unity version, and the
  * Java package where UnityPlayer classes reside. This information is

@@ -1,30 +1,24 @@
 /*
- * BepInEx.Android 鈥?libunity.so hooks
+ * BepInEx.Android — libunity.so hooks
  *
- * Ported from FusionCore main branch (fusion/src/hooking/libunity.cpp).
- *
- * Hooks scripting_method_invoke to prevent crashes when plugins
- * (like EHR via Harmony) call Unity scripting methods with null pointers.
+ * Hooks scripting_method_invoke so that a null scripting method pointer
+ * from an unstripped libunity does not crash the game.
  */
 
 #include "fusion.h"
+#include "utilities/elf.h"
 #include "dobby.h"
 #include <dlfcn.h>
+#include <filesystem>
 #include <string>
-#include <cstring>
 #include <android/log.h>
 
 #define TAG "LibUnityHook"
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, TAG, __VA_ARGS__)
 
-// scripting_method_invoke hook
+namespace fs = std::filesystem;
 
-/*
- * FusionCore pattern: hook scripting_method_invoke to prevent crashes
- * from unstripped libunity failing to resolve scripting methods.
- * If method is null, return null instead of crashing.
- */
 using scripting_method_invoke_fn = void* (*)(void* method, void* obj,
                                               void* args, void* exc, bool something);
 
@@ -37,6 +31,25 @@ static void* scripting_method_invoke_hook(void* method, void* obj,
         return nullptr;
     }
     return g_original_scripting_method_invoke(method, obj, args, exc, something);
+}
+
+/* scripting_method_invoke is LOCAL HIDDEN — absent from .dynsym, so dlsym
+ * cannot see it. Read its RVA out of the companion libunity.sym.so instead. */
+static uintptr_t resolve_module_base(const char* path)
+{
+    void* handle = dlopen(path, RTLD_NOLOAD | RTLD_LAZY);
+    if (!handle) {
+        handle = dlopen(path, RTLD_NOW | RTLD_LOCAL);
+    }
+    if (!handle) return 0;
+
+    void* sym = dlsym(handle, "JNI_OnLoad");
+    if (!sym) return 0;
+
+    Dl_info info{};
+    if (!dladdr(sym, &info) || !info.dli_fbase) return 0;
+
+    return reinterpret_cast<uintptr_t>(info.dli_fbase);
 }
 
 // Public API
@@ -64,23 +77,36 @@ bool try_hook_libunity(const char *libUnityPath, const char *fallbackLibUnityPat
         return false;
     }
 
-    /*
-     * Resolve the C++ mangled symbol for:
-     *   scripting_method_invoke(ScriptingMethodPtr, ScriptingObjectPtr,
-     *                           ScriptingArguments&, ScriptingExceptionPtr*, bool)
-     */
+    /* The shipped libunity is stripped; symbols live in the companion .sym.so. */
+    fs::path sym_path = fs::path(libUnityPath);
+    sym_path.replace_extension("sym.so");
+    if (!fs::exists(sym_path)) {
+        LOGE("libunity.sym.so not found at %s", sym_path.c_str());
+        return false;
+    }
+
     const char *mangled =
         "_Z23scripting_method_invoke18ScriptingMethodPtr18ScriptingObjectPtr"
         "R18ScriptingArgumentsP21ScriptingExceptionPtrb";
 
-    dlerror();
-    void *target = dlsym(RTLD_DEFAULT, mangled);
-    if (!target) {
-        LOGE("scripting_method_invoke not found: %s", dlerror());
+    uintptr_t rva = get_rva_from_sym_file(sym_path.c_str(), mangled);
+    if (rva == 0) {
+        LOGE("scripting_method_invoke not found in %s", sym_path.c_str());
         return false;
     }
 
-    LOGI("scripting_method_invoke @ %p", target);
+    uintptr_t base = resolve_module_base(libUnityPath);
+    if (base == 0 && fallbackLibUnityPath) {
+        base = resolve_module_base(fallbackLibUnityPath);
+    }
+    if (base == 0) {
+        LOGE("Failed to resolve libunity base address");
+        return false;
+    }
+
+    void *target = reinterpret_cast<void *>(base + rva);
+    LOGI("scripting_method_invoke @ %p (base=%p, rva=0x%zx)",
+         target, reinterpret_cast<void *>(base), rva);
 
     int ret = DobbyHook(
         target,

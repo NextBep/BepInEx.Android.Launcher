@@ -1,5 +1,5 @@
 /*
- * BepInEx.Android 鈥?.NET CoreCLR bootstrap
+ * BepInEx.Android —.NET CoreCLR bootstrap
  *
  * Starts the .NET CoreCLR runtime and calls BepInEx entry points.
  * Called from the il2cpp_init hook callback, AFTER Unity's native init
@@ -148,9 +148,9 @@ bool dotnet_start_runtime()
         LOGI("Runtime config: %s", runtimeconfig.c_str());
     }
 
-    /* CoreCLR properties 鈥?exact FusionCore pattern */
+    /* CoreCLR properties — minimal set. */
     /*
-     * FusionCore uses only 3 keys. Enables needed crypto by letting CoreCLR
+     * Only 3 keys are set. Enables needed crypto by letting CoreCLR
      * resolve native libraries through Android's default linker paths.
      */
 #define NUM_KEYS 3
@@ -171,7 +171,7 @@ bool dotnet_start_runtime()
 
     setenv("DOTNET_ReadyToRun", "0", 1);
 
-    /* Initialize CoreCLR 鈥?with W^X retry (FusionCore pattern) */
+    /* Initialize CoreCLR — with W^X retry. */
     setenv("DOTNET_EnableWriteXorExecute", "0", 1);
 
     void *host = nullptr;
@@ -204,7 +204,7 @@ bool dotnet_start_runtime()
         return false;
     }
 
-    /* Call BepInEx entry point 鈥?NextCore style */
+    /* Call BepInEx entry point —NextCore style */
     // NextCoreEntrypoint.Start reads NEXT_* env vars via EnvVars.LoadVars()
     // and calls UnityPreloaderRunner.PreloaderMain internally.
     void *bepInExEntry = nullptr;

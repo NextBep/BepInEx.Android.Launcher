@@ -7,10 +7,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
@@ -28,6 +32,8 @@ import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Animation
 import androidx.compose.material.icons.outlined.Terminal
+import androidx.compose.material.icons.outlined.Tune
+import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -51,7 +57,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bepinex.android.R
@@ -66,30 +71,30 @@ private enum class MaintenanceAction {
     COPY_RESOURCES
 }
 
+/** Settings screen with appearance, in-game options, and maintenance actions. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    packageName: String,
     themeMode: AppSettings.ThemeMode,
     language: AppSettings.Language,
-    floatingLogInGame: Boolean,
-    blockUnityKill: Boolean,
-    useUnstrippedLibUnity: Boolean,
     dynamicColor: Boolean,
     animationDisabled: Boolean,
-    onNavigateBack: () -> Unit,
+    floatingLogInGame: Boolean,
+    useUnstrippedLibUnity: Boolean,
     onNavigateToAbout: () -> Unit,
     onThemeChanged: (AppSettings.ThemeMode) -> Unit,
     onLanguageChanged: (AppSettings.Language) -> Unit,
-    onFloatingLogInGameChanged: (Boolean) -> Unit,
-    onBlockUnityKillChanged: (Boolean) -> Unit,
-    onUseUnstrippedLibUnityChanged: (Boolean) -> Unit,
     onDynamicColorChanged: (Boolean) -> Unit,
     onAnimationDisabledChanged: (Boolean) -> Unit,
+    onFloatingLogInGameChanged: (Boolean) -> Unit,
+    onUseUnstrippedLibUnityChanged: (Boolean) -> Unit,
     onClearBepInEx: () -> Unit,
     onClearDotnet: () -> Unit,
     onClearLibUnity: () -> Unit,
-    onCopyGameResources: () -> Unit
+    onCopyGameResources: () -> Unit,
+    isLanguageIncompleteShown: Boolean,
+    onLanguageIncompleteShown: () -> Unit,
+    onNavigateToGameSettings: (() -> Unit)? = null
 ) {
     var showThemeDialog by remember { mutableStateOf(false) }
     var showLanguageDialog by remember { mutableStateOf(false) }
@@ -98,6 +103,7 @@ fun SettingsScreen(
     var maintenanceAction by remember { mutableStateOf<MaintenanceAction?>(null) }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val context = androidx.compose.ui.platform.LocalContext.current
 
     val completedMessage = stringResource(R.string.done)
 
@@ -114,19 +120,14 @@ fun SettingsScreen(
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.settings_title)) },
-                navigationIcon = {
-                    androidx.compose.material3.IconButton(onClick = onNavigateBack) {
-                    Icon(
-                        imageVector = Icons.Filled.ChevronRight,
-                        contentDescription = stringResource(R.string.back),
-                        modifier = Modifier.graphicsLayer(rotationZ = 180f)
-                    )
-                    }
-                },
+                windowInsets = WindowInsets.safeDrawing.only(
+                    WindowInsetsSides.Horizontal + WindowInsetsSides.Top
+                ),
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 )
@@ -165,7 +166,8 @@ fun SettingsScreen(
                                 checked = dynamicColor,
                                 onCheckedChange = { checked -> onDynamicColorChanged(checked) }
                             )
-                        }
+                        },
+                        onClick = { onDynamicColorChanged(!dynamicColor) }
                     )
                 }
             }
@@ -182,6 +184,10 @@ fun SettingsScreen(
                                 showAnimationRestartDialog = true
                             }
                         )
+                    },
+                    onClick = {
+                        pendingAnimationValue = !animationDisabled
+                        showAnimationRestartDialog = true
                     }
                 )
             }
@@ -197,20 +203,8 @@ fun SettingsScreen(
                             checked = floatingLogInGame,
                             onCheckedChange = { checked -> onFloatingLogInGameChanged(checked) }
                         )
-                    }
-                )
-            }
-            item {
-                SettingListItem(
-                    title = stringResource(R.string.settings_block_unity_kill),
-                    summary = stringResource(R.string.settings_block_unity_kill_desc),
-                    icon = { Icon(Icons.Outlined.Terminal, contentDescription = null) },
-                    trailing = {
-                        Switch(
-                            checked = blockUnityKill,
-                            onCheckedChange = { checked -> onBlockUnityKillChanged(checked) }
-                        )
-                    }
+                    },
+                    onClick = { onFloatingLogInGameChanged(!floatingLogInGame) }
                 )
             }
             item {
@@ -223,7 +217,8 @@ fun SettingsScreen(
                             checked = useUnstrippedLibUnity,
                             onCheckedChange = { checked -> onUseUnstrippedLibUnityChanged(checked) }
                         )
-                    }
+                    },
+                    onClick = { onUseUnstrippedLibUnityChanged(!useUnstrippedLibUnity) }
                 )
             }
 
@@ -262,6 +257,17 @@ fun SettingsScreen(
             }
 
             item { SettingsSectionHeader(stringResource(R.string.settings_about)) }
+            onNavigateToGameSettings?.let { navigateToGameSettings ->
+                item {
+                    SettingListItem(
+                        title = stringResource(R.string.game_settings_title),
+                        summary = stringResource(R.string.game_settings_desc),
+                        icon = { Icon(Icons.Outlined.Tune, contentDescription = null) },
+                        trailing = { Icon(Icons.Filled.ChevronRight, contentDescription = null) },
+                        onClick = navigateToGameSettings
+                    )
+                }
+            }
             item {
                 SettingListItem(
                     title = stringResource(R.string.settings_about),
@@ -308,9 +314,13 @@ fun SettingsScreen(
                 AppSettings.Language.DUTCH to stringResource(R.string.lang_dutch),
                 AppSettings.Language.ARABIC to stringResource(R.string.lang_arabic),
                 AppSettings.Language.ARABIC_EG to stringResource(R.string.lang_arabic_eg),
+                AppSettings.Language.ARABIC_SA to stringResource(R.string.lang_arabic_sa),
                 AppSettings.Language.INDONESIAN to stringResource(R.string.lang_indonesian),
                 AppSettings.Language.MALAY to stringResource(R.string.lang_malay),
+                AppSettings.Language.MALAYALAM to stringResource(R.string.lang_malayalam),
                 AppSettings.Language.THAI to stringResource(R.string.lang_thai),
+                AppSettings.Language.TURKISH to stringResource(R.string.lang_turkish),
+                AppSettings.Language.UKRAINIAN to stringResource(R.string.lang_ukrainian),
                 AppSettings.Language.VENETIAN to stringResource(R.string.lang_venetian)
             ),
             onDismiss = { showLanguageDialog = false },
@@ -408,9 +418,13 @@ private fun languageLabel(language: AppSettings.Language) = when (language) {
     AppSettings.Language.DUTCH -> stringResource(R.string.lang_dutch)
     AppSettings.Language.ARABIC -> stringResource(R.string.lang_arabic)
     AppSettings.Language.ARABIC_EG -> stringResource(R.string.lang_arabic_eg)
+    AppSettings.Language.ARABIC_SA -> stringResource(R.string.lang_arabic_sa)
     AppSettings.Language.INDONESIAN -> stringResource(R.string.lang_indonesian)
     AppSettings.Language.MALAY -> stringResource(R.string.lang_malay)
+    AppSettings.Language.MALAYALAM -> stringResource(R.string.lang_malayalam)
     AppSettings.Language.THAI -> stringResource(R.string.lang_thai)
+    AppSettings.Language.TURKISH -> stringResource(R.string.lang_turkish)
+    AppSettings.Language.UKRAINIAN -> stringResource(R.string.lang_ukrainian)
     AppSettings.Language.VENETIAN -> stringResource(R.string.lang_venetian)
 }
 
@@ -433,19 +447,16 @@ private fun SettingListItem(
     summary: String? = null,
     icon: @Composable () -> Unit,
     trailing: (@Composable () -> Unit)? = null,
-    onClick: (() -> Unit)? = null
+    onClick: () -> Unit
 ) {
-    val modifier = if (onClick != null) {
-        Modifier.fillMaxWidth().clickable(onClick = onClick)
-    } else {
-        Modifier.fillMaxWidth()
-    }
     ListItem(
         headlineContent = { Text(title) },
         supportingContent = summary?.let { { Text(it) } },
+
         leadingContent = icon,
+
         trailingContent = trailing,
-        modifier = modifier
+        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick)
     )
 }
 

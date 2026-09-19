@@ -27,6 +27,7 @@ add_library(fusion SHARED
     src/hooking/safehook.cpp
     src/hooking/libunity.cpp
     src/utilities/library.cpp
+    src/utilities/elf.cpp
 )
 
 # fusion is loaded manually from libmain through the game's linker namespace.

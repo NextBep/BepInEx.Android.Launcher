@@ -91,6 +91,13 @@
             android:launchMode="standard"
             android:exported="false" />
 
+        <!-- Handles desktop shortcut intents for modpack quick-launch -->
+        <activity
+            android:name="com.bepinex.android.ShortcutLauncherActivity"
+            android:exported="true"
+            android:launchMode="standard"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <!-- File provider for DLL sharing -->
         <provider
             android:name="androidx.core.content.FileProvider"

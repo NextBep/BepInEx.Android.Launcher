@@ -21,7 +21,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import com.bepinex.android.ui.components.CrashRecoveryDialog
-import com.bepinex.android.ui.components.UpdateDialog
+import com.bepinex.android.update.AnnouncementDialog
+import com.bepinex.android.update.BlockedDialog
+import com.bepinex.android.update.UpdateDialog
+import com.bepinex.android.update.openUpdateUrl
 import com.bepinex.android.log.BepInExLogReader
 import com.bepinex.android.update.UpdateChecker
 import com.bepinex.android.settings.AppSettings
@@ -51,11 +54,15 @@ class MainActivity : ComponentActivity() {
     private var pendingCrash by mutableStateOf<CrashDiagnostics.PendingLaunch?>(null)
     private var leftLauncher = false
     private var updateInfo by mutableStateOf<UpdateChecker.UpdateInfo?>(null)
+    private var showAnnouncement by mutableStateOf(false)
+    private var showUpdate by mutableStateOf(false)
+    private var showBlocked by mutableStateOf(false)
+    private var pendingAnnouncementToShow by mutableStateOf(false)
 
     // Settings state
     private var themeMode by mutableStateOf(AppSettings.ThemeMode.SYSTEM)
     private var language by mutableStateOf(AppSettings.Language.SYSTEM)
-    private var dynamicColor by mutableStateOf(true)
+    private var dynamicColor by mutableStateOf(false)
     private var animationDisabled by mutableStateOf(false)
 
     private val storagePermissionLauncher = registerForActivityResult(
@@ -90,6 +97,10 @@ class MainActivity : ComponentActivity() {
             AppSettings.Language.MALAY -> Locale.forLanguageTag("ms")
             AppSettings.Language.THAI -> Locale.forLanguageTag("th")
             AppSettings.Language.VENETIAN -> Locale.forLanguageTag("vec")
+            AppSettings.Language.ARABIC_SA -> Locale.forLanguageTag("ar-SA")
+            AppSettings.Language.MALAYALAM -> Locale.forLanguageTag("ml")
+            AppSettings.Language.TURKISH -> Locale.forLanguageTag("tr")
+            AppSettings.Language.UKRAINIAN -> Locale.forLanguageTag("uk")
             AppSettings.Language.SYSTEM -> return super.attachBaseContext(newBase)
         }
         val config = Configuration(ctx.resources.configuration)
@@ -419,17 +430,131 @@ class MainActivity : ComponentActivity() {
 
     private fun checkForUpdates() {
         scope.launch(Dispatchers.IO) {
-            val info = UpdateChecker.fetchLatestRelease()
+            val info = UpdateChecker.fetchInfo(this@MainActivity)
             withContext(Dispatchers.Main) {
+                updateInfo = info
                 if (info != null) {
                     val currentVersion = try {
                         packageManager.getPackageInfo(packageName, 0).versionName ?: ""
                     } catch (_: Exception) { "" }
 
-                    if (UpdateChecker.hasUpdate(currentVersion, info.version)) {
-                        updateInfo = info
+                    when {
+                        !info.allowStart -> showBlocked = true
+                        UpdateChecker.hasUpdate(currentVersion, info.version) -> {
+                            showUpdate = true
+                        }
+                        info.announcementDate.isNotEmpty()
+                            && info.announcementDate != AppSettings.getLastSeenAnnouncementDate(this@MainActivity) -> {
+                            showAnnouncement = true
+                        }
                     }
                 }
+            }
+        }
+    }
+
+    private fun onDismissAnnouncement() {
+        showAnnouncement = false
+        updateInfo?.let { AppSettings.setLastSeenAnnouncementDate(this, it.announcementDate) }
+    }
+
+    private fun onDismissUpdate() {
+        showUpdate = false
+        updateInfo?.let {
+            if (it.announcementDate.isNotEmpty()
+                && it.announcementDate != AppSettings.getLastSeenAnnouncementDate(this)) {
+                showAnnouncement = true
+            }
+        }
+    }
+
+    private fun onUpdateNow() {
+        updateInfo?.let { openUpdateUrl(this, it.urlApk) }
+    }
+
+    /** Collect launcher/game diagnostics and hand them to the share sheet. */
+    private fun onExportLogs() {
+        scope.launch(Dispatchers.IO) {
+            try {
+                val extDir = getExternalFilesDir(null) ?: filesDir
+                val sb = StringBuilder()
+
+                // Launcher process logcat
+                try {
+                    val pid = android.os.Process.myPid()
+                    val process = Runtime.getRuntime().exec(arrayOf("logcat", "-d", "-v", "threadtime", "--pid=$pid"))
+                    sb.appendLine("=== launcher logcat ===")
+                    sb.appendLine(process.inputStream.bufferedReader().readText())
+                    process.waitFor()
+                } catch (e: Exception) {
+                    sb.appendLine("Failed to capture launcher logcat: ${e.message}")
+                }
+
+                // Game logcat (Unity / BepInEx / crash markers)
+                try {
+                    val process = Runtime.getRuntime().exec(arrayOf("logcat", "-d", "-v", "threadtime"))
+                    val output = process.inputStream.bufferedReader().readText()
+                    process.waitFor()
+                    val packages = detectedGames.map { it.packageName }
+                    val filtered = output.lines().filter { line ->
+                        line.contains("Unity") || line.contains("BepInEx") ||
+                            line.contains("FATAL") || line.contains("CRASH") ||
+                            line.contains("libunity") || line.contains("il2cpp") ||
+                            line.contains("signal") || line.contains("backtrace") ||
+                            packages.any { line.contains(it) }
+                    }.joinToString("\n")
+                    sb.appendLine("=== game logcat ===")
+                    sb.appendLine(filtered.ifEmpty { "No game-related logs found" })
+                } catch (e: Exception) {
+                    sb.appendLine("Failed to capture game logcat: ${e.message}")
+                }
+
+                // Crash buffer
+                try {
+                    val process = Runtime.getRuntime().exec(arrayOf("logcat", "-b", "crash", "-d", "-v", "threadtime"))
+                    sb.appendLine("=== crash buffer ===")
+                    sb.appendLine(process.inputStream.bufferedReader().readText())
+                    process.waitFor()
+                } catch (e: Exception) {
+                    sb.appendLine("Failed to capture crash logcat: ${e.message}")
+                }
+
+                // BepInEx logs + modpack logs of detected games
+                for (game in detectedGames) {
+                    val candidates = listOfNotNull(
+                        com.bepinex.android.BepInExPaths.getLogFile(game.packageName),
+                        runCatching {
+                            com.bepinex.android.BepInExPaths.getModpackLogFile(
+                                game.packageName,
+                                AppSettings.getActiveModpack(this@MainActivity, game.packageName) ?: ""
+                            )
+                        }.getOrNull()
+                    )
+                    for (file in candidates) {
+                        if (file.exists() && file.length() <= 2 * 1024 * 1024) {
+                            sb.appendLine("=== ${file.absolutePath} ===")
+                            try { sb.appendLine(file.readText()) } catch (_: Exception) {}
+                            sb.appendLine()
+                        }
+                    }
+                }
+
+                val exportFile = File(extDir, "bepinex_export_logs.txt")
+                exportFile.writeText(sb.toString())
+                withContext(Dispatchers.Main) {
+                    val uri = FileProvider.getUriForFile(
+                        this@MainActivity, "${packageName}.provider", exportFile
+                    )
+                    val share = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_STREAM, uri)
+                        putExtra(Intent.EXTRA_SUBJECT, "BepInEx Launcher Logs")
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+                    startActivity(Intent.createChooser(share, "Export Logs"))
+                }
+            } catch (e: Exception) {
+                BepInExLog.e("Export logs failed", e)
             }
         }
     }
@@ -473,7 +598,9 @@ class MainActivity : ComponentActivity() {
                     onClearBepInEx = { onClearBepInEx(it) },
                     onClearDotnet = { onClearDotnet(it) },
                     onClearLibUnity = { onClearLibUnity(it) },
-                    onCopyGameResources = { onCopyGameResources(it) }
+                    onCopyGameResources = { onCopyGameResources(it) },
+                    onExportLogs = { onExportLogs() },
+                    onShowAnnouncement = { showAnnouncement = true }
                 )
                 if (crash != null) {
                     CrashRecoveryDialog(
@@ -489,14 +616,31 @@ class MainActivity : ComponentActivity() {
                     )
                 }
                 val currentUpdateInfo = updateInfo
-                if (currentUpdateInfo != null) {
+                if (showBlocked && currentUpdateInfo != null) {
+                    BlockedDialog(
+                        message = UpdateChecker.announcementMessage(currentUpdateInfo, this@MainActivity)
+                    )
+                }
+                if (showUpdate && currentUpdateInfo != null) {
                     val currentVersion = try {
                         packageManager.getPackageInfo(packageName, 0).versionName ?: ""
                     } catch (_: Exception) { "" }
                     UpdateDialog(
-                        updateInfo = currentUpdateInfo,
                         currentVersion = currentVersion,
-                        onDismiss = { updateInfo = null }
+                        remoteVersion = currentUpdateInfo.version,
+                        updateMessage = UpdateChecker.announcementMessage(currentUpdateInfo, this@MainActivity),
+                        onUpdate = { onUpdateNow() },
+                        onSkip = {
+                            showUpdate = false
+                            onDismissUpdate()
+                        }
+                    )
+                }
+                if (showAnnouncement && currentUpdateInfo != null && !showUpdate) {
+                    AnnouncementDialog(
+                        date = currentUpdateInfo.announcementDate,
+                        message = UpdateChecker.announcementMessage(currentUpdateInfo, this@MainActivity),
+                        onDismiss = { onDismissAnnouncement() }
                     )
                 }
             }

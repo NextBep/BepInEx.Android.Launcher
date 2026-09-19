@@ -1,74 +1,82 @@
 package com.bepinex.android.ui.theme
 
+import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import com.bepinex.android.settings.AppSettings
 
+// Brand seed color — 远峰蓝 (Sierra Blue), used as the M3 seed for the fallback schemes
+private val BrandSeed = Color(0xFFA7C1D9)
+
+// Fallback color schemes (used when dynamic color is OFF or unavailable)
 private val LightFallbackColors = lightColorScheme(
-    primary = Color(0xFF00897B),
-    onPrimary = Color.White,
-    primaryContainer = Color(0xFFB2DFDB),
-    onPrimaryContainer = Color(0xFF00332E),
-    secondary = Color(0xFF4DB6AC),
-    onSecondary = Color.White,
-    secondaryContainer = Color(0xFFCCE8E4),
-    onSecondaryContainer = Color(0xFF00201D),
-    tertiary = Color(0xFF80CBC4),
-    onTertiary = Color.White,
-    tertiaryContainer = Color(0xFFE0F2F1),
-    onTertiaryContainer = Color(0xFF003935),
+    primary = Color(0xFF006494),
+    onPrimary = Color(0xFFFFFFFF),
+    primaryContainer = Color(0xFFCBE6FF),
+    onPrimaryContainer = Color(0xFF001E30),
+    secondary = Color(0xFF50606F),
+    onSecondary = Color(0xFFFFFFFF),
+    secondaryContainer = Color(0xFFD4E4F6),
+    onSecondaryContainer = Color(0xFF0C1D29),
+    tertiary = Color(0xFF65587B),
+    onTertiary = Color(0xFFFFFFFF),
+    tertiaryContainer = Color(0xFFEBDCFF),
+    onTertiaryContainer = Color(0xFF211634),
     error = Color(0xFFBA1A1A),
-    onError = Color.White,
+    onError = Color(0xFFFFFFFF),
     errorContainer = Color(0xFFFFDAD6),
     onErrorContainer = Color(0xFF410002),
-    background = Color(0xFFF5FBF9),
-    onBackground = Color(0xFF191C1B),
-    surface = Color(0xFFF5FBF9),
-    onSurface = Color(0xFF191C1B),
-    surfaceVariant = Color(0xFFDAE5E2),
-    onSurfaceVariant = Color(0xFF3F4946),
-    outline = Color(0xFF6F7976),
-    outlineVariant = Color(0xFFBEC9C6),
-    inverseSurface = Color(0xFF2E3130),
-    inverseOnSurface = Color(0xFFEFF1EF),
-    inversePrimary = Color(0xFF80CBC4),
-    surfaceTint = Color(0xFF00897B)
+    background = Color(0xFFFCFCFF),
+    onBackground = Color(0xFF1A1C1E),
+    surface = Color(0xFFFCFCFF),
+    onSurface = Color(0xFF1A1C1E),
+    surfaceVariant = Color(0xFFDEE3EA),
+    onSurfaceVariant = Color(0xFF41474D),
+    outline = Color(0xFF72787E),
+    outlineVariant = Color(0xFFC1C7CE),
+    inverseSurface = Color(0xFF2E3133),
+    inverseOnSurface = Color(0xFFF0F0F3),
+    inversePrimary = Color(0xFF8FCDFF),
+    surfaceTint = Color(0xFF006494)
 )
 
 private val DarkFallbackColors = darkColorScheme(
-    primary = Color(0xFF80CBC4),
-    onPrimary = Color(0xFF003731),
-    primaryContainer = Color(0xFF005047),
-    onPrimaryContainer = Color(0xFFB2DFDB),
-    secondary = Color(0xFFB0CCC7),
-    onSecondary = Color(0xFF1B3532),
-    secondaryContainer = Color(0xFF314C48),
-    onSecondaryContainer = Color(0xFFCCE8E4),
-    tertiary = Color(0xFFA0D0CA),
-    onTertiary = Color(0xFF0B3632),
-    tertiaryContainer = Color(0xFF254D49),
-    onTertiaryContainer = Color(0xFFE0F2F1),
+    primary = Color(0xFF8FCDFF),
+    onPrimary = Color(0xFF00344F),
+    primaryContainer = Color(0xFF004B71),
+    onPrimaryContainer = Color(0xFFCBE6FF),
+    secondary = Color(0xFFB8C8D9),
+    onSecondary = Color(0xFF22323F),
+    secondaryContainer = Color(0xFF394956),
+    onSecondaryContainer = Color(0xFFD4E4F6),
+    tertiary = Color(0xFFD0BFE8),
+    onTertiary = Color(0xFF362B4A),
+    tertiaryContainer = Color(0xFF4D4162),
+    onTertiaryContainer = Color(0xFFEBDCFF),
     error = Color(0xFFFFB4AB),
     onError = Color(0xFF690005),
     errorContainer = Color(0xFF93000A),
-    onErrorContainer = Color(0xFFFFDAD6),
-    background = Color(0xFF191C1B),
-    onBackground = Color(0xFFE1E3E1),
-    surface = Color(0xFF191C1B),
-    onSurface = Color(0xFFE1E3E1),
-    surfaceVariant = Color(0xFF3F4946),
-    onSurfaceVariant = Color(0xFFBEC9C6),
-    outline = Color(0xFF899390),
-    outlineVariant = Color(0xFF3F4946),
-    inverseSurface = Color(0xFFE1E3E1),
-    inverseOnSurface = Color(0xFF2E3130),
-    inversePrimary = Color(0xFF00897B),
-    surfaceTint = Color(0xFF80CBC4)
+    onErrorContainer = Color(0xFFFFB4AB),
+    background = Color(0xFF1A1C1E),
+    onBackground = Color(0xFFE2E2E5),
+    surface = Color(0xFF1A1C1E),
+    onSurface = Color(0xFFE2E2E5),
+    surfaceVariant = Color(0xFF41474D),
+    onSurfaceVariant = Color(0xFFC1C7CE),
+    outline = Color(0xFF8B9198),
+    outlineVariant = Color(0xFF41474D),
+    inverseSurface = Color(0xFFE2E2E5),
+    inverseOnSurface = Color(0xFF2E3133),
+    inversePrimary = Color(0xFF006494),
+    surfaceTint = Color(0xFF8FCDFF)
 )
 
 @Composable
@@ -100,6 +108,16 @@ fun BepInExTheme(
         large = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
         extraLarge = androidx.compose.foundation.shape.RoundedCornerShape(24.dp)
     )
+
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+            val insetsController = WindowCompat.getInsetsController(window, view)
+            insetsController.isAppearanceLightStatusBars = !useDarkTheme
+            insetsController.isAppearanceLightNavigationBars = !useDarkTheme
+        }
+    }
 
     MaterialTheme(
         colorScheme = colorScheme,

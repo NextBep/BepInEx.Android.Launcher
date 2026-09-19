@@ -1,13 +1,11 @@
 /*
- * BepInEx.Android 鈥?IL2CPP initialization and hooking
- *
- * Ported from FusionCore main branch (fusion/src/hooking/il2cpp.cpp).
+ * BepInEx.Android —IL2CPP initialization and hooking
  *
  * Key design:
  *   - il2cpp_initialize: dlopen libil2cpp.so with RTLD_GLOBAL so that
  *     BepInEx's P/Invoke (via DllImportResolver 鈫?NativeLibrary.Load)
  *     can resolve IL2CPP symbols.
- *   - il2cpp_install_init_hook: uses DobbyHook directly (FusionCore pattern)
+ *   - il2cpp_install_init_hook: uses DobbyHook directly
  *   - il2cpp_destroy_init_hook: one-shot hook cleanup (called from hook callback)
  */
 
@@ -31,7 +29,7 @@ static uintptr_t g_library_base = 0;           // loaded base address
 static void *g_p_il2cpp_init = nullptr;        // address of il2cpp_init in loaded library
 static void *g_p_il2cpp_method_get_name = nullptr;
 
-/* Function pointer types matching FusionCore's il2cpp.h */
+/* Function pointer types for the IL2CPP runtime entry points */
 typedef const char *(*il2cpp_method_get_name_t)(void *method);
 typedef int         (*il2cpp_init_t)(char *domain_name);
 
@@ -147,7 +145,7 @@ int il2cpp_init(char *domain_name)
 void il2cpp_install_init_hook(void *hookCallback)
 {
     if (!g_p_il2cpp_init) {
-        LOGE("il2cpp_init address not resolved 鈥?call il2cpp_initialize first!");
+        LOGE("il2cpp_init address not resolved —call il2cpp_initialize first!");
         return;
     }
 

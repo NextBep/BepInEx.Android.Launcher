@@ -14,7 +14,7 @@ import java.io.InputStreamReader
  * logcat is captured in the same process where the crash occurs.
  * MainActivity then reads this file in the crash recovery dialog.
  *
- * Modeled after FusionCore's LogcatCapture.java.
+ * Captures logcat output for the running game.
  */
 object GameLogcatCapture {
 

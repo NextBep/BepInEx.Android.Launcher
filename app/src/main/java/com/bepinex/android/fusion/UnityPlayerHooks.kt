@@ -30,7 +30,6 @@ import java.util.concurrent.atomic.AtomicBoolean
  *   2. Sets nativeLibraryDir to "" to prevent the game from finding its own libs
  *   3. Shows a loading overlay while hooks are being installed
  *
- * @see UnityPlayerHooks.java in FusionCore main branch
  */
 object UnityPlayerHooks {
 
@@ -115,7 +114,7 @@ object UnityPlayerHooks {
                         activity = firstArg
                         loadingOverlay = showLoadingOverlay(firstArg, "Injecting BepInEx...")
 
-                        // Use FusionCore's exact CustomContextWrapper implementation
+                        // Use the direct CustomContextWrapper port
                         callFrame.args[0] = GameContextWrapper(gameContext, firstArg, firstArg)
 
                         BepInExLog.i("UnityPlayer constructor: context wrapped")

@@ -119,7 +119,7 @@ class BootstrapActivity : Activity() {
         )
         preparedConfig = prepareFusionState(targetPackage, gameContext, useOriginalLibUnity)
 
-        // 4. Register game native libraries (match FusionCore: no exclusions)
+        // 4. Register game native libraries (no exclusions)
         updateProgress(getString(R.string.bootstrap_status_registering_libraries), "", 60)
         var gameLibDir = gameContext.applicationInfo.nativeLibraryDir
         if (gameLibDir.isNullOrEmpty()) {
@@ -293,7 +293,7 @@ class BootstrapActivity : Activity() {
         // Per-game internal data dir
         val appDataDir = BepInExPaths.getAppDataDir(filesDir, targetPackage)
 
-        // Per-game external storage (FusionCore pattern)
+        // Per-game external storage
         val dataOnSdCard = BepInExPaths.getGameRootDir(targetPackage)
 
         BepInExLog.i("Paths:")
@@ -348,7 +348,7 @@ class BootstrapActivity : Activity() {
             }
         }
 
-        // Detect Unity version from game data (FusionCore VersionLookup)
+        // Detect Unity version from game data
         updateProgress(getString(R.string.bootstrap_status_detecting_version), "", 45)
         val unityVersion = UnityVersionLookup.find(copiedData)
             ?: BACKUP_UNITY_VERSION.also {
@@ -358,7 +358,7 @@ class BootstrapActivity : Activity() {
 
         // Download unity base libraries using Android's HTTP stack (not .NET's).
         // .NET's HttpClient crashes on Android 16 with SIGSEGV in
-        // AndroidCryptoNative_SSLStreamCreate. FusionCore mirrors this pattern
+        // AndroidCryptoNative_SSLStreamCreate. Mirrors the same pattern
         // in LibUnityDownloader.java for libunity.so.
         updateProgress(getString(R.string.bootstrap_status_downloading_libunity), "", 50)
         val unityLibsDir = File(bepInExDir, "unity-libs")
@@ -441,7 +441,7 @@ class BootstrapActivity : Activity() {
         }
         com.bepinex.android.settings.AppSettings.setActiveModpack(this, targetPackage, activeModpack)
 
-        // Register game native libraries (match FusionCore: no exclusions)
+        // Register game native libraries (no exclusions)
         File(gameLibDir).listFiles()?.forEach { file ->
             val name = file.name
             if (name.startsWith("lib") && name.endsWith(".so") && name.length > 6) {

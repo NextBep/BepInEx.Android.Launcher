@@ -14,10 +14,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -29,7 +33,10 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.FolderZip
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.SportsEsports
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.Announcement
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material3.Button
@@ -37,6 +44,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -46,11 +54,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
@@ -62,6 +72,12 @@ import androidx.core.graphics.drawable.toBitmap
 import com.bepinex.android.GameDetector
 import com.bepinex.android.R
 
+/**
+ * Main game selection and mod management screen.
+ *
+ * The screen keeps the scan result as the primary content, then presents the
+ * selected game's status and actions in a clear top-to-bottom hierarchy.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameScreen(
@@ -71,17 +87,21 @@ fun GameScreen(
     isFrameworkReady: Boolean,
     isExtracting: Boolean,
     extractionStatus: String,
+    extractionError: String? = null,
     activeModpackName: String?,
+    activeModpackEnabledCount: Int,
     activeModpackModCount: Int,
     onSelectGame: (GameDetector.DetectedGame) -> Unit,
     onRescan: () -> Unit,
     onLaunch: () -> Unit,
-    onNavigateToSettings: () -> Unit,
-    onNavigateToModpacks: () -> Unit,
-    onNavigateToGameSettings: (GameDetector.DetectedGame) -> Unit
+    onExportLogs: () -> Unit,
+    onShowAnnouncement: () -> Unit = {},
+    showIncompleteBanner: Boolean = false,
+    isSwitchingModpack: Boolean = false
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             TopAppBar(
                 title = {
@@ -100,14 +120,32 @@ fun GameScreen(
                         )
                     }
                 },
+                windowInsets = WindowInsets.safeDrawing.only(
+                    WindowInsetsSides.Horizontal + WindowInsetsSides.Top
+                ),
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 ),
                 actions = {
-                    IconButton(onClick = onRescan, enabled = !isScanning) {
+                    IconButton(onClick = onShowAnnouncement) {
+                        Icon(
+                            imageVector = Icons.Outlined.Announcement,
+                            contentDescription = stringResource(R.string.update_announcement)
+                        )
+                    }
+                    IconButton(
+                        onClick = onRescan,
+                        enabled = !isScanning
+                    ) {
                         Icon(
                             imageVector = Icons.Filled.Refresh,
                             contentDescription = stringResource(R.string.rescan)
+                        )
+                    }
+                    IconButton(onClick = onExportLogs) {
+                        Icon(
+                            imageVector = Icons.Filled.Share,
+                            contentDescription = stringResource(R.string.crash_export_logs)
                         )
                     }
                 }
@@ -131,6 +169,33 @@ fun GameScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(top = 12.dp, bottom = 24.dp)
             ) {
+                if (showIncompleteBanner) {
+                    item {
+                        Surface(
+                            color = MaterialTheme.colorScheme.errorContainer,
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Warning,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onErrorContainer,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Spacer(Modifier.width(10.dp))
+                                com.bepinex.android.update.MarkdownText(
+                                    rawText = stringResource(R.string.lang_incomplete_message),
+                                    style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.onErrorContainer),
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
+                        }
+                    }
+                }
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -178,9 +243,12 @@ fun GameScreen(
                             isFrameworkReady = isFrameworkReady,
                             isExtracting = isExtracting,
                             extractionStatus = extractionStatus,
+                            extractionError = extractionError,
                             activeModpackName = activeModpackName,
+                            activeModpackEnabledCount = activeModpackEnabledCount,
                             activeModpackModCount = activeModpackModCount,
-                            onLaunch = onLaunch
+                            onLaunch = onLaunch,
+                            isSwitchingModpack = isSwitchingModpack
                         )
                     }
                 }
@@ -327,9 +395,12 @@ private fun SelectedGameCard(
     isFrameworkReady: Boolean,
     isExtracting: Boolean,
     extractionStatus: String,
+    extractionError: String? = null,
     activeModpackName: String?,
+    activeModpackEnabledCount: Int,
     activeModpackModCount: Int,
-    onLaunch: () -> Unit
+    onLaunch: () -> Unit,
+    isSwitchingModpack: Boolean = false
 ) {
     Card(
         modifier = Modifier
@@ -371,11 +442,23 @@ private fun SelectedGameCard(
             Spacer(Modifier.height(16.dp))
             ModpackChip(
                 activeModpackName = activeModpackName,
+                activeModpackEnabledCount = activeModpackEnabledCount,
                 activeModpackModCount = activeModpackModCount
             )
 
             Spacer(Modifier.height(10.dp))
-            StatusChip(isFrameworkReady = isFrameworkReady)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                StatusChip(
+                    isFrameworkReady = isFrameworkReady,
+                    isExtracting = isExtracting,
+                    hasError = extractionError != null,
+                    modifier = Modifier.weight(1f)
+                )
+            }
 
             AnimatedVisibility(visible = isExtracting) {
                 Column {
@@ -394,39 +477,103 @@ private fun SelectedGameCard(
                 }
             }
 
-            Spacer(Modifier.height(18.dp))
-            Button(
-                onClick = onLaunch,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                enabled = isFrameworkReady && !isExtracting,
-                shape = RoundedCornerShape(14.dp)
-            ) {
-                Icon(Icons.Filled.PlayArrow, contentDescription = null)
-                Spacer(Modifier.width(8.dp))
+            if (!isExtracting && !extractionError.isNullOrBlank()) {
+                Spacer(Modifier.height(10.dp))
                 Text(
-                    text = stringResource(R.string.launch),
-                    style = MaterialTheme.typography.titleMedium
+                    text = extractionError,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error,
+                    maxLines = 3,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
+
+            if (isSwitchingModpack) {
+                Spacer(Modifier.height(10.dp))
+                LinearProgressIndicator(Modifier.fillMaxWidth())
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    text = stringResource(R.string.modpack_switching),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            Spacer(Modifier.height(18.dp))
+            SelectedGameActions(
+                canLaunch = !isExtracting && !isSwitchingModpack,
+                isFrameworkReady = isFrameworkReady,
+                isSwitchingModpack = isSwitchingModpack,
+                onLaunch = onLaunch
+            )
         }
     }
 }
 
 @Composable
-private fun StatusChip(
+private fun SelectedGameActions(
+    canLaunch: Boolean,
     isFrameworkReady: Boolean,
+    isSwitchingModpack: Boolean = false,
+    onLaunch: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    Button(
+        onClick = onLaunch,
+        modifier = modifier
+            .fillMaxWidth()
+            .height(56.dp),
+        enabled = canLaunch,
+        shape = RoundedCornerShape(14.dp)
+    ) {
+        Icon(Icons.Filled.PlayArrow, contentDescription = null)
+        Spacer(Modifier.width(8.dp))
+        Text(
+            text = stringResource(
+                when {
+                    isSwitchingModpack -> R.string.modpack_switching
+                    isFrameworkReady -> R.string.launch
+                    else -> R.string.framework_retry
+                }
+            ),
+            style = MaterialTheme.typography.titleMedium
+        )
+    }
+}
+
+
+@Composable
+private fun StatusChip(
+    isFrameworkReady: Boolean,
+    isExtracting: Boolean,
+    hasError: Boolean,
+    modifier: Modifier = Modifier
+) {
+    val failed = hasError && !isFrameworkReady && !isExtracting
+    val containerColor = when {
+        isFrameworkReady -> MaterialTheme.colorScheme.primaryContainer
+        failed -> MaterialTheme.colorScheme.errorContainer
+        else -> MaterialTheme.colorScheme.tertiaryContainer
+    }
+    val dotColor = when {
+        isFrameworkReady -> MaterialTheme.colorScheme.primary
+        failed -> MaterialTheme.colorScheme.error
+        else -> MaterialTheme.colorScheme.tertiary
+    }
+    val labelColor = when {
+        isFrameworkReady -> MaterialTheme.colorScheme.onPrimaryContainer
+        failed -> MaterialTheme.colorScheme.onErrorContainer
+        else -> MaterialTheme.colorScheme.onTertiaryContainer
+    }
+    val label = when {
+        isFrameworkReady -> stringResource(R.string.framework_ready)
+        failed -> stringResource(R.string.framework_setup_failed)
+        else -> stringResource(R.string.framework_setting_up)
+    }
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(50),
-        color = if (isFrameworkReady) {
-            MaterialTheme.colorScheme.primaryContainer
-        } else {
-            MaterialTheme.colorScheme.tertiaryContainer
-        }
+        color = containerColor
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
@@ -435,33 +582,21 @@ private fun StatusChip(
             Surface(
                 modifier = Modifier.size(8.dp),
                 shape = RoundedCornerShape(50),
-                color = if (isFrameworkReady) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    MaterialTheme.colorScheme.tertiary
-                }
+                color = dotColor
             ) {}
             Spacer(Modifier.width(8.dp))
             Text(
-                text = if (isFrameworkReady) {
-                    stringResource(R.string.framework_ready)
-                } else {
-                    stringResource(R.string.framework_setting_up)
-                },
+                text = label,
                 style = MaterialTheme.typography.labelLarge,
-                color = if (isFrameworkReady) {
-                    MaterialTheme.colorScheme.onPrimaryContainer
-                } else {
-                    MaterialTheme.colorScheme.onTertiaryContainer
-                }
+                color = labelColor
             )
         }
     }
 }
-
 @Composable
 private fun ModpackChip(
     activeModpackName: String?,
+    activeModpackEnabledCount: Int,
     activeModpackModCount: Int
 ) {
     Surface(
@@ -490,7 +625,11 @@ private fun ModpackChip(
             Spacer(Modifier.width(8.dp))
             Text(
                 text = if (activeModpackName != null) {
-                    "$activeModpackName · $activeModpackModCount mod(s)"
+                    "$activeModpackName · " + stringResource(
+                        R.string.modpack_mod_count_ratio,
+                        activeModpackEnabledCount,
+                        activeModpackModCount
+                    )
                 } else {
                     stringResource(R.string.modpack_vanilla)
                 },

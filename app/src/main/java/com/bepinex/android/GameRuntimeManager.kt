@@ -4,7 +4,7 @@ import android.content.Context
 import java.io.File
 
 /**
- * Runtime path resolver using FusionCore-compatible storage layout.
+ * Runtime path resolver for the per-game storage layout.
  *
  * Delegates to [BepInExPaths] for all path resolution.
  */

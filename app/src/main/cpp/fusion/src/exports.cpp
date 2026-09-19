@@ -1,7 +1,7 @@
 /*
- * BepInEx.Android 鈥?P/Invoke exports for BepInExFusion managed code
+ * BepInEx.Android — P/Invoke exports for the managed BepInEx layer
  *
- * BepInExFusion's FusionInterop.cs P/Invokes these functions from libfusion.so:
+ NextInterop.cs P/Invokes these functions from libfusion.so:
  *   - write_log_level(int level, const char* text)
  *   - hook(void* target, void* detour, bool specialReturn)
  *   - unhook(void* target)
@@ -23,13 +23,13 @@ void write_log(const char *text)
 
 void write_log_level(int level, const char *text)
 {
-    // BepInExFusion's AndroidLogListener already converts BepInEx bit-flag
+    // AndroidLogListener already converts BepInEx bit-flag
     // levels to Android log levels (0=UNKNOWN, 2=VERBOSE, 3=DEBUG, 4=INFO,
     // 5=WARN, 6=ERROR, 7=FATAL). Direct pass-through.
     __android_log_write(level, "BepInEx", text);
 }
 
-// Hook management (used by FusionInterop.hook/unhook)
+// Hook management (used by NextInterop.hook/unhook)
 
 void *hook(void *target, void *detour, bool specialReturnBuffer)
 {

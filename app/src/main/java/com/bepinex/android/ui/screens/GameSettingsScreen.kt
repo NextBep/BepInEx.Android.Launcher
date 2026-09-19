@@ -19,7 +19,7 @@ import com.bepinex.android.R
 import com.bepinex.android.settings.AppSettings
 
 /**
- * Per-game settings screen — inspired by FusionCore's GameSettingsActivity.
+ * Per-game settings screen for a Unity IL2CPP game.
  * Each game gets its own dedicated settings page with toggles and maintenance actions.
  */
 @OptIn(ExperimentalMaterial3Api::class)

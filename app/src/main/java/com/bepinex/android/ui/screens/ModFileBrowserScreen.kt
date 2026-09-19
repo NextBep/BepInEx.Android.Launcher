@@ -44,6 +44,7 @@ private fun isInsideRoot(file: File, root: File): Boolean {
     return filePath == canonicalPath(root) || filePath.startsWith(rootPath)
 }
 
+/** Only the metadata file at the modpack root is protected. */
 private fun isProtectedModpackFile(file: File, root: File): Boolean {
     val parent = file.parentFile ?: return false
     return file.isFile && file.name.equals("modpack.json", ignoreCase = true) &&
@@ -56,6 +57,9 @@ private fun fileTypeLabel(file: File): String = when {
     else -> "FILE"
 }
 
+/**
+ * Browses all files and directories below a modpack's root directory.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ModFileBrowserScreen(

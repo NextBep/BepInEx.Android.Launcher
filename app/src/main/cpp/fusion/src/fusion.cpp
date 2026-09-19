@@ -1,7 +1,5 @@
 /*
- * BepInEx.Android 鈥?libfusion.so core
- *
- * Ported from FusionCore main branch (fusion/src/fusion.cpp).
+ * BepInEx.Android —libfusion.so core
  *
  * Coordinates the full injection pipeline:
  *   Config parse 鈫?allocate injected code cave 鈫?il2cpp_init hook 鈫?CoreCLR 鈫?BepInEx
@@ -145,7 +143,7 @@ static bool stage_fusion_config(const FusionConfig &config)
     }
 
     /*
-     * FusionCore pattern: patch libil2cpp.so with an extended memory segment
+     * Patch libil2cpp.so with an extended memory segment
      * (1 MB code cave) 鈫?copy to appDataDir 鈫?load the patched copy.
      *
      * The code cave provides executable memory within the library's own
@@ -189,15 +187,15 @@ static bool stage_fusion_config(const FusionConfig &config)
 // il2cpp_init hook callback
 
 /*
- * One-shot hook on il2cpp_init (FusionCore pattern).
+ * One-shot hook on il2cpp_init.
  *
  * Called when Unity invokes il2cpp_init. We:
- *   1. Destroy the hook (one-shot 鈥?only fire once)
+ *   1. Destroy the hook (one-shot —only fire once)
  *   2. Call the real il2cpp_init (chains through Dobby trampoline)
  *   3. Set environment variables for BepInEx
  *   4. Start CoreCLR 鈫?BepInEx
  *
- * Signature matches FusionCore: int il2cpp_init(char *domain_name)
+ * Signature of the hook target: int il2cpp_init(char *domain_name)
  */
 static int il2cpp_init_hook(char *domain_name)
 {
@@ -212,7 +210,7 @@ static int il2cpp_init_hook(char *domain_name)
     { char buf[64]; snprintf(buf, sizeof(buf), "real il2cpp_init returned %d", result);
       __android_log_write(ANDROID_LOG_ERROR, "FusionB", buf); }
 
-    /* 3. Set env vars for BepInEx 鈥?use libmain override paths */
+    /* 3. Set env vars for BepInEx —use libmain override paths */
     const char *il2cppPath = libmain_get_override_il2cpp_path();
     setenv("BEPINEX_GAME_ASSEMBLY_PATH", il2cppPath, 1);
     setenv("NEXT_GAME_BINARY", il2cppPath, 1);
@@ -259,7 +257,7 @@ bool fusion_stage_from_config_path(const char *configPath)
 }
 
 /*
- * Bootstrap the fusion chain (FusionCore main branch pattern).
+ * Bootstrap the fusion chain.
  *
  * Called from libmain's load() AFTER libunity.so and libil2cpp.so
  * have been dlopen'd. Steps:
@@ -281,17 +279,17 @@ bool fusion_bootstrap_from_libmain(JNIEnv *env)
 
     LOGI("=== fusion_bootstrap_from_libmain ===");
 
-    /* 1. Hook libunity to prevent null method crashes (FusionCore pattern) */
+    /* 1. Hook libunity to prevent null method crashes */
     const char *unityPath = libmain_get_override_unity_path();
     const char *il2cppPath = libmain_get_override_il2cpp_path();
     LOGI("unity path: %s", unityPath);
     LOGI("il2cpp path: %s", il2cppPath);
 
     if (!try_hook_libunity(unityPath, unityPath)) {
-        LOGW("try_hook_libunity failed 鈥?continuing anyway");
+        LOGW("try_hook_libunity failed —continuing anyway");
     }
 
-    /* 2. Initialize IL2CPP 鈥?dlopen libil2cpp.so with RTLD_GLOBAL */
+    /* 2. Initialize IL2CPP —dlopen libil2cpp.so with RTLD_GLOBAL */
 
     if (!il2cpp_initialize(il2cppPath)) {
         LOGE("il2cpp_initialize failed");
@@ -317,7 +315,7 @@ bool fusion_bootstrap_from_libmain(JNIEnv *env)
     /* 4. Install il2cpp_init hook (one-shot, will fire when Unity calls il2cpp_init) */
     il2cpp_install_init_hook(reinterpret_cast<void *>(il2cpp_init_hook));
 
-    LOGI("Fusion bootstrap complete 鈥?waiting for il2cpp_init...");
+    LOGI("Fusion bootstrap complete —waiting for il2cpp_init...");
     return true;
 }
 

@@ -6,7 +6,7 @@ import java.io.File
 /**
  * Resolves BepInEx paths for any game package.
  *
- * FusionCore-compatible pattern:
+ * Path layout:
  *   External: /storage/emulated/0/BepInEx_Android/{packageName}/BepInEx/
  *   Internal: {filesDir}/{packageName}/
  *

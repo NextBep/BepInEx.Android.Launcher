@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.22.1)
 project("bepinex_android" CXX)
 
-# FusionCore main branch architecture:
+# Native injection layer architecture:
 #   libmain.so  — registers NativeLoader load/unload, resolves fusion dynamically
 #   libfusion.so — il2cpp_init hook, CoreCLR bootstrap, BepInEx entry
 #

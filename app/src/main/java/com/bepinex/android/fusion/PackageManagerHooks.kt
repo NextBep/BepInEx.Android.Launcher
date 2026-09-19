@@ -17,7 +17,6 @@ import java.lang.reflect.Method
  * Note: Pine cannot hook abstract methods, so we find the concrete
  * implementation (ApplicationPackageManager) and hook that.
  *
- * @see PackageManagerHooks.java in FusionCore main branch
  */
 object PackageManagerHooks {
 

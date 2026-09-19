@@ -9,6 +9,12 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 
+internal enum class SyntaxLanguage {
+    JSON,
+    LUA,
+    PLAIN_TEXT
+}
+
 internal data class SyntaxHighlightColors(
     val property: Color,
     val string: Color,
@@ -18,31 +24,86 @@ internal data class SyntaxHighlightColors(
     val keyword: Color,
     val function: Color,
     val builtin: Color,
-    val comment: Color
+    val comment: Color,
+    val punctuation: Color
 )
 
+internal fun syntaxLanguageFor(extension: String): SyntaxLanguage = when (extension.lowercase()) {
+    "json", "json5", "jsonc" -> SyntaxLanguage.JSON
+    "lua" -> SyntaxLanguage.LUA
+    else -> SyntaxLanguage.PLAIN_TEXT
+}
+
+internal fun syntaxLanguageLabel(language: SyntaxLanguage, extension: String): String = when (language) {
+    SyntaxLanguage.JSON -> "JSON"
+    SyntaxLanguage.LUA -> "Lua"
+    SyntaxLanguage.PLAIN_TEXT -> extension.uppercase().ifEmpty { "TEXT" }
+}
+
+internal fun editorSyntaxColors(isDark: Boolean): SyntaxHighlightColors = if (isDark) {
+    SyntaxHighlightColors(
+        property = Color(0xFF9CDCFE),
+        string = Color(0xFFCE9178),
+        number = Color(0xFFB5CEA8),
+        boolean = Color(0xFF569CD6),
+        nullLiteral = Color(0xFF569CD6),
+        keyword = Color(0xFFC586C0),
+        function = Color(0xFFDCDCAA),
+        builtin = Color(0xFF4EC9B0),
+        comment = Color(0xFF6A9955),
+        punctuation = Color(0xFF808080)
+    )
+} else {
+    SyntaxHighlightColors(
+        property = Color(0xFF0451A5),
+        string = Color(0xFFA31515),
+        number = Color(0xFF098658),
+        boolean = Color(0xFF0000FF),
+        nullLiteral = Color(0xFF0000FF),
+        keyword = Color(0xFFAF00DB),
+        function = Color(0xFF795E26),
+        builtin = Color(0xFF267F99),
+        comment = Color(0xFF008000),
+        punctuation = Color(0xFF6F6F6F)
+    )
+}
+
+/**
+ * Adds syntax colors without changing the source text, so cursor and selection
+ * offsets remain identical to the original editable value.
+ */
 internal class SyntaxHighlightVisualTransformation(
     extension: String,
     private val colors: SyntaxHighlightColors
 ) : VisualTransformation {
-    private val language = when (extension.lowercase()) {
-        "json", "json5" -> Language.JSON
-        "lua" -> Language.LUA
-        else -> Language.PLAIN_TEXT
-    }
+    private val language = syntaxLanguageFor(extension)
+    private var cachedInput: String? = null
+    private var cachedOutput: AnnotatedString? = null
 
     override fun filter(text: AnnotatedString): TransformedText {
-        if (language == Language.PLAIN_TEXT || text.isEmpty()) {
+        if (language == SyntaxLanguage.PLAIN_TEXT || text.isEmpty()) {
+            cachedInput = null
+            cachedOutput = null
             return TransformedText(text, OffsetMapping.Identity)
+        }
+        if (text.text.length > MAX_HIGHLIGHT_CHARS) {
+            return TransformedText(text, OffsetMapping.Identity)
+        }
+        cachedOutput?.let { cached ->
+            if (text.text == cachedInput) {
+                return TransformedText(cached, OffsetMapping.Identity)
+            }
         }
 
         val highlighted = AnnotatedString.Builder(text.text).apply {
             when (language) {
-                Language.JSON -> highlightJson(text.text)
-                Language.LUA -> highlightLua(text.text)
-                Language.PLAIN_TEXT -> Unit
+                SyntaxLanguage.JSON -> highlightJson(text.text)
+                SyntaxLanguage.LUA -> highlightLua(text.text)
+                SyntaxLanguage.PLAIN_TEXT -> Unit
             }
         }.toAnnotatedString()
+        cachedInput = text.text
+        cachedOutput = highlighted
         return TransformedText(highlighted, OffsetMapping.Identity)
     }
 
@@ -115,6 +176,11 @@ internal class SyntaxHighlightVisualTransformation(
                         )
                     }
                     index = end
+                }
+
+                source[index] in JSON_PUNCTUATION -> {
+                    addStyle(SpanStyle(color = colors.punctuation), index, index + 1)
+                    index++
                 }
 
                 else -> index++
@@ -197,7 +263,13 @@ internal class SyntaxHighlightVisualTransformation(
                 }
 
                 !source[index].isWhitespace() && expectFunctionName -> {
+                    // Anonymous functions have no identifier to color.
                     expectFunctionName = false
+                    index++
+                }
+
+                source[index] in LUA_PUNCTUATION -> {
+                    addStyle(SpanStyle(color = colors.punctuation), index, index + 1)
                     index++
                 }
 
@@ -214,13 +286,11 @@ internal class SyntaxHighlightVisualTransformation(
         )
     }
 
-    private enum class Language {
-        JSON,
-        LUA,
-        PLAIN_TEXT
-    }
-
     private companion object {
+        const val MAX_HIGHLIGHT_CHARS = 120_000
+        const val JSON_PUNCTUATION = "{}[]:,"
+        const val LUA_PUNCTUATION = "{}[]().,;:+-*/%#^<>~="
+
         val LUA_KEYWORDS = setOf(
             "and", "break", "do", "else", "elseif", "end", "for", "function",
             "goto", "if", "in", "local", "not", "or", "repeat", "return", "then",

@@ -1,7 +1,5 @@
 /*
- * BepInEx.Android 鈥?Dobby SafeHook wrapper
- *
- * Ported from FusionCore main branch (fusion/src/hooking/safehook.cpp).
+ * BepInEx.Android —Dobby SafeHook wrapper
  *
  * Wraps DobbyHook with additional logic:
  *   - Trampoline allocation from injected code cave (via allocator)
@@ -34,7 +32,7 @@ static const size_t kPageSize = sysconf(_SC_PAGESIZE);
 static void *g_library_handle = nullptr;
 static uintptr_t g_library_base = 0;
 
-/* Allocator function 鈥?allocates from injected code cave */
+/* Allocator function —allocates from injected code cave */
 using allocate_func = void *(*)(void *target, void *base, size_t size);
 static allocate_func g_allocator = nullptr;
 
@@ -105,7 +103,7 @@ bool safehook_initialize(void *lib_handle, uintptr_t lib_base, allocate_func all
 }
 
 /*
- * Check if a function is "small" 鈥?too short for Dobby to place an
+ * Check if a function is "small" —too short for Dobby to place an
  * inline hook safely (less than 3 instructions before a branch/return).
  */
 static bool is_small_function(void *address, int max_instr = 3) {
@@ -179,7 +177,7 @@ void *safehook_create_hook(void *target_function, void *hook_function, bool use_
         return dobby_hook_internal(target_function, actual_hook, false);
     }
 
-    // Function is too small 鈥?need a trampoline
+    // Function is too small —need a trampoline
     LOGI("Target at rva 0x%lx is small, allocating trampoline", (unsigned long)rva);
 
     if (!g_allocator) {

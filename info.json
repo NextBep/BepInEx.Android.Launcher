@@ -1,0 +1,13 @@
+{
+  "version": "",
+  "allowStart": "true",
+  "announcement": {
+    "Date": "",
+    "SChinese": "",
+    "English": ""
+  },
+  "urlApk": {
+    "github": "",
+    "gh-proxy": ""
+  }
+}

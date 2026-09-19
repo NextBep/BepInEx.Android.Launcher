@@ -15,7 +15,6 @@ import top.canyie.pine.callback.MethodHook
  * Hooks Instrumentation.execStartActivity / newActivity so game launcher
  * activities can start without being declared in AndroidManifest.xml.
  *
- * @see InstrumentationHooks.java in FusionCore
  */
 object InstrumentationHooks {
 

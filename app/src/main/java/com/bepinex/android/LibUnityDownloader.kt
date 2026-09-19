@@ -13,7 +13,7 @@ import java.util.concurrent.FutureTask
 /**
  * Downloads unstripped libunity.so from NextBep/AndroidNativeLibraries.
  *
- * Modeled after FusionCore's LibUnityDownloader.java. The unstripped
+ * Downloads the unstripped libunity for a game. The unstripped
  * libunity contains debug symbols that make stack traces readable.
  *
  * Downloads both libunity.so and libunity.sym.so companion.

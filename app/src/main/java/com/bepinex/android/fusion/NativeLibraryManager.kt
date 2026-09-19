@@ -10,7 +10,7 @@ import java.lang.reflect.Method
  * Manages native library loading redirects via Pine hooks on
  * ClassLoader.findLibrary().
  *
- * ## How it works (FusionCore main branch)
+ * ## How it works
  *
  * When the game's UnityPlayer constructor calls `System.loadLibrary("main")`,
  * Android's ClassLoader calls `findLibrary("main")` to locate `libmain.so`.
@@ -24,7 +24,6 @@ import java.lang.reflect.Method
  * runs in the GAME's ClassLoader namespace. This means FindClass("com.unity3d.player.NativeLoader")
  * finds the game's REAL NativeLoader class — no stubs needed!
  *
- * @see NativeLibraryManager.java in FusionCore main branch
  */
 object NativeLibraryManager {
 

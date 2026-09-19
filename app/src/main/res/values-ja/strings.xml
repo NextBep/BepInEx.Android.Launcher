@@ -1,137 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- App -->
-    <string name="app_name">BepInEx ランチャー</string>
-    <string name="app_tagline">BepInEx ランチャー</string>
+    <string name="app_name">PVZRH Launcher</string>
+    <string name="app_tagline">PVZRH Launcher</string>
 
     <!-- Navigation -->
-    <string name="nav_games">ゲーム</string>
-    <string name="nav_modpacks">Modパック</string>
-    <string name="nav_settings">設定</string>
-    <string name="nav_about">このアプリについて</string>
+    <string name="nav_games">Games</string>
+    <string name="nav_modpacks">Modpacks</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_about">About</string>
 
     <!-- Game Detection -->
-    <string name="scan_title">検出されたゲーム</string>
-    <string name="scanning">Unity IL2CPP ゲームをスキャン中...</string>
-    <string name="no_games_found">Unity IL2CPP ゲームが見つかりません</string>
-    <string name="no_games_hint">Unity IL2CPP ゲームをインストールして開始してください</string>
-    <string name="scan_again">再スキャン</string>
-    <string name="rescan">再スキャン</string>
+    <string name="scan_title">PlantsVsZombiesRH</string>
+    <string name="scanning">Checking PlantsVsZombiesRH…</string>
+    <string name="no_games_found">PlantsVsZombiesRH Not Found</string>
+    <string name="no_games_hint">Install PlantsVsZombiesRH to get started</string>
+    <string name="scan_again">Scan Again</string>
+    <string name="rescan">Rescan</string>
 
     <!-- Framework Status -->
-    <string name="framework_ready">BepInEx 準備完了</string>
-    <string name="framework_setting_up">セットアップ中...</string>
-    <string name="extracting">BepInEx を展開中...</string>
-    <string name="mod_count">%d 件の mod</string>
+    <string name="framework_ready">BepInEx Ready</string>
+    <string name="framework_setting_up">Setting up…</string>
+    <string name="extracting">Extracting BepInEx…</string>
+    <string name="mod_count">%d mod(s)</string>
 
     <!-- Actions -->
-    <string name="import_mod">Mod をインポート</string>
-    <string name="launch">起動</string>
-    <string name="refresh">更新</string>
-    <string name="delete">削除</string>
+    <string name="import_mod">Import Mod</string>
+    <string name="launch">Launch</string>
+    <string name="refresh">Refresh</string>
+    <string name="delete">Delete</string>
 
     <!-- Mods -->
-    <string name="installed_mods">インストール済み Mod</string>
-    <string name="no_mods_installed">インストールされた Mod はありません</string>
-    <string name="no_mods_hint">「Mod をインポート」をタップして .dll ファイルを追加してください</string>
-    <string name="mod_deleted">削除しました: %s</string>
-    <string name="mod_imported">インポートしました: %s</string>
-    <string name="import_failed">インポートに失敗しました</string>
+    <string name="installed_mods">Installed Mods</string>
+    <string name="no_mods_installed">No Mods Installed</string>
+    <string name="no_mods_hint">Tap Import Mod to add a .dll file</string>
+    <string name="mod_deleted">Deleted: %s</string>
+    <string name="mod_imported">Imported: %s</string>
+    <string name="import_failed">Import failed</string>
 
     <!-- Modpacks -->
-    <string name="modpack_title">Modパック</string>
-    <string name="modpack_create">Modパックを作成</string>
-    <string name="modpack_delete">Modパックを削除</string>
-    <string name="modpack_rename">名前を変更</string>
-    <string name="modpack_export">エクスポート</string>
-    <string name="modpack_import">Modパックをインポート</string>
-    <string name="modpack_select_active">有効にする</string>
-    <string name="modpack_vanilla">バニラ（Mod なし）</string>
-    <string name="modpack_name_hint">Modパック名</string>
-    <string name="modpack_confirm_delete_title">Modパックを削除</string>
-    <string name="modpack_confirm_delete_msg">「%s」とそのすべての Mod を削除しますか？この操作は元に戻せません。</string>
-    <string name="modpack_created">Modパックを作成しました: %s</string>
-    <string name="modpack_deleted">Modパックを削除しました: %s</string>
-    <string name="modpack_exported">エクスポートしました: %s</string>
-    <string name="modpack_imported">インポートしました: %s</string>
-    <string name="modpack_no_mods">この Modパックに Mod はありません</string>
-    <string name="modpack_add_mod">Mod を追加</string>
-    <string name="modpack_target_game">対象: %s</string>
-    <string name="modpack_mod_count">%d 件の mod</string>
-    <string name="modpack_active">有効</string>
+    <string name="modpack_title">Modpacks</string>
+    <string name="modpack_create">Create Modpack</string>
+    <string name="modpack_delete">Delete Modpack</string>
+    <string name="modpack_rename">Rename</string>
+    <string name="modpack_rename_failed">The name is invalid or already exists</string>
+    <string name="modpack_edit">Edit Modpack</string>
+    <string name="modpack_icon">Icon</string>
+    <string name="modpack_icon_hint">Tap to pick an image</string>
+    <string name="modpack_shortcut">Desktop Shortcut</string>
+    <string name="modpack_shortcut_desc">Create a shortcut to launch this modpack directly</string>
+    <string name="shortcut_permission_required">Shortcut permission not granted. Opening settings…</string>
+    <string name="shortcut_permission_title">Permission Required</string>
+    <string name="shortcut_permission_guide">Creating desktop shortcuts requires the \"Home screen shortcut\" permission. Please enable it in the settings page that opens next.</string>
+    <string name="shortcut_permission_open_settings">Open Settings</string>
+    <string name="modpack_vanilla_desc">No mods loaded</string>
+    <string name="modpack_empty">No modpacks installed</string>
+    <string name="modpack_export">Export</string>
+    <string name="modpack_import">Import Modpack</string>
+    <string name="modpack_select_active">Activate</string>
+    <string name="modpack_vanilla">Vanilla (No Mods)</string>
+    <string name="modpack_name_hint">Modpack name</string>
+    <string name="modpack_confirm_delete_title">Delete Modpack</string>
+    <string name="modpack_confirm_delete_msg">Delete \"%s\" and all its mods? This cannot be undone.</string>
+    <string name="modpack_created">Created modpack: %s</string>
+    <string name="modpack_deleted">Deleted modpack: %s</string>
+    <string name="modpack_exported">Exported: %s</string>
+    <string name="modpack_imported">Imported: %s</string>
+    <string name="modpack_no_mods">No mods in this modpack</string>
+    <string name="modpack_add_mod">Add Mod</string>
+    <string name="modpack_browse_mod_files">Browse Mod Files</string>
+    <string name="modpack_browse_mod_files_desc">View all files and directories in this modpack</string>
+    <string name="modpack_target_game">For: %s</string>
+    <string name="modpack_mod_count">%d mod(s)</string>
+    <string name="modpack_active">Active</string>
 
     <!-- Config Editor -->
-    <string name="config_editor_title">設定エディタ</string>
-    <string name="config_editor_save">保存</string>
-    <string name="config_editor_save_failed">ファイルの保存に失敗しました</string>
-    <string name="config_editor_unsaved">未保存の変更</string>
-    <string name="config_editor_discard_title">変更を破棄しますか？</string>
-    <string name="config_editor_discard_msg">未保存の変更があります。破棄しますか？</string>
-    <string name="config_editor_no_configs">設定ファイルがありません</string>
+    <string name="config_editor_title">Config Editor</string>
+    <string name="config_editor_save">Save</string>
+    <string name="config_editor_save_failed">Failed to save the file</string>
+    <string name="config_editor_unsaved">Unsaved changes</string>
+    <string name="config_editor_discard_title">Discard Changes?</string>
+    <string name="config_editor_discard_msg">You have unsaved changes. Discard them?</string>
+    <string name="config_editor_no_configs">No config files</string>
 
     <!-- Mod File Browser -->
-    <string name="mod_file_browser_title">Mod ファイル</string>
-    <string name="mod_file_browser_empty">このディレクトリは空です</string>
-    <string name="mod_file_browser_missing">Modパックのディレクトリが存在しません</string>
-    <string name="mod_file_browser_directory">ディレクトリ</string>
-    <string name="mod_file_browser_editable_file">%1$s · タップして表示または編集</string>
-    <string name="mod_file_browser_unsupported_file">%1$s · プレビュー非対応</string>
-    <string name="mod_file_browser_edit_file">ファイルを表示または編集</string>
-    <string name="mod_file_browser_delete_file">ファイルを削除</string>
-    <string name="mod_file_browser_delete_title">ファイルを削除しますか？</string>
-    <string name="mod_file_browser_delete_message">「%1$s」を削除しますか？この操作は元に戻せません。</string>
-    <string name="mod_file_browser_delete_failed">ファイルの削除に失敗しました</string>
-    <string name="mod_file_browser_protected">保護されたファイル</string>
-    <string name="mod_file_browser_protected_file">保護された Modパックメタデータ · 編集・削除できません</string>
+    <string name="mod_file_browser_title">Mod Files</string>
+    <string name="mod_file_browser_empty">This directory is empty</string>
+    <string name="mod_file_browser_missing">The modpack directory does not exist</string>
+    <string name="mod_file_browser_directory">Directory</string>
+    <string name="mod_file_browser_editable_file">%1$s · Tap to view or edit</string>
+    <string name="mod_file_browser_unsupported_file">%1$s · Preview not supported</string>
+    <string name="mod_file_browser_edit_file">View or edit file</string>
+    <string name="mod_file_browser_delete_file">Delete file</string>
+    <string name="mod_file_browser_delete_title">Delete file?</string>
+    <string name="mod_file_browser_delete_message">Delete "%1$s"? This cannot be undone.</string>
+    <string name="mod_file_browser_delete_failed">Failed to delete the file</string>
+    <string name="mod_file_browser_protected">Protected file</string>
+    <string name="mod_file_browser_protected_file">Protected modpack metadata · Cannot edit or delete</string>
 
-    <!-- Settings -->
-    <string name="settings_title">設定</string>
-    <string name="settings_section_appearance">外観</string>
-    <string name="settings_section_ingame">ゲーム内</string>
-    <string name="settings_section_maintenance">メンテナンス</string>
-    <string name="settings_section_config">設定ファイル</string>
-    <string name="settings_clear_bepinex">BepInEx ファイルをクリア</string>
-    <string name="settings_clear_bepinex_desc">すべての BepInEx ファイルと interop アセンブリを削除します。次回起動時に再展開が必要です。</string>
-    <string name="settings_clear_dotnet">.NET データをクリア</string>
-    <string name="settings_clear_dotnet_desc">.NET ランタイムとコピーされたゲームデータを削除します。次回起動時にファイルが再展開されます。</string>
-    <string name="settings_copy_resources">ゲームリソースをコピー</string>
-    <string name="settings_copy_resources_desc">ゲームのアセットデータをローカルストレージにコピーして interop を生成します。</string>
-    <string name="settings_theme">テーマ</string>
-    <string name="settings_language">言語</string>
-    <string name="settings_dynamic_color">ダイナミックカラー</string>
-    <string name="settings_dynamic_color_desc">利用可能な場合に Android Monet カラーを使用します。</string>
-    <string name="settings_animation_disabled">アニメーションを無効化</string>
-    <string name="settings_animation_disabled_desc">ナビゲーションとページ遷移のアニメーションを無効化します。</string>
-    <string name="settings_about">このアプリについて</string>
+    <!-- Settings sections -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_section_appearance">Appearance</string>
+    <string name="settings_section_ingame">In-Game</string>
+    <string name="settings_section_maintenance">Maintenance</string>
+    <string name="settings_section_config">Config Files</string>
+    <string name="settings_clear_bepinex">Clear BepInEx Files</string>
+    <string name="settings_clear_bepinex_desc">Delete all BepInEx files and interop assemblies. Required for re-extraction on next launch.</string>
+    <string name="settings_clear_dotnet">Clear .NET Data</string>
+    <string name="settings_clear_dotnet_desc">Delete the .NET runtime and copied game data. Files will be re-extracted on next launch.</string>
+    <string name="settings_clear_libunity">Clear libunity Cache</string>
+    <string name="settings_clear_libunity_desc">Delete the downloaded unstripped libunity.so files. Will be re-downloaded on next launch.</string>
+    <string name="settings_copy_resources">Copy Game Resources</string>
+    <string name="settings_copy_resources_desc">Copy the game\'s asset data to local storage for interop generation.</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_dynamic_color">Monet Color</string>
+    <string name="settings_dynamic_color_desc">Color scheme based on the system accent color (Android 12+ only).</string>
+    <string name="settings_animation_disabled">Disable Animations</string>
+    <string name="settings_animation_disabled_desc">Disabling animations can improve performance on some devices.</string>
+    <string name="settings_about">About</string>
 
     <!-- Confirm Dialogs -->
-    <string name="confirm_clear_bepinex_title">BepInEx ファイルをクリアしますか？</string>
-    <string name="confirm_clear_bepinex_msg">このゲームのすべての BepInEx ファイルと interop アセンブリが削除されます。次回起動時に再展開が必要です。</string>
-    <string name="confirm_clear_dotnet_title">.NET データをクリアしますか？</string>
-    <string name="confirm_clear_dotnet_msg">このゲームの .NET ランタイムとコピーされたゲームデータが削除されます。次回起動時にファイルが再展開されます。</string>
-    <string name="confirm_copy_resources_title">ゲームリソースをコピーしますか？</string>
-    <string name="confirm_copy_resources_msg">APK からゲームのアセットデータをローカルストレージにコピーします。</string>
-    <string name="confirm_yes">はい</string>
-    <string name="confirm_no">いいえ</string>
-    <string name="confirm_cancel">キャンセル</string>
-    <string name="confirm_delete">削除</string>
+    <string name="confirm_clear_bepinex_title">Clear BepInEx Files?</string>
+    <string name="confirm_clear_bepinex_msg">This will delete all BepInEx files and interop assemblies for this game. You will need to re-extract on next launch.</string>
+    <string name="confirm_clear_dotnet_title">Clear .NET Data?</string>
+    <string name="confirm_clear_dotnet_msg">This will delete the .NET runtime and copied game data for this game. Files will be re-extracted on next launch.</string>
+    <string name="confirm_clear_libunity_title">Clear libunity Cache?</string>
+    <string name="confirm_clear_libunity_msg">This will delete the downloaded unstripped libunity.so files. They will be re-downloaded on next launch.</string>
+    <string name="clear_libunity_done">libunity cache cleared</string>
+    <string name="clear_libunity_none">No libunity cache to clear</string>
+    <string name="confirm_copy_resources_title">Copy Game Resources?</string>
+    <string name="confirm_copy_resources_msg">This will copy the game\'s asset data from the APK to local storage.</string>
+    <string name="confirm_yes">Yes</string>
+    <string name="confirm_no">No</string>
+    <string name="confirm_ok">OK</string>
+    <string name="confirm_cancel">Cancel</string>
+    <string name="confirm_delete">Delete</string>
 
     <!-- Theme -->
-    <string name="theme_dark">ダーク</string>
-    <string name="theme_light">ライト</string>
-    <string name="theme_system">システムのデフォルト</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_system">System Default</string>
 
     <!-- Language -->
     <string name="lang_english">English</string>
     <string name="lang_chinese">简体中文</string>
-    <string name="lang_system">システムのデフォルト</string>
+    <string name="lang_system">System Default</string>
+    <string name="lang_incomplete_title">ローカライズ未貢献</string>
+    <string name="lang_incomplete_message">お使いの言語の翻訳は完全ではありません。ローカライズの改善にご協力いただける場合は、[こちら](https://github.com/ModPVZRH/PVZRH.Android.Launcher/blob/main/docs/TRANSLATING.md)からご参加ください。</string>
 
     <!-- About -->
-    <string name="about_title">BepInEx ランチャー</string>
-    <string name="about_description">Android をサポートする BepInEx ローダー</string>
-    <string name="about_version">バージョン %1$s (ビルド %2$d)</string>
-    <string name="about_disclaimer">⚠ BepInEx ランチャーは BepInEx プロジェクトによって公式にサポートされていません。</string>
-    <string name="about_projects_section">使用・参照プロジェクト</string>
+    <string name="about_title">PVZRH Launcher</string>
+    <string name="about_description">A BepInEx loader supporting Android for PVZRH</string>
+    <string name="about_version">Version %1$s (Build %2$d)</string>
+    <string name="about_disclaimer">⚠ PVZRH Launcher is not officially supported by the BepInEx project.</string>
+    <string name="about_projects_section">Projects Used &amp; Referenced</string>
     <string name="about_project_bepinex_name">BepInEx</string>
     <string name="about_project_bepinex_desc">Unity IL2CPP modding framework — the core plugin loader. BepInEx 6.0.0-pre.2 by BepInEx team.</string>
     <string name="about_project_fusioncore_name">FusionCore</string>
@@ -146,76 +169,97 @@
     <string name="about_project_pine_desc">ART Java method hook framework (top.canyie.pine:core:0.3.0). Used for ClassLoader, PackageManager, and UnityPlayer hooks.</string>
     <string name="about_project_dobby_name">Dobby</string>
     <string name="about_project_dobby_desc">Native hook framework for ARM64. Used for il2cpp_init hook in libfusion.</string>
-    <string name="about_project_bepinexandroid_name">BepInEx.Android.Launcher</string>
-    <string name="about_project_bepinexandroid_desc">Generic BepInEx Android launcher — supports multiple games with modpack management.</string>
     <string name="about_project_cpp2il_name">Cpp2IL</string>
     <string name="about_project_cpp2il_desc">IL2CPP reverse engineering tool. Used for interop assembly generation.</string>
-    <string name="about_dev_section">メイン開発者</string>
-    <string name="about_dev_names">HayashiUme · HexCat · Celestynka</string>
-    <string name="about_footer">©2026 NextBep</string>
-
     <string name="about_url_bepinex">https://github.com/BepInEx/BepInEx</string>
     <string name="about_url_fusioncore">https://github.com/All-Of-Us-Mods/FusionCore</string>
     <string name="about_url_nextbep">https://github.com/NextBep/BepInEx.Android</string>
-    <string name="about_url_bepinexandroid">https://github.com/NextBep/BepInEx.Android.Launcher</string>
     <string name="about_url_dotnet">https://github.com/dotnet/runtime</string>
     <string name="about_url_openssl">https://github.com/openssl/openssl</string>
     <string name="about_url_pine">https://github.com/canyie/Pine</string>
     <string name="about_url_dobby">https://github.com/jmpews/Dobby</string>
     <string name="about_url_cpp2il">https://github.com/SamboyCoding/Cpp2IL</string>
+    <string name="about_dev_section">Lead Developers</string>
+    <string name="about_dev_names">HayashiUme · Gaoshu · NextBep</string>
+    <string name="about_footer">©2026 PVZRH Mod Dev</string>
+    <string name="about_sponsor">Sponsor</string>
+    <string name="about_sponsor_desc">Support the development</string>
+    <string name="about_sponsor_code_desc">Sponsor QR Code</string>
+    <string name="about_sponsor_note">Sponsorship is voluntary. You will not receive any rewards or privileges within the launcher.</string>
+    <string name="about_credits">Credits</string>
+    <string name="about_credits_desc">Projects and developers</string>
+    <string name="about_contact">Contact Us</string>
+    <string name="about_contact_desc">Get help or give feedback</string>
+    <string name="about_privacy_policy">Privacy Policy</string>
+    <string name="about_privacy_policy_desc">How we handle your data</string>
+    <string name="about_official_docs">Official Documentation</string>
+    <string name="about_official_docs_desc">Setup guides and troubleshooting</string>
 
     <!-- Log -->
-    <string name="log_title">BepInEx ログ</string>
-    <string name="log_share">共有</string>
-    <string name="log_copy">コピー</string>
-    <string name="log_clear">クリア</string>
-    <string name="log_empty">ログエントリがありません。ゲームを起動して BepInEx ログを確認してください。</string>
-    <string name="log_copied">ログをクリップボードにコピーしました</string>
-    <string name="log_filter_all">すべて</string>
-    <string name="log_filter_errors">エラー</string>
-    <string name="log_filter_warnings">警告</string>
-    <string name="log_auto_scroll">自動スクロール</string>
+    <string name="log_title">BepInEx Log</string>
+    <string name="log_share">Share</string>
+    <string name="log_copy">Copy</string>
+    <string name="log_clear">Clear</string>
+    <string name="log_empty">No log entries yet. Launch a game to see BepInEx logs.</string>
+    <string name="log_copied">Log copied to clipboard</string>
+    <string name="log_filter_all">All</string>
+    <string name="log_filter_errors">Errors</string>
+    <string name="log_filter_warnings">Warnings</string>
+    <string name="log_auto_scroll">Auto-scroll</string>
 
     <!-- Storage Permission -->
-    <string name="storage_permission_title">ストレージの許可が必要です</string>
-    <string name="storage_permission_message">BepInEx ランチャーは BepInEx を展開し Mod を管理するためにすべてのファイルへのアクセスが必要です。</string>
-    <string name="storage_permission_grant">許可を与える</string>
+    <string name="storage_permission_title">Storage Permission Required</string>
+    <string name="storage_permission_message">BepInEx Launcher needs access to all files to extract BepInEx and manage mods.</string>
+    <string name="storage_permission_grant">Grant Permission</string>
 
     <!-- In-Game Settings -->
-    <string name="settings_ingame_section">ゲーム内</string>
-    <string name="settings_floating_log">ゲーム内のフローティングログ</string>
-    <string name="settings_floating_log_desc">ゲームの上にフローティングログボタンを表示します。タップでリアルタイムの BepInEx ログを確認できます。</string>
-    <string name="settings_block_unity_kill">Unity 起動時の終了をブロック</string>
-    <string name="settings_block_unity_kill_desc">起動中に UnityPlayer.kill() を一時的にブロックします。インジェクション中に終了するゲームのみ有効にしてください。</string>
+    <string name="settings_ingame_section">In-Game</string>
+    <string name="settings_floating_log">Floating Log in Game</string>
+    <string name="settings_floating_log_desc">Show a floating log button on top of the game. Tap to view real-time BepInEx logs.</string>
+    <string name="settings_unstripped_libunity">Use Unstripped libunity</string>
+    <string name="settings_unstripped_libunity_desc">Download and use unstripped libunity.so with full icalls.</string>
 
     <!-- Launch -->
-    <string name="launch_failed">起動に失敗しました</string>
-    <string name="launch_wait_extraction">お待ちください — BepInEx はまだ展開中です</string>
-    <string name="launch_no_game">ゲームが選択されていません</string>
+    <string name="launch_failed">Launch failed</string>
+    <string name="launch_wait_extraction">Please wait — BepInEx is still extracting</string>
+    <string name="launch_no_game">No game selected</string>
+
+    <!-- Crash -->
+    <string name="crash_title">Runtime Error Detected</string>
+    <string name="crash_game_info">%1$s has exited unexpectedly</string>
+    <string name="crash_signal">Signal: %1$s</string>
+    <string name="crash_hint">Please send the exported log to the developer for investigation.</string>
+    <string name="crash_export_logs">Export Logs</string>
 
     <!-- Generic -->
     <string name="ok">OK</string>
-    <string name="back">戻る</string>
-    <string name="close">閉じる</string>
-    <string name="loading">読み込み中...</string>
-    <string name="error">エラー</string>
-    <string name="done">完了</string>
-    <string name="share_saved">メッセージを保存しました。ゲームに戻ってください</string>
-    <string name="crash_detected_title">前回のゲーム起動が戻ってきていません</string>
-    <string name="crash_detected_message">%1$s の前回の起動がクラッシュした可能性があります。トラブルシューティングのために診断情報をエクスポートできます。</string>
-    <string name="crash_export">診断情報をエクスポート</string>
-    <string name="crash_export_failed">診断情報のエクスポートに失敗しました</string>
+    <string name="back">Back</string>
+    <string name="close">Close</string>
+    <string name="loading">Loading…</string>
+    <string name="error">Error</string>
+    <string name="done">Done</string>
+    <string name="share_saved">Message saved, switch back to game</string>
+
+    <!-- Update -->
+    <string name="update_announcement">Announcement</string>
+    <string name="update_available">Update Available</string>
+    <string name="update_version_info">Current: %1$s → New: %2$s</string>
+    <string name="update_now">Update</string>
+    <string name="update_skip">Skip</string>
+    <string name="update_blocked_title">Service Discontinued</string>
+    <string name="update_blocked_message">This application has been discontinued and is no longer available.</string>
 
     <!-- Bootstrap Loading -->
-    <string name="bootstrap_title">選択したゲームを起動中</string>
-    <string name="bootstrap_status_preparing">ターゲットパッケージを準備中...</string>
-    <string name="bootstrap_status_copy_assets">Unity データをコピー中...</string>
-    <string name="bootstrap_status_detecting_version">Unity バージョンを検出中...</string>
-    <string name="bootstrap_status_downloading_libunity">ストリップされていない libunity をダウンロード中...</string>
-    <string name="bootstrap_status_extracting_runtime">ランタイムファイルを展開中...</string>
-    <string name="bootstrap_status_registering_libraries">ネイティブライブラリを登録中...</string>
-    <string name="bootstrap_status_installing_hooks">フックをインストール中...</string>
-    <string name="bootstrap_status_launching">ゲームを起動中...</string>
-    <string name="bootstrap_status_error">起動に失敗しました</string>
+    <string name="bootstrap_title">Launching selected game</string>
+    <string name="bootstrap_status_preparing">Preparing target package…</string>
+    <string name="bootstrap_status_copy_assets">Copying Unity data…</string>
+    <string name="bootstrap_status_detecting_version">Detecting Unity version…</string>
+    <string name="bootstrap_status_downloading_libunity">Downloading unstripped libunity…</string>
+    <string name="bootstrap_status_preparing_unity_libraries">Preparing Unity base libraries…</string>
+    <string name="bootstrap_status_extracting_runtime">Extracting runtime files…</string>
+    <string name="bootstrap_status_registering_libraries">Registering native libraries…</string>
+    <string name="bootstrap_status_installing_hooks">Installing hooks…</string>
+    <string name="bootstrap_status_launching">Launching game…</string>
+    <string name="bootstrap_status_error">Launch failed</string>
     <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
 </resources>
