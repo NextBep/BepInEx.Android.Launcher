@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Loading overlay shown on top of the game activity while BepInEx initializes.
+    Inflated by com.bepinex.android.hooks.GameRuntime and controlled from native
+    code via com.bepinex.android.tools.JniBridge (loader / progressBar / loadingText).
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/loader"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="128dp"
+        android:layout_height="128dp" />
+
+    <com.bepinex.android.tools.OutlinedTextView
+        android:id="@+id/loadingText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        android:text="@string/loading"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="24sp" />
+
+</LinearLayout>

@@ -91,6 +91,18 @@
             android:launchMode="standard"
             android:exported="false" />
 
+        <!-- Secondary stub used when the running game starts its own activities.
+             GameRuntime wraps those intents into this component and substitutes
+             the real activity instance during creation. -->
+        <activity
+            android:name="com.bepinex.android.SecondaryStubActivity"
+            android:theme="@style/UnityThemeSelector"
+            android:process=":game"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale|layoutDirection|density"
+            android:hardwareAccelerated="true"
+            android:launchMode="standard"
+            android:exported="false" />
+
         <!-- Handles desktop shortcut intents for modpack quick-launch -->
         <activity
             android:name="com.bepinex.android.ShortcutLauncherActivity"

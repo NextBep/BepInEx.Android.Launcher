@@ -11,7 +11,6 @@ import android.os.storage.StorageManager
 import android.provider.MediaStore
 import com.bepinex.android.BepInExLog
 import com.bepinex.android.BepInExPaths
-import com.bepinex.android.FileExtractor
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File

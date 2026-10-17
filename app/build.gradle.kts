@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
+    id("org.jetbrains.kotlin.plugin.parcelize")
 }
 
 // Increment once for an assemble/build invocation, not for help or clean-only
@@ -45,6 +46,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     externalNativeBuild {
@@ -113,9 +115,6 @@ dependencies {
 
     // Kotlin Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
-
-    // Pine — ART Java hook framework (FusionCore approach)
-    implementation("top.canyie.pine:core:0.3.0")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
 }

@@ -1,112 +1,117 @@
 package com.bepinex.android
 
 import android.content.Context
+import android.os.Build
+import com.bepinex.android.tools.Utilities
 import java.io.File
-import java.io.FileOutputStream
-import java.util.zip.ZipInputStream
 
 /**
- * Extracts BepInEx and .NET runtime from APK assets to per-game directories.
+ * Extracts the BepInEx and .NET runtimes from APK assets.
  *
- * Uses [BepInExPaths] for path resolution. Extraction is idempotent —
- * checks for marker files before extracting and skips if already complete.
+ * Layout (matches the bootstrap flow):
+ *   - BepInEx runtime: external per-game directory ([BepInExPaths.getBepInExDir]),
+ *     `config/` preserved across re-extraction so user config survives updates
+ *   - .NET runtime: shared app-private directory (`getDir("bepinex_runtime")/dotnet`),
+ *     skipped while the (versionCode | assetSize) stamp matches
  */
 class FileExtractor(private val context: Context) {
 
+    companion object {
+        private const val TAG = "FileExtractor"
+        private const val RUNTIME_DIR_NAME = "bepinex_runtime"
+        private const val BEPINEX_ASSET = "BepInEx.Android.zip"
+        private const val DOTNET_ASSET = "dotnet.zip"
+        private const val DOTNET_STAMP = ".extract.stamp"
+    }
+
+    /** Shared .NET runtime directory (not per-game). */
+    private fun dotnetDir(): File =
+        File(context.getDir(RUNTIME_DIR_NAME, Context.MODE_PRIVATE), "dotnet")
+
+    /** True when both the BepInEx core and the shared .NET runtime are on disk. */
+    fun isFrameworkReady(packageName: String): Boolean {
+        val bepInExCore = File(BepInExPaths.getBepInExDir(packageName), "core/BepInEx.Core.dll")
+        return bepInExCore.isFile && File(dotnetDir(), "System.Private.CoreLib.dll").isFile
+    }
+
     /**
-     * Extract BepInEx.Android.zip for a specific game.
-     * Skips if BepInEx.Core.dll marker already exists.
+     * Extracts the BepInEx runtime for a game when the core marker is missing.
+     * `config/` is preserved. The bootstrap flow re-extracts on every launch for
+     * framework updates; this UI-facing variant only fills in missing files.
      */
     fun extractBepInExIfNeeded(packageName: String, onProgress: (String) -> Unit = {}) {
         val bepInExDir = BepInExPaths.getBepInExDir(packageName)
         val marker = File(bepInExDir, "core/BepInEx.Core.dll")
 
-        if (marker.exists()) {
-            BepInExLog.i("BepInEx already extracted for $packageName")
+        if (marker.isFile) {
+            BepInExLog.i("$TAG: BepInEx runtime already extracted for $packageName")
             return
         }
 
-        // Incomplete extraction — delete and retry
-        if (bepInExDir.exists()) {
-            BepInExLog.i("BepInEx dir exists but incomplete — re-extracting for $packageName")
-            bepInExDir.deleteRecursively()
-        }
+        onProgress("Extracting BepInEx…")
+        BepInExLog.i("$TAG: Extracting $BEPINEX_ASSET -> ${bepInExDir.absolutePath}")
+        Utilities.extractZipFromAssets(context, BEPINEX_ASSET, bepInExDir, "config/")
 
-        onProgress("Extracting BepInEx for $packageName...")
-        BepInExLog.i("Extracting BepInEx.Android.zip → ${bepInExDir.absolutePath}")
-        extractZip("BepInEx.Android.zip", bepInExDir)
-        BepInExLog.i("BepInEx extracted: ${bepInExDir.absolutePath}")
+        if (!marker.isFile) {
+            BepInExLog.e("$TAG: BepInEx extraction did not produce ${marker.absolutePath}")
+        }
     }
 
     /**
-     * Extract dotnet.zip for a specific game.
-     * Skips if System.Private.CoreLib.dll marker already exists.
+     * Extracts the shared .NET runtime unless the (versionCode | assetSize) stamp
+     * matches — repeat launches then skip the 20+ MB unpack.
      */
-    fun extractDotnetIfNeeded(packageName: String, onProgress: (String) -> Unit = {}) {
-        val dotnetDir = BepInExPaths.getDotnetDir(context.filesDir, packageName)
-        val marker = File(dotnetDir, "System.Private.CoreLib.dll")
+    fun extractDotnetIfNeeded(onProgress: (String) -> Unit = {}) {
+        val dotnetDir = dotnetDir()
+        val stamp = dotnetStamp()
+        val stampFile = File(dotnetDir, DOTNET_STAMP)
+        val coreLib = File(dotnetDir, "System.Private.CoreLib.dll")
 
-        if (marker.exists()) {
-            BepInExLog.i("dotnet already extracted for $packageName")
+        if (stampFile.isFile && coreLib.isFile && stampFile.readText().trim() == stamp) {
+            BepInExLog.i("$TAG: .NET runtime already extracted (stamp unchanged)")
             return
         }
 
         if (dotnetDir.exists()) {
-            BepInExLog.i("dotnet dir exists but incomplete — re-extracting for $packageName")
+            BepInExLog.i("$TAG: .NET runtime stamp changed — re-extracting")
             dotnetDir.deleteRecursively()
         }
+        dotnetDir.mkdirs()
 
-        onProgress("Extracting .NET runtime for $packageName...")
-        BepInExLog.i("Extracting dotnet.zip → ${dotnetDir.absolutePath}")
-        extractZip("dotnet.zip", dotnetDir)
-        BepInExLog.i("dotnet extracted: ${dotnetDir.absolutePath}")
+        onProgress("Extracting .NET runtime…")
+        BepInExLog.i("$TAG: Extracting $DOTNET_ASSET -> ${dotnetDir.absolutePath}")
+        Utilities.extractZipFromAssets(context, DOTNET_ASSET, dotnetDir)
+
+        try {
+            stampFile.writeText(stamp)
+        } catch (e: Exception) {
+            BepInExLog.w("$TAG: Failed to write .NET extraction stamp: ${e.message}")
+        }
     }
 
-    /**
-     * Check if BepInEx and dotnet are both ready for a game.
-     */
-    fun isFrameworkReady(packageName: String): Boolean =
-        BepInExPaths.isBepInExExtracted(packageName) &&
-        BepInExPaths.isDotnetExtracted(context.filesDir, packageName)
-
-    /**
-     * Extract a ZIP asset to a destination directory.
-     * Handles Windows path separators (\ → /) for compatibility.
-     */
-    private fun extractZip(assetName: String, destDir: File) {
-        if (!destDir.mkdirs() && !destDir.exists()) {
-            val msg = "Cannot create dest dir: ${destDir.absolutePath} — check MANAGE_EXTERNAL_STORAGE permission"
-            BepInExLog.e(msg)
-            throw RuntimeException(msg)
+    private fun dotnetStamp(): String {
+        val versionCode = try {
+            val info = context.packageManager.getPackageInfo(context.packageName, 0)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                info.longVersionCode
+            } else {
+                @Suppress("DEPRECATION") info.versionCode.toLong()
+            }
+        } catch (e: Exception) {
+            0L
         }
-        var extractCount = 0
-        context.assets.open(assetName).use { input ->
-            ZipInputStream(input).use { zis ->
-                var entry = zis.nextEntry
-                while (entry != null) {
-                    // Normalize path separators: Windows-created zips may use \ instead of /
-                    val normalizedName = entry.name.replace('\\', '/')
-                    val outFile = File(destDir, normalizedName)
-                    if (entry.isDirectory || normalizedName.endsWith("/")) {
-                        if (!outFile.mkdirs() && !outFile.exists()) {
-                            BepInExLog.w("Cannot create dir: ${outFile.absolutePath}")
-                        }
-                    } else {
-                        val parent = outFile.parentFile
-                        if (parent != null && !parent.mkdirs() && !parent.exists()) {
-                            val msg = "Cannot create parent dir: ${parent.absolutePath} — storage permission issue?"
-                            BepInExLog.e(msg)
-                            throw RuntimeException(msg)
-                        }
-                        FileOutputStream(outFile).use { fos ->
-                            zis.copyTo(fos)
-                        }
-                        extractCount++
-                    }
-                    entry = zis.nextEntry
-                }
+        return "$versionCode|${assetSize(DOTNET_ASSET)}"
+    }
+
+    private fun assetSize(assetName: String): Long {
+        return try {
+            context.assets.openFd(assetName).use { it.length }
+        } catch (e: Exception) {
+            try {
+                context.assets.open(assetName).use { it.available().toLong() }
+            } catch (e2: Exception) {
+                -1L
             }
         }
-        BepInExLog.i("Extracted $extractCount files to ${destDir.absolutePath}")
     }
 }

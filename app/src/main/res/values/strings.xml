@@ -584,6 +584,7 @@
     <string name="bootstrap_status_launching">Launching game…</string>
     <string name="bootstrap_status_error">Launch failed</string>
     <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
+    <string name="bootstrap_request_il2cpp_map">Select the IL2CPP deobfuscation map (.map)</string>
     <string name="modpack_empty_config">No config files in this modpack</string>
     <string name="modpack_empty_configs">No config files</string>
     <string name="modpack_browse_files">Browse Mod Files</string>

@@ -280,7 +280,7 @@ class MainActivity : ComponentActivity() {
                 fileExtractor.extractBepInExIfNeeded(packageName) { status ->
                     extractionStatus = status
                 }
-                fileExtractor.extractDotnetIfNeeded(packageName) { status ->
+                fileExtractor.extractDotnetIfNeeded { status ->
                     extractionStatus = status
                 }
                 BepInExLog.i("Framework extraction complete for $packageName")
