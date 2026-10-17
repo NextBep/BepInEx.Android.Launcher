@@ -1,0 +1,37 @@
+// Copyright (c) 2026 XtraCube
+#ifndef NEXTBEP_EXPORTS_H
+#define NEXTBEP_EXPORTS_H
+#include <external/dobby.h>
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+const char *get_il2cpp_api(const char *name);
+
+void init_bridge_helper(const char *libraryPath);
+
+dobby_dummy_func_t hook(void *address, dobby_dummy_func_t replace_delegate, bool specialReturnBuffer);
+
+void unhook(void *target);
+
+bool unhook_checked(void *target);
+
+void create_alert(const char *title, const char *message);
+
+void set_loader_stage(uint8_t stage);
+
+void set_loader_message(const char *text);
+
+void write_log(const char *text);
+
+void write_log_level(int level, const char *text);
+
+int8_t get_low_memory_mode();
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif //NEXTBEP_EXPORTS_H

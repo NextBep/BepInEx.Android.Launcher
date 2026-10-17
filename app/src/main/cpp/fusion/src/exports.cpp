@@ -1,62 +1,84 @@
-/*
- * BepInEx.Android — P/Invoke exports for the managed BepInEx layer
- *
- NextInterop.cs P/Invokes these functions from libfusion.so:
- *   - write_log_level(int level, const char* text)
- *   - hook(void* target, void* detour, bool specialReturn)
- *   - unhook(void* target)
- */
-
+// Copyright (c) 2026 XtraCube
+#include <exports.h>
 #include <android/log.h>
-#include <dlfcn.h>
-#include <cstdint>
-#include <cstdbool>
+#include <hooking/safehook.h>
+#include <logger.h>
+#include <utilities/java.h>
+#include <fusion_config.h>
 
-extern "C" {
-
-// Logging (used by AndroidLogListener)
-
-void write_log(const char *text)
+const char *get_il2cpp_api(const char *name)
 {
-    __android_log_write(ANDROID_LOG_INFO, "BepInEx", text);
+    if (!runtime_config.initialized) return nullptr;
+
+    auto it = runtime_config.il2cppApiMap.find(name);
+
+    if (it == runtime_config.il2cppApiMap.end() || it->second.empty()) {
+        return nullptr;
+    }
+
+    return it->second.c_str();
 }
 
-void write_log_level(int level, const char *text)
+void init_bridge_helper(const char *libraryPath)
 {
-    // AndroidLogListener already converts BepInEx bit-flag
-    // levels to Android log levels (0=UNKNOWN, 2=VERBOSE, 3=DEBUG, 4=INFO,
-    // 5=WARN, 6=ERROR, 7=FATAL). Direct pass-through.
-    __android_log_write(level, "BepInEx", text);
+    if (!libraryPath) {
+        log(LogLevel::ERROR, "BridgeHelper", "Cannot init bridge helper, null lib path!");
+    }
+    safehook_setup_bridge_helper(libraryPath);
 }
 
-// Hook management (used by NextInterop.hook/unhook)
-
-void *hook(void *target, void *detour, bool specialReturnBuffer)
+dobby_dummy_func_t hook(void *address, dobby_dummy_func_t replace_delegate, bool specialReturnBuffer)
 {
-    (void)specialReturnBuffer;
-    // Use Dobby to install the hook
-    void *dobby = dlopen("libdobby.so", RTLD_NOLOAD);
-    if (!dobby) return nullptr;
-
-    typedef int (*DobbyHook_t)(void *, void *, void **);
-    auto DH = (DobbyHook_t)dlsym(dobby, "DobbyHook");
-    if (!DH) return nullptr;
-
-    void *original = nullptr;
-    int rc = DH(target, detour, &original);
-    if (rc != 0) return nullptr;
-
-    return original;  // Return the trampoline (original function)
+    return safehook_create_hook(address, replace_delegate, specialReturnBuffer);
 }
 
 void unhook(void *target)
 {
-    void *dobby = dlopen("libdobby.so", RTLD_NOLOAD);
-    if (!dobby) return;
-
-    typedef int (*DobbyDestroy_t)(void *);
-    auto DD = (DobbyDestroy_t)dlsym(dobby, "DobbyDestroy");
-    if (DD) DD(target);
+    safehook_destroy_hook(target);
 }
 
-} /* extern "C" */
+bool unhook_checked(void *target)
+{
+    return safehook_destroy_hook_checked(target);
+}
+
+void create_alert(const char *title, const char *message)
+{
+
+}
+
+void set_loader_stage(uint8_t stage)
+{
+    setLoadingState(stage < 2);
+}
+
+void set_loader_message(const char *text)
+{
+    if (!text) {
+        return;
+    }
+    setLoadingText(text);
+}
+
+void write_log(const char *text)
+{
+    if (!text) {
+        return;
+    }
+    log(LogLevel::INFO, "BepInEx", text);
+}
+
+void write_log_level(int level, const char *text)
+{
+    if (!text) {
+        return;
+    }
+    LogLevel logLevel = static_cast<LogLevel>(level);
+    log(logLevel, "BepInEx", text);
+}
+
+int8_t get_low_memory_mode()
+{
+    // TODO: add configuration
+    return 1;
+}

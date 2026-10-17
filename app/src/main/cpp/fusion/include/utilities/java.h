@@ -1,0 +1,27 @@
+// Copyright (c) 2026 XtraCube
+#ifndef NEXTBEP_JAVA_H
+#define NEXTBEP_JAVA_H
+#include <jni.h>
+
+#define GET_JAVA_STRING(env, javaString, assignment) \
+    do { \
+        const char *chars = (env)->GetStringUTFChars(javaString, nullptr); \
+        assignment = std::string(chars); \
+        (env)->ReleaseStringUTFChars(javaString, chars); \
+    } while(0)
+
+JNIEnv* getJNIEnv();
+
+jclass find_class_in_app_classloader(JNIEnv *env, const char *className);
+
+jobject get_fusion_config(JNIEnv *env);
+
+jint getStaticResourceId(JNIEnv* env, const char *name);
+
+jobject getUnityActivity(JNIEnv* env);
+
+void setLoadingState(bool enabled);
+
+void setLoadingText(const char *text);
+
+#endif //NEXTBEP_JAVA_H

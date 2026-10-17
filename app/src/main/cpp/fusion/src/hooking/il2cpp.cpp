@@ -1,188 +1,206 @@
-/*
- * BepInEx.Android —IL2CPP initialization and hooking
- *
- * Key design:
- *   - il2cpp_initialize: dlopen libil2cpp.so with RTLD_GLOBAL so that
- *     BepInEx's P/Invoke (via DllImportResolver 鈫?NativeLibrary.Load)
- *     can resolve IL2CPP symbols.
- *   - il2cpp_install_init_hook: uses DobbyHook directly
- *   - il2cpp_destroy_init_hook: one-shot hook cleanup (called from hook callback)
- */
-
-#include "fusion.h"
-#include <jni.h>
+// Copyright (c) 2026 XtraCube
+#include <hooking/il2cpp.h>
+#include <external/dobby.h>
+#include <utilities/asm.h>
+#include <utilities/tools.h>
+#include <logger.h>
 #include <dlfcn.h>
-#include <string>
-#include <cstring>
-#include <android/log.h>
-#include "dobby.h"
+#include <exports.h>
 
-#define TAG "FusionIL2CPP"
-#define LOGI(...) __android_log_print(ANDROID_LOG_INFO, TAG, __VA_ARGS__)
-#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, TAG, __VA_ARGS__)
+#define TAG "BepInExIL2CPP"
 
-// Static state
+static uintptr_t library_base = 0;
 
-static void *g_il2cpp_handle = nullptr;       // dlopen handle
-static uintptr_t g_library_base = 0;           // loaded base address
+static void *p_il2cpp_init;
 
-static void *g_p_il2cpp_init = nullptr;        // address of il2cpp_init in loaded library
-static void *g_p_il2cpp_method_get_name = nullptr;
+static il2cpp_init_t fun_il2cpp_init = nullptr;
+static il2cpp_init_t init_hook = nullptr;
 
-/* Function pointer types for the IL2CPP runtime entry points */
-typedef const char *(*il2cpp_method_get_name_t)(void *method);
-typedef int         (*il2cpp_init_t)(char *domain_name);
+#if defined(__aarch64__)
+static void disable_export_caller_check(void *export_function)
+{
+    auto *code = static_cast<const uint32_t *>(export_function);
+    uintptr_t regs[32] = {};
+    uintptr_t state = 0;
+    bool loads_ranges = false;
+    bool compares_lr = false;
 
-static il2cpp_init_t             g_orig_il2cpp_init = nullptr;
-static il2cpp_method_get_name_t  g_orig_il2cpp_method_get_name = nullptr;
+    for (int i = 0; i < 48 && !is_ret(code[i]); i++)
+    {
+        uint32_t ins = code[i];
+        auto pc = reinterpret_cast<uintptr_t>(&code[i]);
 
-static il2cpp_init_t             g_init_hook_fn = nullptr;  // current hook callback
+        if ((ins & 0x9F000000) == 0x90000000) // adrp
+        {
+            int64_t imm = ((ins >> 29) & 0x3) | ((static_cast<int64_t>(ins >> 5) & 0x7FFFF) << 2);
+            imm = (imm << 43) >> 43;
+            regs[ins & 0x1F] = (pc & ~static_cast<uintptr_t>(0xFFF)) + (imm << 12);
+        }
+        else if ((ins & 0xFFC00000) == 0x91000000) // add xd, xn, #imm
+        {
+            uintptr_t value = regs[(ins >> 5) & 0x1F] + ((ins >> 10) & 0xFFF);
+            regs[ins & 0x1F] = value;
+            if (state && value == state + 0x8) loads_ranges = true;
+        }
+        else if ((ins & 0xFFFFFC00) == 0xC8DFFC00) // ldar xt, [xn]
+        {
+            if (!state) state = regs[(ins >> 5) & 0x1F];
+        }
+        else if ((ins & 0xFFFFFC1F) == 0xEB1E001F) // cmp xn, x30
+        {
+            compares_lr = true;
+        }
+    }
 
-// Public API
+    if (!state || !loads_ranges || !compares_lr)
+    {
+        log(LogLevel::DEBUG, TAG, "No export caller check found");
+        return;
+    }
 
-extern "C" {
+    auto *values = reinterpret_cast<uintptr_t *>(state);
+    values[1] = 0;
+    values[2] = UINTPTR_MAX;
+    values[3] = 0;
+    values[4] = UINTPTR_MAX;
+    __atomic_store_n(&values[0], ~static_cast<uintptr_t>(0), __ATOMIC_RELEASE);
+    log_format(LogLevel::INFO, TAG, "Disabled export caller check at 0x{:X}", state);
+}
+#endif
 
 bool il2cpp_initialize(const char *library_path)
 {
-    LOGI("il2cpp_initialize: %s", library_path);
-
-    if (g_il2cpp_handle) {
-        LOGI("il2cpp already initialized");
-        return true;
-    }
-
-    /*
-     * CRITICAL: RTLD_GLOBAL makes IL2CPP symbols globally visible.
-     * This is required for BepInEx's managed P/Invoke to resolve
-     * functions like il2cpp_domain_get, il2cpp_assembly_get_image, etc.
-     *
-     * Without RTLD_GLOBAL, NativeLibrary.Load in managed code returns
-     * a handle that has NO globally visible symbols 鈫?SIGSEGV.
-     */
-    dlerror();
-    g_il2cpp_handle = dlopen(library_path, RTLD_GLOBAL | RTLD_NOW);
-    if (!g_il2cpp_handle) {
-        char *err = dlerror();
-        LOGE("Failed to open libil2cpp.so: %s", err ? err : "unknown");
+    handle = dlopen(library_path, RTLD_GLOBAL | RTLD_NOW);
+    if (!handle)
+    {
+        log_format(LogLevel::FATAL, TAG, "Failed to open libil2cpp.so: {}", safe_dlerror());
         return false;
     }
-    LOGI("dlopen OK (RTLD_GLOBAL)");
 
-    /* Resolve il2cpp_init */
-    dlerror();
-    g_p_il2cpp_init = dlsym(g_il2cpp_handle, "il2cpp_init");
-    if (!g_p_il2cpp_init) {
-        char *err = dlerror();
-        LOGE("Failed to find il2cpp_init: %s", err ? err : "unknown");
+    const char *mapped_init_name = get_il2cpp_api("il2cpp_init");
+    const char *init_name = mapped_init_name ? mapped_init_name : "il2cpp_init";
+
+    p_il2cpp_init = dlsym(handle, init_name);
+    if (!p_il2cpp_init)
+    {
+        log_format(LogLevel::FATAL, TAG, "Failed to find il2cpp_init: {}", safe_dlerror());
         return false;
     }
-    g_orig_il2cpp_init = reinterpret_cast<il2cpp_init_t>(g_p_il2cpp_init);
-    LOGI("il2cpp_init @ %p", g_p_il2cpp_init);
+    fun_il2cpp_init = reinterpret_cast<il2cpp_init_t>(p_il2cpp_init);
 
-    /* Resolve il2cpp_method_get_name (used by SafeHook for diagnostics) */
-    dlerror();
-    g_p_il2cpp_method_get_name = dlsym(g_il2cpp_handle, "il2cpp_method_get_name");
-    if (g_p_il2cpp_method_get_name) {
-        g_orig_il2cpp_method_get_name =
-            reinterpret_cast<il2cpp_method_get_name_t>(g_p_il2cpp_method_get_name);
-        LOGI("il2cpp_method_get_name @ %p", g_p_il2cpp_method_get_name);
-    } else {
-        LOGI("il2cpp_method_get_name not found (non-fatal)");
+#if defined(__aarch64__)
+    if (mapped_init_name)
+    {
+        disable_export_caller_check(p_il2cpp_init);
     }
+#endif
 
-    /* Resolve library base via dladdr */
-    Dl_info info;
-    if (dladdr(g_p_il2cpp_init, &info) != 0) {
-        g_library_base = reinterpret_cast<uintptr_t>(info.dli_fbase);
-        LOGI("library base: 0x%lx", (unsigned long)g_library_base);
-    }
-
-    LOGI("il2cpp_initialize complete");
+    log(LogLevel::INFO, TAG, "Successfully loaded libil2cpp.so");
     return true;
 }
 
 void *il2cpp_get_handle()
 {
-    return g_il2cpp_handle;
+    if (!handle)
+    {
+        log(LogLevel::ERROR, TAG, "il2cpp is not initialized!");
+        return nullptr;
+    }
+
+    return handle;
 }
 
 uintptr_t il2cpp_get_library_base()
 {
-    return g_library_base;
+    if (!handle)
+    {
+        log(LogLevel::ERROR, TAG, "il2cpp is not initialized!");
+        return 0;
+    }
+
+    if (library_base != 0)
+    {
+        return library_base;
+    }
+
+    Dl_info info;
+    if (dladdr(p_il2cpp_init, &info) == 0)
+    {
+        log(LogLevel::ERROR, TAG, "Failed to get library base!");
+        return 0;
+    }
+
+    library_base = reinterpret_cast<uintptr_t>(info.dli_fbase);
+    return library_base;
 }
 
-const char *il2cpp_method_get_name(void *method)
-{
-    if (!g_orig_il2cpp_method_get_name) return "";
-    return g_orig_il2cpp_method_get_name(method);
-}
-
-/*
- * Wrapper for the real il2cpp_init.
- * After DobbyHook is installed, this points to the original function
- * (Dobby stores the trampoline here). Called from the hook callback
- * AFTER destroying the hook, to chain to the real il2cpp_init.
- */
+// wrapper for il2cpp_init. if hooked, this will
+// call the original function
 int il2cpp_init(char *domain_name)
 {
-    if (!g_orig_il2cpp_init) {
-        LOGE("il2cpp_init not initialized!");
+    static bool called = false;
+
+    if (!fun_il2cpp_init)
+    {
+        log(LogLevel::ERROR, TAG, "fun_il2cpp_init is null!");
         return -1;
     }
-    return g_orig_il2cpp_init(domain_name);
+
+    if (called)
+    {
+        log(LogLevel::ERROR, TAG, "il2cpp_init has already been called!");
+        return -1;
+    }
+
+    called = true;
+    return fun_il2cpp_init(domain_name);
 }
 
-/*
- * Install a one-shot DobbyHook on il2cpp_init.
- *
- * After this call, any invocation of il2cpp_init will redirect to
- * `hook`. The REAL il2cpp_init is saved in g_orig_il2cpp_init
- * (Dobby's trampoline mechanism).
- *
- * The hook callback should call il2cpp_destroy_init_hook() before
- * chaining to the real il2cpp_init (one-shot pattern).
- */
-void il2cpp_install_init_hook(void *hookCallback)
+// installs a hook on il2cpp_init
+void il2cpp_install_init_hook(il2cpp_init_t hook)
 {
-    if (!g_p_il2cpp_init) {
-        LOGE("il2cpp_init address not resolved —call il2cpp_initialize first!");
+    if (!p_il2cpp_init)
+    {
+        log(LogLevel::ERROR, TAG, "il2cpp_init is not initialized!");
         return;
     }
 
-    if (!hookCallback) {
-        LOGE("Hook function is null!");
+    if (!hook)
+    {
+        log(LogLevel::ERROR, TAG, "Hook function is null!");
         return;
     }
 
-    g_init_hook_fn = reinterpret_cast<il2cpp_init_t>(hookCallback);
+    init_hook = hook;
 
+    dobby_disable_near_branch_trampoline();
     int result = DobbyHook(
-        g_p_il2cpp_init,
-        hookCallback,
-        reinterpret_cast<void **>(&g_orig_il2cpp_init));
+            p_il2cpp_init,
+            (dobby_dummy_func_t)init_hook,
+            (dobby_dummy_func_t *)&fun_il2cpp_init);
 
-    if (result != 0) {
-        LOGE("DobbyHook failed: %d", result);
+    if (result != 0)
+    {
+        log_format(LogLevel::ERROR, TAG, "Failed to hook il2cpp_init: {:d}", result);
         return;
     }
 
-    LOGI("DobbyHook installed on il2cpp_init");
+    log(LogLevel::DEBUG, TAG, "Successfully hooked il2cpp_init");
 }
 
-/*
- * Destroy the one-shot hook. After this, il2cpp_init calls go
- * directly to the original function.
- */
+// destroy the il2cpp_init hook if it exists
 void il2cpp_destroy_init_hook()
 {
-    if (!g_p_il2cpp_init) {
-        LOGE("No hook to destroy");
+    if (!init_hook)
+    {
+        log(LogLevel::ERROR, TAG, "il2cpp_init hook is not installed!");
         return;
     }
 
-    DobbyDestroy(g_p_il2cpp_init);
-    g_init_hook_fn = nullptr;
-    LOGI("DobbyHook destroyed (one-shot complete)");
-}
+    // restore the original function
+    DobbyDestroy(p_il2cpp_init);
+    init_hook = nullptr;
+    fun_il2cpp_init = reinterpret_cast<il2cpp_init_t>(p_il2cpp_init);
 
-} /* extern "C" */
+    log(LogLevel::DEBUG, TAG, "Successfully destroyed il2cpp_init hook");
+}

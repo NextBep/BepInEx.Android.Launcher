@@ -1,113 +1,86 @@
-/*
- * BepInEx.Android — Trampoline allocator (code cave)
- *
- * Uses the padded libil2cpp.so's extra memory pool to allocate
- * trampoline space for SafeHook, ensuring hooks on small functions
- * have enough room for absolute jumps.
- */
-
-#include <cstdint>
-#include <dlfcn.h>
-#include <android/log.h>
+// Copyright (c) 2026 XtraCube
+#include <hooking/allocator.h>
+#include <utilities/library.h>
+#include <utilities/asm.h>
+#include <logger.h>
+#include <sys/mman.h>
+#include <cstring>
+#include <cerrno>
 
 #define TAG "Allocator"
-#define LOGI(...) __android_log_print(ANDROID_LOG_INFO, TAG, __VA_ARGS__)
-#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, TAG, __VA_ARGS__)
 
-// Forward declaration from library.cpp
-struct PaddedOpenResult {
-    void *handle;
-    void *base;
-    size_t pool_base;
-    size_t pool_size;
-};
-PaddedOpenResult padded_write_elf(const char *library_name,
-                                  const char *temp_path, size_t pool_size);
-PaddedOpenResult padded_dlopen(const char *library_name,
-                               const char *temp_path, size_t pool_size);
+static PaddedOpenResult padded_open;
 
-static PaddedOpenResult g_padded;
-static size_t g_pool_pointer = 0;
+static size_t pool_pointer = 0;
+static bool pool_rwx = false;
 
-extern "C" {
-
-void *allocate_setup_injected(const char *library, const char *output_path,
-                               size_t pool_size)
+uintptr_t get_injected_pool_base()
 {
-    LOGI("allocate_setup_injected: %s -> %s, pool=%zu",
-         library, output_path, pool_size);
-    g_padded = padded_dlopen(library, output_path, pool_size);
-    if (!g_padded.handle) {
-        LOGE("padded_dlopen failed!");
-        return nullptr;
-    }
-    LOGI("Pool base: 0x%zx, size: %zu",
-         g_padded.pool_base, g_padded.pool_size);
-    return g_padded.handle;
+    return padded_open.pool_base;
 }
 
-void *allocate_setup_injected_noload(const char *library, const char *output_path,
-                                     size_t pool_size)
+void *allocate_setup_injected(const char *library, const char *output_path, size_t pool_size)
 {
-    LOGI("allocate_setup_injected_noload: %s -> %s, pool=%zu",
-         library, output_path, pool_size);
-    g_padded = padded_write_elf(library, output_path, pool_size);
-    if (!g_padded.pool_size) {
-        LOGE("padded_write_elf failed!");
-        return nullptr;
-    }
-    LOGI("Patched ELF written, pool size %zu (load deferred)", g_padded.pool_size);
-    return reinterpret_cast<void *>(1);
-}
+    padded_open = padded_dlopen(library, output_path, pool_size);
 
-void *allocate_bind_loaded(void *handle)
-{
-    if (!handle) return nullptr;
-    g_padded.handle = handle;
-    void *sym = dlsym(handle, "il2cpp_init");
-    if (!sym) {
-        LOGE("allocate_bind_loaded: il2cpp_init not found");
-        return nullptr;
+    pool_rwx = mprotect(reinterpret_cast<void *>(padded_open.pool_base),
+                        padded_open.pool_size,
+                        PROT_READ | PROT_WRITE | PROT_EXEC) == 0;
+
+    if (!pool_rwx) {
+        log_format(LogLevel::ERROR, TAG, "mprotect RWX failed: {}", strerror(errno));
     }
-    Dl_info info{};
-    if (!dladdr(sym, &info) || !info.dli_fbase) {
-        LOGE("allocate_bind_loaded: dladdr failed");
-        return nullptr;
-    }
-    g_padded.base = info.dli_fbase;
-    const size_t pool_offset = g_padded.pool_base;
-    g_padded.pool_base = reinterpret_cast<uintptr_t>(info.dli_fbase) + pool_offset;
-    LOGI("Bound loaded il2cpp: base=%p pool=0x%zx size=%zu",
-         g_padded.base, g_padded.pool_base, g_padded.pool_size);
-    return handle;
+
+    log_format(LogLevel::INFO, TAG, "Injected trampoline pool initialized at 0x{:X}, size 0x{:X},"
+                                    " rwx: {}",
+        padded_open.pool_base, padded_open.pool_size, pool_rwx);
+
+    return pool_rwx ? padded_open.handle : nullptr;
 }
 
 void *allocate_injected(void *target, void *library_base, size_t size)
 {
-    if (!g_padded.handle) {
-        LOGE("allocator not initialized!");
+    (void) library_base;
+
+    if (!padded_open.handle || padded_open.pool_base == 0 || padded_open.pool_size == 0)
+    {
+        log(LogLevel::ERROR, TAG, "Injected trampoline pool is not initialized!");
         return nullptr;
     }
 
-    uintptr_t target_ptr = reinterpret_cast<uintptr_t>(target);
-    uintptr_t tramp_ptr = g_padded.pool_base + g_pool_pointer;
-
-    if (g_pool_pointer + size > g_padded.pool_size) {
-        LOGE("Trampoline pool full!");
+    if (size == 0)
+    {
+        log(LogLevel::ERROR, TAG, "Trampoline allocation size is zero!");
         return nullptr;
     }
 
-    // Check distance: ARM64 branch range is +/-128MB
-    uintptr_t dist = tramp_ptr > target_ptr ?
-        tramp_ptr - target_ptr : target_ptr - tramp_ptr;
-    if (dist > 0x7FFFFFF) {
-        LOGE("Target 0x%zx too far from trampoline space 0x%zx",
-             (size_t)target_ptr, (size_t)tramp_ptr);
+    if (!pool_rwx) {
+        log(LogLevel::ERROR, TAG, "Trampoline pool is not rwx!");
         return nullptr;
     }
 
-    g_pool_pointer += size;
+    // keep trampolines naturally 4-byte aligned (instruction alignment on ARM/ARM64)
+    const size_t offset = (pool_pointer + 3) & ~static_cast<size_t>(3);
+
+    // overflow-safe bounds check: never write past the end of the pool
+    if (offset > padded_open.pool_size || size > padded_open.pool_size - offset)
+    {
+        log(LogLevel::ERROR, TAG, "Trampoline pool is full!");
+        return nullptr;
+    }
+
+    const uintptr_t target_ptr = reinterpret_cast<uintptr_t>(target);
+    const uintptr_t tramp_ptr = padded_open.pool_base + offset;
+
+    // signed distance check: a near branch only reaches +/-128MB in either direction
+    const auto dist = static_cast<int64_t>(tramp_ptr) - static_cast<int64_t>(target_ptr);
+    if (dist < -static_cast<int64_t>(0x8000000) || dist > static_cast<int64_t>(0x7FFFFFF))
+    {
+        log_format(LogLevel::ERROR, TAG, "Target 0x{:x} too far from trampoline space 0x{:x}!",
+                   target_ptr, tramp_ptr);
+        return nullptr;
+    }
+
+    pool_pointer = offset + size;
     return reinterpret_cast<void *>(tramp_ptr);
 }
-
-} /* extern "C" */

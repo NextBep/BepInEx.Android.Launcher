@@ -1,233 +1,200 @@
-/*
- * BepInEx.Android —.NET CoreCLR bootstrap
- *
- * Starts the .NET CoreCLR runtime and calls BepInEx entry points.
- * Called from the il2cpp_init hook callback, AFTER Unity's native init
- * but BEFORE Unity scripts start running.
- */
-
-#include "fusion.h"
-#include <jni.h>
+// Copyright (c) 2026 XtraCube. All rights reserved.
+#include <dotnet.h>
+#include <hooking/il2cpp.h>
+#include <external/coreclrhost.h>
+#include <filesystem>
+#include <logger.h>
+#include <thread>
 #include <dlfcn.h>
-#include <string>
-#include <vector>
-#include <cstring>
-#include <algorithm>
-#include <dirent.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <android/log.h>
 
-#define LOG_TAG "Fusion/DotNet"
-#define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
-#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
-#define LOGW(...) __android_log_print(ANDROID_LOG_WARN, LOG_TAG, __VA_ARGS__)
+#define TAG "BepInEx.NET"
 
-// CoreCLR host API types
+namespace fs = std::filesystem;
 
-typedef int (*coreclr_initialize_fn)(
-    const char *exePath,
-    const char *appDomainFriendlyName,
-    int propertyCount,
-    const char **propertyKeys,
-    const char **propertyValues,
-    void **hostHandle,
-    unsigned int *domainId);
 
-typedef int (*coreclr_create_delegate_fn)(
-    void *hostHandle,
-    unsigned int domainId,
-    const char *assemblyName,
-    const char *typeName,
-    const char *methodName,
-    void **delegate);
+void build_tpa(const char *directory, std::string &tpaList);
 
-// Helpers
-
-static bool str_ends_with(const char *str, const char *suffix)
+int dotnet_execute_assembly(const DotNetConfig& config, AuxPluginFolderList *auxFolders)
 {
-    size_t slen = strlen(str);
-    size_t xlen = strlen(suffix);
-    if (xlen > slen) return false;
-    return strcasecmp(str + slen - xlen, suffix) == 0;
-}
-
-static bool file_exists(const char *path)
-{
-    struct stat st;
-    return stat(path, &st) == 0;
-}
-
-static std::vector<std::string> scan_dlls(const std::string &dir)
-{
-    std::vector<std::string> result;
-    DIR *d = opendir(dir.c_str());
-    if (!d) {
-        LOGW("Cannot open dir: %s (%s)", dir.c_str(), strerror(errno));
-        return result;
+    entrypoint_fn managedDelegate;
+    if(config.IsMono){
+        log(LogLevel::INFO, TAG, "using il2cpp2mono!");
+        auto get_delegate =
+                reinterpret_cast<GetDelegate>(
+                        dlsym(handle, "il2cpp2mono_get_delegate")
+                );
+        std::string FullPath = fs::path(config.managedLibsDir) / (config.entryPointAssembly + ".dll");
+        managedDelegate = reinterpret_cast<entrypoint_fn>(get_delegate(FullPath.c_str(), config.entryPointType.c_str(), config.entryPointMethod.c_str(), 1));
+        if(managedDelegate == nullptr){
+            log_format(LogLevel::ERROR, TAG, "il2cpp2mono failed to get {}::{}.{}", config.entryPointAssembly, config.entryPointType, config.entryPointMethod);
+            return -1;
+        }
     }
+    else {
+        log(LogLevel::INFO, TAG, "Preparing CLR properties");
 
-    struct dirent *entry;
-    while ((entry = readdir(d)) != nullptr) {
-        if (entry->d_type != DT_REG && entry->d_type != DT_LNK
-            && entry->d_type != DT_UNKNOWN)
-            continue;
-        if (!str_ends_with(entry->d_name, ".dll"))
-            continue;
-        result.push_back(dir + "/" + entry->d_name);
-    }
-    closedir(d);
-    std::sort(result.begin(), result.end());
-    return result;
-}
+        #define NUM_KEYS 3
 
-// CoreCLR startup
+        const char *propertyKeys[NUM_KEYS] = {
+                "TRUSTED_PLATFORM_ASSEMBLIES",
+                "APP_PATHS",
+                "APP_CONTEXT_BASE_DIRECTORY"
+        };
 
-bool dotnet_start_runtime()
-{
-    __android_log_write(ANDROID_LOG_ERROR, "FusionB", "dotnet_start_runtime enter");
-    LOGI("=== Starting CoreCLR + BepInEx ===");
+        std::string appPaths = (config.runtimeDir + ":" + config.managedLibsDir);
 
-    /* Resolve CoreCLR */
-    __android_log_write(ANDROID_LOG_ERROR, "FusionB", "dotnet: resolving coreclr");
-    void *coreclr = dlopen("libcoreclr.so", RTLD_NOLOAD);
-    if (!coreclr) {
-        __android_log_write(ANDROID_LOG_ERROR, "FusionB", "dotnet: libcoreclr.so NOT loaded");
-        return false;
-    }
-    __android_log_write(ANDROID_LOG_ERROR, "FusionB", "dotnet: coreclr found");
+        std::string tpaPath;
+        build_tpa(config.managedLibsDir.c_str(), tpaPath);
+        build_tpa(config.runtimeDir.c_str(), tpaPath);
 
-    auto init_fn = (coreclr_initialize_fn)dlsym(coreclr, "coreclr_initialize");
-    auto delegate_fn = (coreclr_create_delegate_fn)dlsym(coreclr, "coreclr_create_delegate");
-    __android_log_write(ANDROID_LOG_ERROR, "FusionB", init_fn ? "coreclr_initialize found" : "coreclr_initialize MISSING");
-    __android_log_write(ANDROID_LOG_ERROR, "FusionB", delegate_fn ? "coreclr_create_delegate found" : "coreclr_create_delegate MISSING");
-    if (!init_fn || !delegate_fn) {
-        return false;
-    }
+        log_format(LogLevel::DEBUG, TAG, "TPA Path: {}", tpaPath);
 
-    /* Find BepInEx core directory */
-    std::string bepInExCore = g_config.bepInExDir + "/core";
-    std::string dotnetRuntime = g_config.dotnetDir;
+        const char *propertyValues[NUM_KEYS] = {
+                tpaPath.c_str(),
+                appPaths.c_str(),
+                config.managedLibsDir.c_str()
+        };
 
-    LOGI("BepInEx core: %s", bepInExCore.c_str());
-    LOGI("DotNet runtime: %s", dotnetRuntime.c_str());
+        setenv("DOTNET_ReadyToRun", "0", 1);
 
-    if (!file_exists(bepInExCore.c_str())) {
-        LOGE("BepInEx core dir not found: %s", bepInExCore.c_str());
-        return false;
-    }
+        uint32_t hr = -1;
+        void *hostHandle = nullptr;
+        unsigned int domainId = 0;
 
-    /* Build TPA list */
-    auto coreDlls = scan_dlls(bepInExCore);
-    auto rtDlls = scan_dlls(dotnetRuntime);
+        for (int attempt = 1; attempt <= 2; ++attempt)
+        {
+            hostHandle = nullptr;
+            domainId = 0;
+            hr = coreclr_initialize(
+                    config.runtimeDir.c_str(),            // AppDomain base path
+                    "NextBepHost",                      // AppDomain friendly name
+                    sizeof(propertyKeys) / sizeof(char *),// Property count
+                    propertyKeys,                         // Property names
+                    propertyValues,                       // Property values
+                    &hostHandle,                          // Host handle
+                    &domainId);                           // AppDomain ID
 
-    LOGI("Assemblies: %zu in core, %zu in dotnet", coreDlls.size(), rtDlls.size());
+            log_format(LogLevel::INFO, TAG,
+                       "coreclr_initialize attempt {} -> hr={} ({:#010x}), hostHandle={}, domainId={}",
+                       attempt,
+                       hr,
+                       static_cast<uint32_t>(hr),
+                       hostHandle,
+                       domainId);
 
-    if (coreDlls.empty()) {
-        LOGE("No .dll files in %s", bepInExCore.c_str());
-        return false;
-    }
+            if (hr >= 0)
+            {
+                break;
+            }
 
-    std::string tpa;
-    for (size_t i = 0; i < coreDlls.size(); i++) {
-        if (i > 0) tpa += ":";
-        tpa += coreDlls[i];
-    }
-    for (size_t i = 0; i < rtDlls.size(); i++) {
-        tpa += ":";
-        tpa += rtDlls[i];
-    }
+            if (attempt == 1 && hr == HR_INTERNAL_ERROR)
+            {
+                // Retry with W^X enabled
+                setenv("DOTNET_EnableWriteXorExecute", "1", 1);
+                log(LogLevel::WARN, TAG, "Retrying CoreCLR init with W^X enabled");
+                std::this_thread::sleep_for(std::chrono::milliseconds(75));
+                continue;
+            }
 
-    /* Runtime config */
-    std::string runtimeconfig = bepInExCore +
-        "/BepInEx.Unity.IL2CPP.runtimeconfig.json";
-    if (!file_exists(runtimeconfig.c_str())) {
-        runtimeconfig = dotnetRuntime + "/Microsoft.NETCore.App.runtimeconfig.json";
-        LOGI("Using fallback runtimeconfig: %s", runtimeconfig.c_str());
-    } else {
-        LOGI("Runtime config: %s", runtimeconfig.c_str());
-    }
+            break;
+        }
 
-    /* CoreCLR properties — minimal set. */
-    /*
-     * Only 3 keys are set. Enables needed crypto by letting CoreCLR
-     * resolve native libraries through Android's default linker paths.
-     */
-#define NUM_KEYS 3
-    const char *propertyKeys[NUM_KEYS] = {
-        "TRUSTED_PLATFORM_ASSEMBLIES",
-        "APP_PATHS",
-        "APP_CONTEXT_BASE_DIRECTORY"
-    };
+        if (hr >= 0) {
+            log_format(LogLevel::INFO, TAG, "CoreCLR started; AppDomain {} created", domainId);
+        } else {
+            log_format(LogLevel::ERROR, TAG, "coreclr_initialize failed - status: {} ({:#010x})",
+                       hr, static_cast<uint32_t>(hr));
+            return hr;
+        }
 
-    std::string appPaths = bepInExCore + ":" + dotnetRuntime;
-    std::string tpa_list = tpa;
+        log_format(LogLevel::INFO, TAG, "Creating delegate for {}.{} in {}",
+                   config.entryPointType, config.entryPointMethod, config.entryPointAssembly);
 
-    const char *propertyValues[NUM_KEYS] = {
-        tpa_list.c_str(),
-        appPaths.c_str(),
-        bepInExCore.c_str()
-    };
+        hr = coreclr_create_delegate(
+                hostHandle,
+                domainId,
+                config.entryPointAssembly.c_str(),
+                config.entryPointType.c_str(),
+                config.entryPointMethod.c_str(),
+                (void**)&managedDelegate);
 
-    setenv("DOTNET_ReadyToRun", "0", 1);
-
-    /* Initialize CoreCLR — with W^X retry. */
-    setenv("DOTNET_EnableWriteXorExecute", "0", 1);
-
-    void *host = nullptr;
-    unsigned int dom = 0;
-    int rc = -1;
-
-    for (int attempt = 1; attempt <= 2; ++attempt) {
-        host = nullptr;
-        dom = 0;
-        rc = init_fn(runtimeconfig.c_str(), "BepInExHost",
-                     NUM_KEYS, propertyKeys, propertyValues, &host, &dom);
-
-        { char buf[64]; snprintf(buf, sizeof(buf), "coreclr_initialize attempt %d rc=%d", attempt, rc);
-          __android_log_write(ANDROID_LOG_ERROR, "FusionB", buf); }
-
-        if (rc >= 0) break;
-
-        if (attempt == 1) {
-            setenv("DOTNET_EnableWriteXorExecute", "1", 1);
-            LOGI("Retrying CoreCLR with W^X enabled");
-            usleep(75000);
+        if (hr >= 0)
+        {
+            log(LogLevel::INFO, TAG, "Managed delegate created");
+        }
+        else
+        {
+            log_format(LogLevel::ERROR, TAG, "coreclr_create_delegate failed - status: {}", hr);
+            return hr;
         }
     }
 
-    if (rc >= 0) {
-        LOGI("CoreCLR started (host=%p, domain=%u)", host, dom);
-        __android_log_write(ANDROID_LOG_ERROR, "FusionB", "CoreCLR started!");
-    } else {
-        LOGE("coreclr_initialize failed: 0x%x", rc);
-        return false;
+    managedDelegate(auxFolders);
+
+    log(LogLevel::INFO, TAG, "Executed delegate!");
+    return 0;
+}
+
+void build_tpa(const char *directory, std::string &tpaList)
+{
+    std::error_code ec;
+    fs::path dir(directory);
+
+    if (!fs::exists(dir, ec))
+    {
+        if (ec)
+        {
+            log_format(LogLevel::ERROR, TAG, "Error checking existence of {}: {}", directory, ec
+                    .message());
+        }
+        else
+        {
+            log_format(LogLevel::WARN, TAG, "TPA directory does not exist: {}", directory);
+        }
+        return;
     }
 
-    /* Call BepInEx entry point —NextCore style */
-    // NextCoreEntrypoint.Start reads NEXT_* env vars via EnvVars.LoadVars()
-    // and calls UnityPreloaderRunner.PreloaderMain internally.
-    void *bepInExEntry = nullptr;
-    int entryRc = delegate_fn(host, dom,
-        "BepInEx.Unity.IL2CPP",
-        "BepInEx.Unity.IL2CPP.NextCoreEntrypoint", "Start",
-        &bepInExEntry);
-    { char buf[160]; snprintf(buf, sizeof(buf), "delegate NextCoreEntrypoint.Start rc=%d", entryRc); __android_log_write(ANDROID_LOG_ERROR, "FusionB", buf); }
-    if (entryRc == 0 && bepInExEntry) {
-        __android_log_write(ANDROID_LOG_ERROR, "FusionB", "Found entry point!");
+    if (!fs::is_directory(dir, ec))
+    {
+        if (ec)
+        {
+            log_format(LogLevel::ERROR, TAG, "Error checking if {} is a directory: {}", directory, ec.message());
+        }
+        else
+        {
+            log_format(LogLevel::WARN, TAG, "TPA path is not a directory: {}", directory);
+        }
+        return;
     }
 
-    if (bepInExEntry) {
-        __android_log_write(ANDROID_LOG_ERROR, "FusionB", "Calling BepInEx entry...");
-        std::string bepinRoot = g_config.bepInExDir;
-        chdir(bepinRoot.c_str());
-        mkdir((bepinRoot + "/logs").c_str(), 0755);
-        typedef void (*entry_fn)();
-        ((entry_fn)bepInExEntry)();
-        __android_log_write(ANDROID_LOG_ERROR, "FusionB", "BepInEx done");
-    } else {
-        __android_log_write(ANDROID_LOG_ERROR, "FusionB", "No BepInEx entry found");
+    std::vector<std::string> dllPaths;
+    for (const auto& entry : fs::directory_iterator(dir, ec)) {
+        if (ec)
+        {
+            log_format(LogLevel::ERROR, TAG, "Error iterating directory {}: {}", directory, ec.message());
+            break;
+        }
+
+        if (!entry.is_regular_file())
+        {
+            continue;
+        }
+
+        const fs::path& p = entry.path();
+
+        if (p.extension() == ".dll") {
+            dllPaths.emplace_back(p.string());
+        }
     }
 
-    return true;
+    std::sort(dllPaths.begin(), dllPaths.end());
+
+    for (const auto &dllPath : dllPaths)
+    {
+        if (!tpaList.empty())
+        {
+            tpaList.append(":");
+        }
+        tpaList.append(dllPath);
+    }
 }

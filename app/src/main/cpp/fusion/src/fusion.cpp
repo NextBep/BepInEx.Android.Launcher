@@ -1,322 +1,218 @@
-/*
- * BepInEx.Android —libfusion.so core
- *
- * Coordinates the full injection pipeline:
- *   Config parse 鈫?allocate injected code cave 鈫?il2cpp_init hook 鈫?CoreCLR 鈫?BepInEx
- */
-
-#include "fusion.h"
-#include <dlfcn.h>
-#include <jni.h>
-#include <string>
-#include <vector>
-#include <cstring>
-#include <cstdio>
-#include <dirent.h>
-#include <sys/stat.h>
+// Copyright (c) 2026 XtraCube
 #include <unistd.h>
-#include <android/log.h>
+#include <jni.h>
+#include <filesystem>
+#include <logger.h>
+#include <libmain.h>
+#include <fusion_config.h>
+#include <hooking/il2cpp.h>
+#include <hooking/safehook.h>
+#include <hooking/allocator.h>
+#include <hooking/libunity.h>
+#include <dotnet.h>
+#include <external/dobby.h>
+#include <utilities/java.h>
+#include <dlfcn.h>
 
-#define LOG_TAG "Fusion"
-#define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
-#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
-#define LOGW(...) __android_log_print(ANDROID_LOG_WARN, LOG_TAG, __VA_ARGS__)
+#define TAG "BepInExNative"
 
-// Global config instance
+namespace fs = std::filesystem;
 
-FusionConfig g_config;
-static std::string g_configPath;
-static bool g_staged = false;
+FusionConfig runtime_config;
 
-// Forward declarations
-
-/* libmain overrides (defined in main.cpp with extern "C" linkage) */
-extern "C" {
-    void libmain_set_override_unity_path(const char *path);
-    void libmain_set_override_il2cpp_path(const char *path);
-    const char *libmain_get_override_unity_path();
-    const char *libmain_get_override_il2cpp_path();
-}
-
-/* Hooking */
-bool il2cpp_initialize(const char *il2cppPath);
-void il2cpp_install_init_hook(void *hookCallback);
-void il2cpp_destroy_init_hook();
-int il2cpp_init(char *domain_name);
-void *il2cpp_get_handle();
-uintptr_t il2cpp_get_library_base();
-bool safehook_initialize(void *lib_handle, uintptr_t lib_base,
-                         void *(*allocator)(void *, void *, size_t));
-
-/* CoreCLR / BepInEx bootstrap */
-bool dotnet_start_runtime();
-
-// Config file parsing
-
-static std::string read_file(const char *path)
+static bool execute_fusion_config(const FusionConfig &config)
 {
-    std::string result;
-    FILE *f = fopen(path, "rb");
-    if (!f) return result;
+    fusion_print_config(config);
 
-    fseek(f, 0, SEEK_END);
-    long size = ftell(f);
-    fseek(f, 0, SEEK_SET);
-    if (size > 0) {
-        result.resize(size);
-        fread(&result[0], 1, size, f);
+    fs::path gameLibsPath(config.gameLibraryDirectory);
+    fs::path codeCache(config.codeCacheDirectory);
+    fs::path gamePath = fs::path(config.bepInExDirectory).parent_path();
+
+    fs::path libUnity;
+    fs::path patchedLibIl2Cpp;
+    if(config.isIl2Cpp2Mono){
+        fs::path MonoPath(config.dotnetDirectory);
+
+        fs::path monoLib = MonoPath / "libmonosgen-2.0.so";
+        void* handle = dlopen(monoLib.c_str(), RTLD_GLOBAL | RTLD_NOW);
+        if (!handle) {
+            log_format(LogLevel::ERROR, TAG, "Failed to dlopen libmonosgen-2.0.so: {}", dlerror());
+            return false;
+        }
+        patchedLibIl2Cpp = MonoPath / "libil2cpp.so";
+        handle = dlopen(patchedLibIl2Cpp.c_str(), RTLD_GLOBAL | RTLD_NOW);
+        if (!handle) {
+            log_format(LogLevel::ERROR, TAG, "Failed to dlopen {}: {}", patchedLibIl2Cpp.string(), dlerror());
+            return false;
+        }
+        using SetOverrideDirs = void (*)(const char*, const char*);
+        auto set_override_dirs =
+                reinterpret_cast<SetOverrideDirs>(
+                        dlsym(handle, "il2cpp2mono_set_override_dirs")
+                );
+        fs::path dllpath = gamePath / "PersistentData/mono";
+        fs::path monopath = MonoPath / "mono";
+        log_format(LogLevel::INFO, TAG, "setting il2cpp2mono paths: {}, {}", dllpath.c_str(), monopath.c_str());
+        set_override_dirs(dllpath.c_str(), monopath.c_str());
     }
-    fclose(f);
-    return result;
-}
-
-/*
- * Simple config parser. Expected format (one key=value per line):
- *
- *   gameLibraryDirectory=/data/app/.../lib/arm64
- *   appLibraryDirectory=/data/app/.../lib/arm64
- *   appDataDirectory=/data/data/com.bepinex.android/files/...
- *   bepInExDirectory=/storage/...
- *   dotnetDirectory=/storage/...
- *   unityDataDirectory=/storage/...
- *   unityVersion=2022.3.62f3
- *   useOriginalLibUnity=false
- */
-static bool parse_fusion_config(const char *text, FusionConfig *out)
-{
-    if (!text || !out) return false;
-
-    const char *p = text;
-    while (*p) {
-        /* Skip whitespace */
-        while (*p == ' ' || *p == '\t' || *p == '\r' || *p == '\n') p++;
-        if (!*p) break;
-
-        /* Read key */
-        std::string key;
-        while (*p && *p != '=' && *p != '\n' && *p != '\r') key += *p++;
-        if (*p != '=') continue; /* skip malformed lines */
-        p++; /* skip = */
-
-        /* Read value */
-        std::string value;
-        while (*p && *p != '\n' && *p != '\r') value += *p++;
-        if (*p) p++; /* skip newline */
-
-        /* Assign */
-        if (key == "gameLibraryDirectory") out->gameLibraryDir = value;
-        else if (key == "appLibraryDirectory") out->appLibraryDir = value;
-        else if (key == "appDataDirectory") out->appDataDir = value;
-        else if (key == "bepInExDirectory") out->bepInExDir = value;
-        else if (key == "dotnetDirectory") out->dotnetDir = value;
-        else if (key == "unityDataDirectory") out->unityDataDir = value;
-        else if (key == "unityVersion") out->unityVersion = value;
-        else if (key == "useOriginalLibUnity") out->useOriginalLibUnity = (value == "true");
+    else{
+        patchedLibIl2Cpp = codeCache / "libil2cpp.so";
+        fs::path libIl2Cpp = gameLibsPath / "libil2cpp.so";
+        allocate_setup_injected(libIl2Cpp.c_str(), patchedLibIl2Cpp.c_str(), 1024 * 1024);
+    }
+    if (config.useOriginalLibUnity)
+    {
+        libUnity = gameLibsPath / "libunity.so";
+    }
+    else
+    {
+        libUnity = codeCache / "libunity.so";
     }
 
-    return !out->appLibraryDir.empty();
-}
+    std::string libUnityPath = libUnity.string();
+    try_hook_libunity(libUnityPath, (gameLibsPath / "libunity.so").string());
 
-// Staging
+    std::string patchedPath = patchedLibIl2Cpp.string();
+    libmain_set_override_il2cpp_path(patchedPath.c_str());
+    libmain_set_override_unity_path(libUnityPath.c_str());
 
-static bool stage_fusion_config(const FusionConfig &config)
-{
-    LOGI("=== Staging Fusion ===");
-    LOGI("  gameLibDir:   %s", config.gameLibraryDir.c_str());
-    LOGI("  appLibDir:    %s", config.appLibraryDir.c_str());
-    LOGI("  appDataDir:   %s", config.appDataDir.c_str());
-    LOGI("  bepInExDir:   %s", config.bepInExDir.c_str());
-    LOGI("  dotnetDir:    %s", config.dotnetDir.c_str());
-    LOGI("  unityDataDir: %s", config.unityDataDir.c_str());
-    LOGI("  unityVersion: %s", config.unityVersion.c_str());
-    LOGI("  useOrigUnity: %s", config.useOriginalLibUnity ? "true" : "false");
-
-    /* Set library paths */
-    std::string unityPath;
-    std::string il2cppPath;
-    std::string gameIl2cppPath = config.gameLibraryDir + "/libil2cpp.so";
-
-    if (config.useOriginalLibUnity) {
-        unityPath = config.gameLibraryDir + "/libunity.so";
-    } else {
-        unityPath = config.appLibraryDir + "/libunity.so";
-    }
-
-    /*
-     * Patch libil2cpp.so with an extended memory segment
-     * (1 MB code cave) 鈫?copy to appDataDir 鈫?load the patched copy.
-     *
-     * The code cave provides executable memory within the library's own
-     * segment, bypassing Android 14+ W^X restrictions. Dobby trampolines
-     * are allocated from this cave instead of mmap (which would be W^X).
-     *
-     * The patched copy path matches the DataLibrary redirect in
-     * NativeLibraryManager 鈫?findLibrary("il2cpp") returns this path.
-     */
-    std::string patchedIl2CppPath = config.appDataDir + "/libil2cpp.so";
-    LOGI("Patching il2cpp: %s -> %s (1MB pool)", gameIl2cppPath.c_str(), patchedIl2CppPath.c_str());
-
-    void *poolHandle = allocate_setup_injected_noload(
-        gameIl2cppPath.c_str(),
-        patchedIl2CppPath.c_str(),
-        1024 * 1024);  // 1 MB code cave, load AFTER libunity
-    if (!poolHandle) {
-        LOGE("allocate_setup_injected_noload failed — falling back to original il2cpp path");
-        il2cppPath = gameIl2cppPath;
-    } else {
-        il2cppPath = patchedIl2CppPath;
-        LOGI("Patched il2cpp ELF written (load deferred until after libunity)");
-    }
-
-    LOGI("  unityPath:  %s", unityPath.c_str());
-    LOGI("  il2cppPath: %s", il2cppPath.c_str());
-
-    /* Tell libmain where to find the libraries.
-     * Do NOT dlopen/hook libunity here — UnityPlayer is still constructing
-     * and loading libunity too early crashes some games (PVZ). */
-    libmain_set_override_unity_path(unityPath.c_str());
-    libmain_set_override_il2cpp_path(il2cppPath.c_str());
-
-    g_config = config;
-    g_staged = true;
-
-    LOGI("=== Fusion staged ===");
+    log(LogLevel::INFO, TAG, "BepInEx bootstrap finished successfully.");
     return true;
 }
 
-// il2cpp_init hook callback
-
-/*
- * One-shot hook on il2cpp_init.
- *
- * Called when Unity invokes il2cpp_init. We:
- *   1. Destroy the hook (one-shot —only fire once)
- *   2. Call the real il2cpp_init (chains through Dobby trampoline)
- *   3. Set environment variables for BepInEx
- *   4. Start CoreCLR 鈫?BepInEx
- *
- * Signature of the hook target: int il2cpp_init(char *domain_name)
- */
-static int il2cpp_init_hook(char *domain_name)
+int il2cpp_init_hook(char *domain_name)
 {
-    __android_log_write(ANDROID_LOG_ERROR, "FusionB", "il2cpp_init HOOK FIRED!");
-
-    /* 1. Destroy hook IMMEDIATELY (one-shot pattern) */
+    const char *d_name = domain_name ? domain_name : "Unknown Domain Name";
+    log_format(LogLevel::INFO, TAG, "il2cpp_init called with domain: {}", d_name);
     il2cpp_destroy_init_hook();
-    __android_log_write(ANDROID_LOG_ERROR, "FusionB", "hook destroyed (one-shot)");
 
-    /* 2. Call the real il2cpp_init (goes through Dobby's trampoline) */
+    // call the original il2cpp_init function
     int result = il2cpp_init(domain_name);
-    { char buf[64]; snprintf(buf, sizeof(buf), "real il2cpp_init returned %d", result);
-      __android_log_write(ANDROID_LOG_ERROR, "FusionB", buf); }
 
-    /* 3. Set env vars for BepInEx —use libmain override paths */
-    const char *il2cppPath = libmain_get_override_il2cpp_path();
-    setenv("BEPINEX_GAME_ASSEMBLY_PATH", il2cppPath, 1);
-    setenv("NEXT_GAME_BINARY", il2cppPath, 1);
-    setenv("NEXT_BEPINEX_PATH", g_config.bepInExDir.c_str(), 1);
-    setenv("NEXT_GAME_DATA_DIR", g_config.unityDataDir.c_str(), 1);
-    setenv("NEXT_APP_DATA_DIR", g_config.appDataDir.c_str(), 1);
-    setenv("NEXT_UNITY_VERSION", g_config.unityVersion.c_str(), 1);
-    setenv("TMPDIR", g_config.appDataDir.c_str(), 1);
-    setenv("DOTNET_ReadyToRun", "0", 1);
-    setenv("DOTNET_EnableWriteXorExecute", "0", 1);
-    __android_log_write(ANDROID_LOG_ERROR, "FusionB", "env vars set");
+    if (runtime_config.initialized)
+    {
+        // setup environment variables
+        setenv("BEPINEX_GAME_ASSEMBLY_PATH", libmain_get_override_il2cpp_path(), 1);
+        setenv("NEXT_BEPINEX_PATH", runtime_config.bepInExDirectory.c_str(), 1);
+        setenv("NEXT_GAME_BINARY", libmain_get_override_il2cpp_path(), 1);
+        setenv("NEXT_GAME_DATA_DIR", runtime_config.unityDataDirectory.c_str(), 1);
+        setenv("NEXT_APP_DATA_DIR", runtime_config.appDataDirectory.c_str(), 1);
+        setenv("NEXT_UNITY_VERSION", runtime_config.unityVersion.c_str(), 1);
 
-    /* 4. Start CoreCLR + BepInEx */
-    __android_log_write(ANDROID_LOG_ERROR, "FusionB", "calling dotnet_start_runtime...");
-    dotnet_start_runtime();
+        const char *ssl_cert_path = "/apex/com.android.conscrypt/cacerts";
+        const char *backup_cert_path = "/system/etc/security/cacerts";
+        if (access(ssl_cert_path, R_OK) == 0) {
+            setenv("SSL_CERT_DIR", ssl_cert_path, 1);
+        } else if (access(backup_cert_path, R_OK) == 0) {
+            setenv("SSL_CERT_DIR", backup_cert_path, 1);
+        } else {
+            log(LogLevel::WARN, TAG, "No readable SSL cert file found; HTTPS requests may fail.");
+        }
+        const char *ssl_path = getenv("SSL_CERT_DIR");
+        const char *safe_ssl_path = ssl_path ? ssl_path : "(null)";
+        log_format(LogLevel::INFO, TAG, "Using {} for SSL certificates", safe_ssl_path);
 
-    __android_log_write(ANDROID_LOG_ERROR, "FusionB", "hook returning");
+        fs::path bepInExCoreDirectory = fs::path(runtime_config.bepInExDirectory) / "core";
+
+        DotNetConfig dotNetConfig;
+        dotNetConfig.runtimeDir = runtime_config.dotnetDirectory;
+        dotNetConfig.managedLibsDir = bepInExCoreDirectory.string();
+        dotNetConfig.entryPointAssembly = "BepInEx.Unity.IL2CPP";
+        dotNetConfig.entryPointType = "BepInEx.Unity.IL2CPP.NextCoreEntrypoint";
+        dotNetConfig.entryPointMethod = "Start";
+        dotNetConfig.IsMono = runtime_config.isIl2Cpp2Mono;
+        // set TMPDIR for MonoMod lib drops
+        setenv("TMPDIR", runtime_config.codeCacheDirectory.c_str(), 1);
+
+        // create AuxFolderPluginList
+        auto aux = runtime_config.auxiliaryPluginFolders;
+        int size = static_cast<int>(aux.size());
+        const char** pointerArray = new const char*[size];
+
+        for (int i = 0; i < size; i++) {
+            char* strCopy = new char[aux[i].length() + 1];
+            std::copy(aux[i].begin(), aux[i].end(), strCopy);
+            strCopy[aux[i].length()] = '\0';
+
+            pointerArray[i] = strCopy;
+        }
+
+        AuxPluginFolderList list{};
+        list.count = size;
+        list.folders = pointerArray;
+
+        // change working directory to fusion's scoped data directory
+        chdir(runtime_config.appDataDirectory.c_str());
+        dotnet_execute_assembly(dotNetConfig, &list);
+    }
+    else
+    {
+        log(LogLevel::WARN, TAG, "Native config not initialized. Skipping modloader initialization.");
+    }
+
+    log_format(LogLevel::INFO, TAG, "il2cpp_init returned: {}", result);
     return result;
 }
 
-// Public API
-
-extern "C" {
-
-bool fusion_stage_from_config_path(const char *configPath)
+extern "C" [[maybe_unused]] bool fusion_bootstrap_from_libmain(JNIEnv *env)
 {
-    LOGI("fusion_stage_from_config_path: %s", configPath);
-    g_configPath = configPath;
+    (void) env;
 
-    std::string content = read_file(configPath);
-    if (content.empty()) {
-        LOGE("Failed to read config: %s", configPath);
-        return false;
-    }
-    LOGI("Config (%zu bytes):\n%s", content.size(), content.c_str());
+    log(LogLevel::INFO, TAG, "BepInEx bootstrap starting...");
+    jobject javaConfig = get_fusion_config(env);
+    FusionConfig config = fusion_parse_config(env, javaConfig);
+    env->DeleteLocalRef(javaConfig);
 
-    FusionConfig config;
-    if (!parse_fusion_config(content.c_str(), &config)) {
-        LOGE("Failed to parse config");
+    log(LogLevel::INFO, TAG, "Executing BepInEx bootstrap from libmain namespace...");
+    if (!execute_fusion_config(config)) {
+        log(LogLevel::ERROR, TAG, "Failed to execute BepInEx bootstrap.");
         return false;
     }
 
-    return stage_fusion_config(config);
-}
-
-/*
- * Bootstrap the fusion chain.
- *
- * Called from libmain's load() AFTER libunity.so and libil2cpp.so
- * have been dlopen'd. Steps:
- *
- *   1. Initialize IL2CPP (dlopen with RTLD_GLOBAL 鈫?symbols visible for P/Invoke)
- *   2. Initialize SafeHook with IL2CPP handle/base
- *   3. Install one-shot DobbyHook on il2cpp_init
- *
- * NOTE: Code cave injection (allocate_setup_injected) is not yet
- * implemented. For now we rely on Dobby's own trampoline allocation.
- * The il2cpp_init function is large enough for Dobby to hook directly.
- */
-bool fusion_bootstrap_from_libmain(JNIEnv *env)
-{
-    if (!g_staged) {
-        LOGE("fusion_bootstrap called before staging!");
+    runtime_config = config;
+    auto il2cpp_path = libmain_get_override_il2cpp_path();
+    if (!il2cpp_initialize(il2cpp_path))
+    {
+        log_format(LogLevel::ERROR, TAG, "Failed to initialize il2cpp with path: {}", il2cpp_path);
+        return false;
+    }
+    if(runtime_config.isIl2Cpp2Mono){
+        setLoadingState(false);
+        log(LogLevel::WARN, TAG, "BepInEx is currently disabled in il2cpp2mono.");
+        return true;
+    }
+    // Pool placement and library bounds must be trustworthy before any hooking.
+    const uintptr_t pool_base = get_injected_pool_base();
+    const uintptr_t il2cpp_base = il2cpp_get_library_base();
+    if (pool_base == 0 || il2cpp_base == 0 || pool_base <= il2cpp_base)
+    {
+        log_format(LogLevel::ERROR, TAG,
+                   "Invalid pool/library base relationship! pool=0x{:X}, il2cpp=0x{:X}",
+                   pool_base, il2cpp_base);
         return false;
     }
 
-    LOGI("=== fusion_bootstrap_from_libmain ===");
-
-    /* 1. Hook libunity to prevent null method crashes */
-    const char *unityPath = libmain_get_override_unity_path();
-    const char *il2cppPath = libmain_get_override_il2cpp_path();
-    LOGI("unity path: %s", unityPath);
-    LOGI("il2cpp path: %s", il2cppPath);
-
-    if (!try_hook_libunity(unityPath, unityPath)) {
-        LOGW("try_hook_libunity failed —continuing anyway");
-    }
-
-    /* 2. Initialize IL2CPP —dlopen libil2cpp.so with RTLD_GLOBAL */
-
-    if (!il2cpp_initialize(il2cppPath)) {
-        LOGE("il2cpp_initialize failed");
+    // plain integer subtraction (pool sits directly above the library image)
+    const size_t library_size = pool_base - il2cpp_base;
+    constexpr size_t kMaxPlausibleLibrarySize = 512ull * 1024 * 1024;
+    if (library_size > kMaxPlausibleLibrarySize)
+    {
+        log_format(LogLevel::ERROR, TAG,
+                   "Implausible library size 0x{:X}; refusing to initialize SafeHook",
+                   library_size);
         return false;
     }
-    allocate_bind_loaded(il2cpp_get_handle());
 
-    /* 3. Initialize SafeHook with injected code cave allocator */
-    void *il2cppHandle = il2cpp_get_handle();
-    uintptr_t il2cppBase = il2cpp_get_library_base();
-
-    /*
-     * Pass allocate_injected as the trampoline allocator.
-     * This ensures Dobby trampolines are allocated within the patched
-     * libil2cpp.so's code cave (bypassing Android W^X).
-     */
-    if (!safehook_initialize(il2cppHandle, il2cppBase, allocate_injected)) {
-        LOGE("safehook_initialize failed");
+    if (!safehook_initialize(il2cpp_get_handle(), il2cpp_base, library_size, allocate_injected))
+    {
+        log(LogLevel::ERROR, TAG, "Failed to initialize SafeHook");
         return false;
     }
-    LOGI("SafeHook initialized");
 
-    /* 4. Install il2cpp_init hook (one-shot, will fire when Unity calls il2cpp_init) */
-    il2cpp_install_init_hook(reinterpret_cast<void *>(il2cpp_init_hook));
-
-    LOGI("Fusion bootstrap complete —waiting for il2cpp_init...");
+    log(LogLevel::INFO, TAG, "Installing il2cpp hooks...");
+    il2cpp_install_init_hook(il2cpp_init_hook);
+    log(LogLevel::INFO, TAG, "il2cpp hooks installed successfully!");
+    log(LogLevel::INFO, TAG, "BepInEx bootstrap finished successfully.");
     return true;
 }
 
-} /* extern "C" */

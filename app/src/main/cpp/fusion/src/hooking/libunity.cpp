@@ -1,125 +1,82 @@
-/*
- * BepInEx.Android — libunity.so hooks
- *
- * Hooks scripting_method_invoke so that a null scripting method pointer
- * from an unstripped libunity does not crash the game.
- */
-
-#include "fusion.h"
-#include "utilities/elf.h"
-#include "dobby.h"
+// Copyright (c) 2026 XtraCube
+#include <hooking/libunity.h>
 #include <dlfcn.h>
+#include <external/dobby.h>
+#include <logger.h>
+#include <utilities/elf.h>
+#include <utilities/library.h>
+#include <utilities/tools.h>
 #include <filesystem>
-#include <string>
-#include <android/log.h>
+#include <fstream>
 
 #define TAG "LibUnityHook"
-#define LOGI(...) __android_log_print(ANDROID_LOG_INFO, TAG, __VA_ARGS__)
-#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, TAG, __VA_ARGS__)
 
 namespace fs = std::filesystem;
 
-using scripting_method_invoke_fn = void* (*)(void* method, void* obj,
-                                              void* args, void* exc, bool something);
+using scripting_method_invoke_fn = void* (*)(void* method, void* obj, void* args, void* exc, bool);
+scripting_method_invoke_fn original_scripting_method_invoke = nullptr;
 
-static scripting_method_invoke_fn g_original_scripting_method_invoke = nullptr;
-
-static void* scripting_method_invoke_hook(void* method, void* obj,
-                                           void* args, void* exc, bool something)
-{
+// this hook prevents crashes from unstripped libunity failing to resolve scripting methods
+void* scripting_method_invoke_hook(void* method, void* obj, void* args, void* exc, bool something) {
     if (!method) {
         return nullptr;
     }
-    return g_original_scripting_method_invoke(method, obj, args, exc, something);
+
+    return original_scripting_method_invoke(method, obj, args, exc, something);
 }
+void try_hook_libunity(std::string &libUnityPath, const std::string &fallbackLibUnityPath) {
 
-/* scripting_method_invoke is LOCAL HIDDEN — absent from .dynsym, so dlsym
- * cannot see it. Read its RVA out of the companion libunity.sym.so instead. */
-static uintptr_t resolve_module_base(const char* path)
-{
-    void* handle = dlopen(path, RTLD_NOLOAD | RTLD_LAZY);
-    if (!handle) {
-        handle = dlopen(path, RTLD_NOW | RTLD_LOCAL);
-    }
-    if (!handle) return 0;
-
-    void* sym = dlsym(handle, "JNI_OnLoad");
-    if (!sym) return 0;
-
-    Dl_info info{};
-    if (!dladdr(sym, &info) || !info.dli_fbase) return 0;
-
-    return reinterpret_cast<uintptr_t>(info.dli_fbase);
-}
-
-// Public API
-
-extern "C" {
-
-bool try_hook_libunity(const char *libUnityPath, const char *fallbackLibUnityPath)
-{
-    LOGI("try_hook_libunity: %s", libUnityPath);
-
-    /* Prefer an already-loaded libunity (loaded by NativeLoader). Extra
-     * RTLD_NOW dlopen during UnityPlayer construction crashes some games. */
-    void *handle = dlopen(libUnityPath, RTLD_NOW | RTLD_NOLOAD);
-    if (!handle) {
-        handle = dlopen(libUnityPath, RTLD_LAZY | RTLD_GLOBAL);
-    }
-    if (!handle && fallbackLibUnityPath) {
-        handle = dlopen(fallbackLibUnityPath, RTLD_NOW | RTLD_NOLOAD);
-        if (!handle) {
-            handle = dlopen(fallbackLibUnityPath, RTLD_LAZY | RTLD_GLOBAL);
-        }
-    }
-    if (!handle) {
-        LOGE("Failed to dlopen libunity.so: %s", dlerror());
-        return false;
+    // should never be closed
+    void *handle = dlopen(libUnityPath.c_str(), RTLD_NOW | RTLD_GLOBAL);
+    if (!handle)
+    {
+        log_format(LogLevel::ERROR, TAG,
+                   "Failed to load libunity for hooking: {}. Error: {}",
+                   libUnityPath.c_str(), safe_dlerror());
+        return;
     }
 
-    /* The shipped libunity is stripped; symbols live in the companion .sym.so. */
-    fs::path sym_path = fs::path(libUnityPath);
-    sym_path.replace_extension("sym.so");
-    if (!fs::exists(sym_path)) {
-        LOGE("libunity.sym.so not found at %s", sym_path.c_str());
-        return false;
+    fs::path libunity_path(libUnityPath);
+    fs::path sym_path = libunity_path.replace_extension("sym.so");
+    if (!fs::exists(libunity_path) || !fs::exists(sym_path))
+    {
+        log_format(LogLevel::ERROR, TAG, "Failed to find libunity or libunity.sym.so at {}", libUnityPath.c_str());
+        return;
     }
 
-    const char *mangled =
-        "_Z23scripting_method_invoke18ScriptingMethodPtr18ScriptingObjectPtr"
-        "R18ScriptingArgumentsP21ScriptingExceptionPtrb";
+    log_format(LogLevel::INFO, TAG, "Found libunity at {}", libUnityPath.c_str());
+    log_format(LogLevel::INFO, TAG, "Found libunity.sym.so at {}", sym_path.c_str());
 
-    uintptr_t rva = get_rva_from_sym_file(sym_path.c_str(), mangled);
-    if (rva == 0) {
-        LOGE("scripting_method_invoke not found in %s", sym_path.c_str());
-        return false;
+    uintptr_t rva = get_rva_from_sym_file(sym_path.c_str(),
+                                          "_Z23scripting_method_invoke18ScriptingMethodPtr18ScriptingObjectPtrR18ScriptingArgumentsP21ScriptingExceptionPtrb");
+    if (rva == 0)
+    {
+        libUnityPath = fallbackLibUnityPath;
+        log(LogLevel::ERROR, TAG, "Failed to find scripting_method_invoke in libunity.sym.so");
+        return;
     }
 
-    uintptr_t base = resolve_module_base(libUnityPath);
-    if (base == 0 && fallbackLibUnityPath) {
-        base = resolve_module_base(fallbackLibUnityPath);
-    }
+    uintptr_t base = get_module_base(libUnityPath.c_str());
     if (base == 0) {
-        LOGE("Failed to resolve libunity base address");
-        return false;
+        libUnityPath = fallbackLibUnityPath;
+        log(LogLevel::ERROR, TAG, "Failed to find base address of libunity");
+        return;
     }
 
     void *target = reinterpret_cast<void *>(base + rva);
-    LOGI("scripting_method_invoke @ %p (base=%p, rva=0x%zx)",
-         target, reinterpret_cast<void *>(base), rva);
-
-    int ret = DobbyHook(
-        target,
-        reinterpret_cast<void *>(scripting_method_invoke_hook),
-        reinterpret_cast<void **>(&g_original_scripting_method_invoke));
-
-    if (ret != 0) {
-        LOGE("DobbyHook scripting_method_invoke failed: %d", ret);
-        return false;
+    log_format(LogLevel::INFO, TAG, "Found scripting_method_invoke at 0x{:x}", base + rva);
+    if (
+            DobbyHook(target,
+                      reinterpret_cast<dobby_dummy_func_t>(scripting_method_invoke_hook),
+                      reinterpret_cast<dobby_dummy_func_t *>(&original_scripting_method_invoke))
+            == 0)
+    {
+        log(LogLevel::INFO, TAG, "Successfully hooked scripting_method_invoke");
     }
-
-    LOGI("scripting_method_invoke hook installed");
-    return true;
+    else
+    {
+        log(LogLevel::ERROR, TAG, "Failed to hook scripting_method_invoke");
+        // reset libunity path
+        libUnityPath = fallbackLibUnityPath;
+    }
 }
-
-} /* extern "C" */
