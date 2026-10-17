@@ -6,7 +6,8 @@ import java.io.RandomAccessFile
 /** Reads the Unity editor version embedded in common Unity data files. */
 object UnityVersionLookup {
     private const val MAX_VERSION_LENGTH = 32
-    private val versionPattern = Regex("^\\d+\\.\\d+\\.\\d+(?:[abcfp]\\d+|rc\\d+)?$")
+    // Matches "2022.3.62", "2022.3.62f2", "2022.3.62f1c1" (China suffix) and "2022.2.0b1".
+    private val versionPattern = Regex("^\\d+\\.\\d+\\.\\d+(?:[abcfp]\\d+(?:c\\d+)?|rc\\d+)?$")
 
     private val candidates = linkedMapOf(
         "globalgamemanagers" to intArrayOf(0x14, 0x30),
