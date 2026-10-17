@@ -13,20 +13,23 @@ import java.util.concurrent.FutureTask
 /**
  * Downloads unstripped libunity.so from NextBep/AndroidNativeLibraries.
  *
- * Downloads the unstripped libunity for a game. The unstripped
- * libunity contains debug symbols that make stack traces readable.
+ * Assets are published as GitHub releases — one release per full Unity version
+ * tag (e.g. "2022.3.62f2"), holding per-ABI assets "libunity.so.{abi}" and
+ * "libunity.sym.so.{abi}". The unstripped libunity contains debug symbols that
+ * make stack traces readable; the .sym.so companion is required by the native
+ * LibUnityHook to patch scripting_method_invoke whenever the unstripped
+ * library is used.
  *
- * Downloads both libunity.so and libunity.sym.so companion.
  * Uses atomic download (temp file + rename) to prevent corruption.
  * Cache metadata stored in cache.properties alongside files.
  */
 object LibUnityDownloader {
 
     private const val TAG = "LibUnityDownloader"
-    private const val RAW_BASE_URL =
-        "https://raw.githubusercontent.com/NextBep/AndroidNativeLibraries/main/"
-    private const val PROXY_BASE_URL =
-        "https://gh-proxy.org/https://raw.githubusercontent.com/NextBep/AndroidNativeLibraries/main/"
+    private const val RELEASES_BASE_URL =
+        "https://github.com/NextBep/AndroidNativeLibraries/releases/download/"
+    private const val PROXY_RELEASES_BASE_URL =
+        "https://gh-proxy.org/https://github.com/NextBep/AndroidNativeLibraries/releases/download/"
     private const val MIN_LIB_SIZE = 1024 * 1024 // 1 MB minimum for valid libunity
     private const val MIN_SYM_SIZE = 1024        // 1 KB minimum for sym file
     private const val CACHE_META_FILE = "cache.properties"
@@ -68,7 +71,7 @@ object LibUnityDownloader {
 
     /**
      * Core download logic. Downloads libunity.so and libunity.sym.so atomically.
-     * Uses dual sources (raw GitHub + gh-proxy.org) with ELF validation.
+     * Uses dual sources (GitHub releases + gh-proxy.org) with ELF validation.
      */
     fun downloadAndCache(
         outputDir: File,
@@ -95,28 +98,33 @@ object LibUnityDownloader {
             return false
         }
 
-        val normalizedVersion = normalizeVersion(version)
+        // Release tag = full Unity version (e.g. "2022.3.62f2"); the cache is keyed on
+        // the full version so a game patch update triggers a fresh download.
+        val versionTag = version.trim()
 
         val libFile = File(outputDir, "libunity.so")
         val symFile = File(outputDir, "libunity.sym.so")
         val cacheMetaFile = File(outputDir, CACHE_META_FILE)
 
-        val cacheKey = "$normalizedVersion|$normalizedAbi"
+        val cacheKey = "$versionTag|$normalizedAbi"
         if (isCachedLibUnityValid(libFile, symFile, cacheMetaFile, cacheKey)) {
             BepInExLog.i("$TAG: Using cached libunity ($cacheKey) at ${outputDir.absolutePath}")
             notifyFinished(listener, true, true)
             return true
         }
 
-        val sources = listOf(
-            "${RAW_BASE_URL}${normalizedVersion}/${normalizedAbi}",
-            "${PROXY_BASE_URL}${normalizedVersion}/${normalizedAbi}"
+        val libUrls = listOf(
+            "${RELEASES_BASE_URL}${versionTag}/libunity.so.${normalizedAbi}",
+            "${PROXY_RELEASES_BASE_URL}${versionTag}/libunity.so.${normalizedAbi}"
+        )
+        val symUrls = listOf(
+            "${RELEASES_BASE_URL}${versionTag}/libunity.sym.so.${normalizedAbi}",
+            "${PROXY_RELEASES_BASE_URL}${versionTag}/libunity.sym.so.${normalizedAbi}"
         )
 
         // Download libunity.so
         var libDownloaded = false
-        for (baseUrl in sources) {
-            val url = "$baseUrl/libunity.so"
+        for (url in libUrls) {
             if (downloadFileAtomic(libFile, url, listener)) {
                 if (isValidElf(libFile)) {
                     libDownloaded = true
@@ -135,18 +143,26 @@ object LibUnityDownloader {
             return false
         }
 
-        // Download libunity.sym.so companion (best effort)
-        for (baseUrl in sources) {
-            val url = "$baseUrl/libunity.sym.so"
+        // Download libunity.sym.so companion (required — the native LibUnityHook needs it
+        // to patch scripting_method_invoke before the unstripped libunity can be used)
+        var symDownloaded = false
+        for (url in symUrls) {
             if (downloadFileAtomic(symFile, url, listener)) {
                 if (symFile.length() > MIN_SYM_SIZE) {
+                    symDownloaded = true
                     BepInExLog.i("$TAG: libunity.sym.so downloaded (${formatSize(symFile.length())})")
+                    break
                 } else {
-                    BepInExLog.w("$TAG: libunity.sym.so too small, discarding")
+                    BepInExLog.w("$TAG: libunity.sym.so too small — trying next source")
                     symFile.delete()
                 }
-                break
             }
+        }
+        if (!symDownloaded) {
+            BepInExLog.w("$TAG: Failed to download libunity.sym.so from all sources — unstripped libunity cannot be used without it")
+            symFile.delete()
+            notifyFinished(listener, false, false)
+            return false
         }
 
         // Write cache metadata
@@ -154,7 +170,7 @@ object LibUnityDownloader {
             Properties().apply {
                 setProperty("cacheKey", cacheKey)
                 setProperty("version", version)
-                setProperty("normalizedVersion", normalizedVersion)
+                setProperty("versionTag", versionTag)
                 setProperty("abi", normalizedAbi)
                 setProperty("libunitySize", libFile.length().toString())
                 setProperty("libunitySymSize", if (symFile.exists()) symFile.length().toString() else "0")
