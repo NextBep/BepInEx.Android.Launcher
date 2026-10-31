@@ -573,6 +573,13 @@ fun BepInExNavHost(
                                 },
                                 isSwitchingModpack = isSwitchingModpack,
                                 onExportLogs = onExportLogs,
+                                onGameSettings = {
+                                    selectedGame?.let { game ->
+                                        navController.navigate(
+                                            NavRoutes.gameSettings(game.packageName, game.label)
+                                        )
+                                    }
+                                },
                                 onShowAnnouncement = onShowAnnouncement,
                                 showIncompleteBanner = showIncompleteBanner
                             )
@@ -679,11 +686,7 @@ fun BepInExNavHost(
                                 )
                             }
                             2 -> {
-                                val packageName = selectedGame?.packageName ?: ""
                                 val settingsContext = LocalContext.current
-                                var useUnstrippedLibUnity by remember {
-                                    mutableStateOf(AppSettings.isUseUnstrippedLibUnity(settingsContext))
-                                }
                                 var dynamicColorSetting by remember {
                                     mutableStateOf(AppSettings.isDynamicColorEnabled(settingsContext))
                                 }
@@ -695,15 +698,7 @@ fun BepInExNavHost(
                                     language = language,
                                     dynamicColor = dynamicColorSetting,
                                     animationDisabled = animationDisabledSetting,
-                                    useUnstrippedLibUnity = useUnstrippedLibUnity,
                                     onNavigateToAbout = { navController.navigate(NavRoutes.ABOUT) },
-                                    onNavigateToGameSettings = {
-                                        selectedGame?.let { game ->
-                                            navController.navigate(
-                                                NavRoutes.gameSettings(game.packageName, game.label)
-                                            )
-                                        }
-                                    },
                                     onThemeChanged = onThemeChanged,
                                     onLanguageChanged = onLanguageChanged,
                                     onDynamicColorChanged = { enabled ->
@@ -715,14 +710,6 @@ fun BepInExNavHost(
                                         AppSettings.setAnimationDisabled(settingsContext, disabled)
                                         animationDisabledSetting = disabled
                                     },
-                                    onUseUnstrippedLibUnityChanged = { enabled ->
-                                        AppSettings.setUseUnstrippedLibUnity(settingsContext, enabled)
-                                        useUnstrippedLibUnity = enabled
-                                    },
-                                    onClearBepInEx = { onClearBepInEx(packageName) },
-                                    onClearDotnet = { onClearDotnet(packageName) },
-                                    onClearLibUnity = { onClearLibUnity(packageName) },
-                                    onCopyGameResources = { onCopyGameResources(packageName) },
                                     isLanguageIncompleteShown = AppSettings.isLanguageIncompleteShown(settingsContext),
                                     onLanguageIncompleteShown = { AppSettings.setLanguageIncompleteShown(settingsContext, true) }
                                 )

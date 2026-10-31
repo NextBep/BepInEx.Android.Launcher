@@ -21,18 +21,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.ColorLens
-import androidx.compose.material.icons.outlined.ContentCopy
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.DeleteForever
-import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Animation
-import androidx.compose.material.icons.outlined.Tune
-import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -41,8 +34,6 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -63,14 +54,7 @@ import com.bepinex.android.settings.AppSettings
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private enum class MaintenanceAction {
-    CLEAR_BEPINEX,
-    CLEAR_DOTNET,
-    CLEAR_LIBUNITY,
-    COPY_RESOURCES
-}
-
-/** Settings screen with appearance, in-game options, and maintenance actions. */
+/** Settings screen with appearance options and an About entry. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
@@ -78,47 +62,23 @@ fun SettingsScreen(
     language: AppSettings.Language,
     dynamicColor: Boolean,
     animationDisabled: Boolean,
-    useUnstrippedLibUnity: Boolean,
     onNavigateToAbout: () -> Unit,
     onThemeChanged: (AppSettings.ThemeMode) -> Unit,
     onLanguageChanged: (AppSettings.Language) -> Unit,
     onDynamicColorChanged: (Boolean) -> Unit,
     onAnimationDisabledChanged: (Boolean) -> Unit,
-    onUseUnstrippedLibUnityChanged: (Boolean) -> Unit,
-    onClearBepInEx: () -> Unit,
-    onClearDotnet: () -> Unit,
-    onClearLibUnity: () -> Unit,
-    onCopyGameResources: () -> Unit,
     isLanguageIncompleteShown: Boolean,
-    onLanguageIncompleteShown: () -> Unit,
-    onNavigateToGameSettings: (() -> Unit)? = null
+    onLanguageIncompleteShown: () -> Unit
 ) {
     var showThemeDialog by remember { mutableStateOf(false) }
     var showLanguageDialog by remember { mutableStateOf(false) }
     var showAnimationRestartDialog by remember { mutableStateOf(false) }
     var pendingAnimationValue by remember { mutableStateOf(false) }
-    var maintenanceAction by remember { mutableStateOf<MaintenanceAction?>(null) }
-    val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    val context = androidx.compose.ui.platform.LocalContext.current
-
-    val completedMessage = stringResource(R.string.done)
-
-    fun reportMaintenanceAction(action: MaintenanceAction) {
-        when (action) {
-            MaintenanceAction.CLEAR_BEPINEX -> onClearBepInEx()
-            MaintenanceAction.CLEAR_DOTNET -> onClearDotnet()
-            MaintenanceAction.CLEAR_LIBUNITY -> onClearLibUnity()
-            MaintenanceAction.COPY_RESOURCES -> onCopyGameResources()
-        }
-        maintenanceAction = null
-        scope.launch { snackbarHostState.showSnackbar(completedMessage) }
-    }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.settings_title)) },
@@ -189,68 +149,7 @@ fun SettingsScreen(
                 )
             }
 
-            item { SettingsSectionHeader(stringResource(R.string.settings_section_ingame)) }
-            item {
-                SettingListItem(
-                    title = stringResource(R.string.settings_unstripped_libunity),
-                    summary = stringResource(R.string.settings_unstripped_libunity_desc),
-                    icon = { Icon(Icons.Outlined.Code, contentDescription = null) },
-                    trailing = {
-                        Switch(
-                            checked = useUnstrippedLibUnity,
-                            onCheckedChange = { checked -> onUseUnstrippedLibUnityChanged(checked) }
-                        )
-                    },
-                    onClick = { onUseUnstrippedLibUnityChanged(!useUnstrippedLibUnity) }
-                )
-            }
-
-            item { SettingsSectionHeader(stringResource(R.string.settings_section_maintenance)) }
-            item {
-                MaintenanceItem(
-                    title = stringResource(R.string.settings_clear_bepinex),
-                    summary = stringResource(R.string.settings_clear_bepinex_desc),
-                    icon = Icons.Outlined.DeleteForever,
-                    onClick = { maintenanceAction = MaintenanceAction.CLEAR_BEPINEX }
-                )
-            }
-            item {
-                MaintenanceItem(
-                    title = stringResource(R.string.settings_clear_dotnet),
-                    summary = stringResource(R.string.settings_clear_dotnet_desc),
-                    icon = Icons.Outlined.Delete,
-                    onClick = { maintenanceAction = MaintenanceAction.CLEAR_DOTNET }
-                )
-            }
-            item {
-                MaintenanceItem(
-                    title = stringResource(R.string.settings_clear_libunity),
-                    summary = stringResource(R.string.settings_clear_libunity_desc),
-                    icon = Icons.Outlined.Delete,
-                    onClick = { maintenanceAction = MaintenanceAction.CLEAR_LIBUNITY }
-                )
-            }
-            item {
-                SettingListItem(
-                    title = stringResource(R.string.settings_copy_resources),
-                    summary = stringResource(R.string.settings_copy_resources_desc),
-                    icon = { Icon(Icons.Outlined.ContentCopy, contentDescription = null) },
-                    onClick = { maintenanceAction = MaintenanceAction.COPY_RESOURCES }
-                )
-            }
-
             item { SettingsSectionHeader(stringResource(R.string.settings_about)) }
-            onNavigateToGameSettings?.let { navigateToGameSettings ->
-                item {
-                    SettingListItem(
-                        title = stringResource(R.string.game_settings_title),
-                        summary = stringResource(R.string.game_settings_desc),
-                        icon = { Icon(Icons.Outlined.Tune, contentDescription = null) },
-                        trailing = { Icon(Icons.Filled.ChevronRight, contentDescription = null) },
-                        onClick = navigateToGameSettings
-                    )
-                }
-            }
             item {
                 SettingListItem(
                     title = stringResource(R.string.settings_about),
@@ -318,42 +217,6 @@ fun SettingsScreen(
             }
         )
     }
-
-    maintenanceAction?.let { action ->
-        val dialog = maintenanceDialog(action)
-        AlertDialog(
-            onDismissRequest = { maintenanceAction = null },
-            title = { Text(stringResource(dialog.title)) },
-            text = { Text(stringResource(dialog.message)) },
-            confirmButton = {
-                TextButton(onClick = { reportMaintenanceAction(action) }) {
-                    Text(
-                        stringResource(R.string.confirm_yes),
-                        color = if (dialog.destructive) MaterialTheme.colorScheme.error
-                        else MaterialTheme.colorScheme.primary
-                    )
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { maintenanceAction = null }) {
-                    Text(stringResource(R.string.confirm_no))
-                }
-            }
-        )
-    }
-}
-
-private data class MaintenanceDialog(
-    val title: Int,
-    val message: Int,
-    val destructive: Boolean
-)
-
-private fun maintenanceDialog(action: MaintenanceAction) = when (action) {
-    MaintenanceAction.CLEAR_BEPINEX -> MaintenanceDialog(R.string.confirm_clear_bepinex_title, R.string.confirm_clear_bepinex_msg, true)
-    MaintenanceAction.CLEAR_DOTNET -> MaintenanceDialog(R.string.confirm_clear_dotnet_title, R.string.confirm_clear_dotnet_msg, true)
-    MaintenanceAction.CLEAR_LIBUNITY -> MaintenanceDialog(R.string.confirm_clear_libunity_title, R.string.confirm_clear_libunity_msg, true)
-    MaintenanceAction.COPY_RESOURCES -> MaintenanceDialog(R.string.confirm_copy_resources_title, R.string.confirm_copy_resources_msg, false)
 }
 
 @Composable
@@ -400,21 +263,6 @@ private fun SettingListItem(
 
         trailingContent = trailing,
         modifier = Modifier.fillMaxWidth().clickable(onClick = onClick)
-    )
-}
-
-@Composable
-private fun MaintenanceItem(
-    title: String,
-    summary: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
-    onClick: () -> Unit
-) {
-    SettingListItem(
-        title = title,
-        summary = summary,
-        icon = { Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.error) },
-        onClick = onClick
     )
 }
 

@@ -39,6 +39,7 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Announcement
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.SearchOff
+import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -95,6 +96,7 @@ fun GameScreen(
     onRescan: () -> Unit,
     onLaunch: () -> Unit,
     onExportLogs: () -> Unit,
+    onGameSettings: () -> Unit = {},
     onShowAnnouncement: () -> Unit = {},
     showIncompleteBanner: Boolean = false,
     isSwitchingModpack: Boolean = false
@@ -252,6 +254,7 @@ fun GameScreen(
                             activeModpackEnabledCount = activeModpackEnabledCount,
                             activeModpackModCount = activeModpackModCount,
                             onLaunch = onLaunch,
+                            onGameSettings = onGameSettings,
                             isSwitchingModpack = isSwitchingModpack
                         )
                     }
@@ -404,6 +407,7 @@ private fun SelectedGameCard(
     activeModpackEnabledCount: Int,
     activeModpackModCount: Int,
     onLaunch: () -> Unit,
+    onGameSettings: () -> Unit,
     isSwitchingModpack: Boolean = false
 ) {
     Card(
@@ -462,6 +466,7 @@ private fun SelectedGameCard(
                     hasError = extractionError != null,
                     modifier = Modifier.weight(1f)
                 )
+                GameSettingsButton(onClick = onGameSettings)
             }
 
             AnimatedVisibility(visible = isExtracting) {
@@ -541,6 +546,38 @@ private fun SelectedGameActions(
                 }
             ),
             style = MaterialTheme.typography.titleMedium
+        )
+    }
+}
+
+
+@Composable
+private fun GameSettingsButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val capsule = RoundedCornerShape(50)
+    FilledTonalButton(
+        onClick = onClick,
+        modifier = modifier.height(40.dp),
+        shape = capsule,
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 0.dp),
+        colors = ButtonDefaults.filledTonalButtonColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+        )
+    ) {
+        Icon(
+            imageVector = Icons.Outlined.Tune,
+            contentDescription = stringResource(R.string.game_settings_title),
+            modifier = Modifier.size(18.dp)
+        )
+        Spacer(Modifier.width(6.dp))
+        Text(
+            text = stringResource(R.string.game_settings_title),
+            style = MaterialTheme.typography.labelLarge,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
