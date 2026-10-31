@@ -469,7 +469,14 @@
     <string name="ok">OK</string>
     <string name="back">Back</string>
     <string name="close">Close</string>
-    <string name="loading">Loading…</string>
+    <string name="loading">載入中…</string>
+    <string name="loader_preloader">正在執行預載器…</string>
+    <string name="loader_initialized_chainloader">正在初始化鏈式載入器…</string>
+    <string name="loader_running_chainloader">正在執行鏈式載入器…</string>
+    <string name="loader_loading_plugin">正在載入 %1$s</string>
+    <string name="loader_downloading_unity_assemblies">正在下載 Unity 組件…</string>
+    <string name="loader_running_cpp2il">正在執行 Cpp2IL…</string>
+    <string name="loader_generating_interop">正在產生 IL2CPP 互通檔案…</string>
     <string name="error">Error</string>
     <string name="done">Done</string>
     <string name="share_saved">Message saved, switch back to game</string>

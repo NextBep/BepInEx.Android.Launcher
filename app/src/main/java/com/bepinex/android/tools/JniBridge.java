@@ -42,8 +42,12 @@ public class JniBridge {
                 return;
             }
 
-            view.setText(text);
-            Log.i(TAG, "Set loading text to "+text);
+            // The managed runtime always emits English status messages; translate them to
+            // the language selected in the launcher so the overlay follows the app language.
+            final String localized = LoaderText.localize(view.getContext(), text);
+
+            view.setText(localized);
+            Log.i(TAG, "Set loading text to "+localized);
 
             // reset timer
             if (timerRunnable != null) {
@@ -62,7 +66,7 @@ public class JniBridge {
                     String timeString = String.format(Locale.getDefault(),
                             " (%02d:%02d)", minutes, seconds);
 
-                    view.setText(text + timeString);
+                    view.setText(localized + timeString);
 
                     handler.postDelayed(this, 1000);
                 }

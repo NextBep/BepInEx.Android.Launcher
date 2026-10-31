@@ -470,6 +470,13 @@
     <string name="back">返回</string>
     <string name="close">关闭</string>
     <string name="loading">加载中…</string>
+    <string name="loader_preloader">正在运行预加载器…</string>
+    <string name="loader_initialized_chainloader">正在初始化链式加载器…</string>
+    <string name="loader_running_chainloader">正在运行链式加载器…</string>
+    <string name="loader_loading_plugin">正在加载 %1$s</string>
+    <string name="loader_downloading_unity_assemblies">正在下载 Unity 程序集…</string>
+    <string name="loader_running_cpp2il">正在运行 Cpp2IL…</string>
+    <string name="loader_generating_interop">正在生成 IL2CPP 互操作文件…</string>
     <string name="error">错误</string>
     <string name="done">完成</string>
     <string name="share_saved">消息已保存，切回游戏继续</string>

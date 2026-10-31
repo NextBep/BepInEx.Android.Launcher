@@ -496,6 +496,13 @@
     <string name="back">Back</string>
     <string name="close">Close</string>
     <string name="loading">Loading…</string>
+    <string name="loader_preloader">Running Preloader…</string>
+    <string name="loader_initialized_chainloader">Initializing Chainloader…</string>
+    <string name="loader_running_chainloader">Running Chainloader…</string>
+    <string name="loader_loading_plugin">Loading %1$s</string>
+    <string name="loader_downloading_unity_assemblies">Downloading Unity assemblies…</string>
+    <string name="loader_running_cpp2il">Running Cpp2IL…</string>
+    <string name="loader_generating_interop">Generating IL2CPP interop files…</string>
     <string name="error">Error</string>
     <string name="done">Done</string>
     <string name="share_saved">Message saved, switch back to game</string>
