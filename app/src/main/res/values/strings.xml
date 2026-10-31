@@ -12,7 +12,7 @@
     <string name="nav_about">About</string>
 
     <!-- Game Detection -->
-    <string name="scan_title">PlantsVsZombiesRH</string>
+    <string name="scan_title">Detected Games</string>
     <string name="scanning">Checking PlantsVsZombiesRH…</string>
     <string name="no_games_found">PlantsVsZombiesRH Not Found</string>
     <string name="no_games_hint">Install Plants vs. Zombies: Fusion, then tap Rescan. The package name is com.LanPiaoPiao.PlantsVsZombiesRH.</string>
@@ -458,6 +458,14 @@
     <string name="log_filter_errors">Errors</string>
     <string name="log_filter_warnings">Warnings</string>
     <string name="log_auto_scroll">Auto-scroll</string>
+
+    <!-- In-Game Floating Log Overlay -->
+    <string name="log_overlay_channel_name">BepInEx Log Overlay</string>
+    <string name="log_overlay_channel_desc">Shown while the in-game floating log is active</string>
+    <string name="log_overlay_notification_text">Floating log active — tap to return to game</string>
+    <string name="log_overlay_share_chooser">Share Log</string>
+    <string name="log_overlay_share_subject">BepInEx Log - %1$s</string>
+    <string name="log_overlay_open">Open log</string>
 
     <!-- Storage Permission -->
     <string name="storage_permission_title">Storage Permission Required</string>

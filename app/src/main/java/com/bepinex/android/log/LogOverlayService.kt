@@ -15,6 +15,7 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
+import com.bepinex.android.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -60,6 +61,9 @@ class LogOverlayService : Service() {
     private var overlayView: View? = null
     private var scope: CoroutineScope? = null
     private var currentPackageName: String? = null
+
+    /** Launcher resources in the user-selected language. */
+    private val res: Context by lazy { LogText.launcherContext(this) }
 
     companion object {
         private const val TAG = "LogOverlayService"
@@ -116,10 +120,10 @@ class LogOverlayService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                "BepInEx Log Overlay",
+                res.getString(R.string.log_overlay_channel_name),
                 NotificationManager.IMPORTANCE_LOW
             ).apply {
-                description = "Shows when BepInEx floating log is active in-game"
+                description = res.getString(R.string.log_overlay_channel_desc)
             }
             getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
         }
@@ -133,8 +137,8 @@ class LogOverlayService : Service() {
         )
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Notification.Builder(this, CHANNEL_ID)
-                .setContentTitle("BepInEx Log")
-                .setContentText("Floating log active  -- tap to return to game")
+                .setContentTitle(res.getString(R.string.log_title))
+                .setContentText(res.getString(R.string.log_overlay_notification_text))
                 .setSmallIcon(android.R.drawable.ic_menu_edit)
                 .setContentIntent(pendingIntent)
                 .setOngoing(true)
@@ -142,8 +146,8 @@ class LogOverlayService : Service() {
         } else {
             @Suppress("DEPRECATION")
             Notification.Builder(this)
-                .setContentTitle("BepInEx Log")
-                .setContentText("Floating log active")
+                .setContentTitle(res.getString(R.string.log_title))
+                .setContentText(res.getString(R.string.log_overlay_notification_text))
                 .setSmallIcon(android.R.drawable.ic_menu_edit)
                 .setContentIntent(pendingIntent)
                 .setOngoing(true)
@@ -241,13 +245,13 @@ class LogOverlayService : Service() {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            "BepInEx Log",
+                            res.getString(R.string.log_title),
                             color = Color.White,
                             fontSize = 14.sp,
                             modifier = Modifier.weight(1f)
                         )
                         TextButton(onClick = onClose) {
-                            Text("Close", color = Color(0xFFF38BA8), fontSize = 12.sp)
+                            Text(res.getString(R.string.close), color = Color(0xFFF38BA8), fontSize = 12.sp)
                         }
                         TextButton(onClick = { expanded = false }) {
                             Text("--", color = Color(0xFF89B4FA), fontSize = 16.sp)
@@ -291,7 +295,7 @@ class LogOverlayService : Service() {
             ) {
                 Icon(
                     Icons.Filled.Terminal,
-                    contentDescription = "Log",
+                    contentDescription = res.getString(R.string.log_overlay_open),
                     tint = Color(0xFF89B4FA),
                     modifier = Modifier.size(24.dp)
                 )

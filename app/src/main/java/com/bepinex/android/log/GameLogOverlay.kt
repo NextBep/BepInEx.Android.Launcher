@@ -17,6 +17,7 @@ import android.widget.HorizontalScrollView
 import android.widget.ScrollView
 import android.widget.TextView
 import com.bepinex.android.BepInExPaths
+import com.bepinex.android.R
 import java.io.File
 import java.io.RandomAccessFile
 
@@ -35,6 +36,9 @@ object GameLogOverlay {
     fun show(activity: Activity, packageName: String, logFile: File? = null, showPanel: Boolean = false, showFab: Boolean = true) {
         val decorView = activity.window?.decorView as? ViewGroup ?: return
         val resolvedLogFile = logFile ?: BepInExPaths.getLogFile(packageName)
+        // Launcher resources in the user-selected language (the activity's own resources
+        // belong to the game once the runtime swaps them in).
+        val res = LogText.launcherContext(activity)
 
         // Remove old if any
         remove(decorView)
@@ -91,7 +95,7 @@ object GameLogOverlay {
         ))
 
         val headerText = TextView(activity).apply {
-            text = " BepInEx Log "
+            text = " ${res.getString(R.string.log_title)} "
             setTextColor(Color.parseColor("#89B4FA"))
             textSize = 11f
             typeface = Typeface.DEFAULT_BOLD
@@ -213,10 +217,10 @@ object GameLogOverlay {
             val shareIntent = Intent(Intent.ACTION_SEND).apply {
                 type = "text/plain"
                 putExtra(Intent.EXTRA_STREAM, uri)
-                putExtra(Intent.EXTRA_SUBJECT, "BepInEx Log - $packageName")
+                putExtra(Intent.EXTRA_SUBJECT, res.getString(R.string.log_overlay_share_subject, packageName))
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
-            activity.startActivity(Intent.createChooser(shareIntent, "Share Log"))
+            activity.startActivity(Intent.createChooser(shareIntent, res.getString(R.string.log_overlay_share_chooser)))
         }
 
         // Add to DecorView

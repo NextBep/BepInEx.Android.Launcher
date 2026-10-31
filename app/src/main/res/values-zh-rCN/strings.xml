@@ -10,7 +10,7 @@
     <string name="nav_settings">设置</string>
     <string name="nav_about">关于</string>
     <!-- Game Detection -->
-    <string name="scan_title">植物大战僵尸融合版</string>
+    <string name="scan_title">检测到的游戏</string>
     <string name="scanning">正在检查 植物大战僵尸融合版…</string>
     <string name="no_games_found">未找到 植物大战僵尸融合版</string>
     <string name="no_games_hint">请先安装植物大战僵尸融合版，然后点刷新。游戏包名为 com.LanPiaoPiao.PlantsVsZombiesRH。</string>
@@ -437,6 +437,13 @@
     <string name="log_filter_errors">错误</string>
     <string name="log_filter_warnings">警告</string>
     <string name="log_auto_scroll">自动滚动</string>
+    <!-- 游戏内悬浮日誌 -->
+    <string name="log_overlay_channel_name">BepInEx 悬浮日志</string>
+    <string name="log_overlay_channel_desc">游戏内悬浮日志开启时显示</string>
+    <string name="log_overlay_notification_text">悬浮日志已开启 — 点按返回游戏</string>
+    <string name="log_overlay_share_chooser">分享日志</string>
+    <string name="log_overlay_share_subject">BepInEx 日志 - %1$s</string>
+    <string name="log_overlay_open">打开日志</string>
     <!-- Storage Permission -->
     <string name="storage_permission_title">需要存储权限</string>
     <string name="storage_permission_message">BepInEx Launcher 需要访问所有文件以解压 BepInEx 和管理模组。</string>

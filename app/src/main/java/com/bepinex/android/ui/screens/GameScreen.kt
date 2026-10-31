@@ -203,9 +203,13 @@ fun GameScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = stringResource(R.string.scan_title),
+                            // Show the currently selected game's name; fall back to a
+                            // generic title before any game has been chosen.
+                            text = selectedGame?.label ?: stringResource(R.string.scan_title),
                             style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.SemiBold
+                            fontWeight = FontWeight.SemiBold,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                         if (!isScanning && detectedGames.isNotEmpty()) {
                             Text(
