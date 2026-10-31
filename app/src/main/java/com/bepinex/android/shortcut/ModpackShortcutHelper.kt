@@ -136,7 +136,7 @@ object ModpackShortcutHelper {
 
                 val callback = android.app.PendingIntent.getBroadcast(
                     context, 0,
-                    Intent("com.pvzrh.android.shortcut.RESULT"),
+                    Intent("com.bepinex.android.shortcut.RESULT"),
                     android.app.PendingIntent.FLAG_IMMUTABLE
                 )
 

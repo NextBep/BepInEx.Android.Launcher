@@ -322,7 +322,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    // Crash detection (ported from the PVZRH launcher)
+    // Crash detection (ported from the upstream BepInEx Android launcher)
 
     private fun startCrashMonitor(packageName: String) {
         crashMonitorJob?.cancel()
@@ -705,7 +705,7 @@ class MainActivity : ComponentActivity() {
         updateInfo?.let { openUpdateUrl(this, it.urlApk) }
     }
 
-    // Log export (ported from the PVZRH launcher)
+    // Log export (ported from the upstream BepInEx Android launcher)
 
     private fun onExportLogs() {
         scope.launch(Dispatchers.IO) {

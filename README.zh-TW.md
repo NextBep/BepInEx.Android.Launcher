@@ -8,7 +8,7 @@
 
 - 一鍵注入 BepInEx 到 Unity IL2CPP 遊戲
 - 自動偵測已安裝的 Unity IL2CPP 遊戲
-- Modpack 管理：建立、匯入/匯出（.rhp/.zip）、啟用/停用 mod 組合
+- Modpack 管理：建立、匯入/匯出（.bal/.zip）、啟用/停用 mod 組合
 - 每個遊戲獨立設定：浮動日誌、未剝離 libunity、Unity Kill 阻斷
 - 內建設定檔編輯器（JSON/Lua 語法突顯）
 - 遊戲日誌檢視器（logcat 整合）
@@ -38,7 +38,7 @@
 
 ### Lead Developers
 
-HayashiUme · Gaoshu · NextBep
+HayashiUme
 
 ©2026 NextBep
 

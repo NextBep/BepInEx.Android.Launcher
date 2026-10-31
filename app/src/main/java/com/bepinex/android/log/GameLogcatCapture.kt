@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicReference
  * MainActivity cannot reliably read the :game process logcat on modern Android,
  * so capture has to run inside :game and flush on every error line.
  *
- * Ported from the PVZRH launcher.
+ * Ported from the upstream BepInEx Android launcher.
  */
 object GameLogcatCapture {
 

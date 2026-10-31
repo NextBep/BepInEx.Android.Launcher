@@ -969,7 +969,7 @@ class ModpackManager {
     private fun isLauncherManagedPath(file: File): Boolean {
         val path = file.absolutePath
         val sep = File.separator
-        return path.contains("${sep}PVZRH_Launcher${sep}") ||
+        return path.contains("${sep}BepInEx_Launcher${sep}") ||
             path.contains("${sep}Android${sep}data${sep}") ||
             path.contains("${sep}Android${sep}obb${sep}")
     }

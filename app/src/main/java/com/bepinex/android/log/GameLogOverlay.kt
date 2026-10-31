@@ -25,7 +25,7 @@ import java.util.ArrayDeque
  * Floating FAB + log panel added directly to the game Activity's DecorView.
  * Only the view's own bounds intercept touches — game stays fully playable.
  *
- * Ported from PVZRH's GameLogOverlay. Text resolves through [LogText] so the
+ * Ported from the upstream GameLogOverlay. Text resolves through [LogText] so the
  * overlay keeps the launcher language even after the runtime swaps the game's
  * resources onto the Activity.
  */

@@ -8,7 +8,7 @@
 
 - Unity IL2CPPゲームにワンタップでBepInExをインジェクション
 - インストール済みUnity IL2CPPゲームを自動検出
-- モッドパック管理: 作成、インポート/エクスポート (.rhp/.zip)、有効/無効切り替え
+- モッドパック管理: 作成、インポート/エクスポート (.bal/.zip)、有効/無効切り替え
 - ゲームごとの設定: フローティングログ、非ストリップlibunity、Unity Killブロッキング
 - JSON/Luaシンタックスハイライト付き設定ファイルエディタ
 - logcat統合ゲームログビュークラッシュ検出と診断エクスポート
@@ -37,7 +37,7 @@
 
 ### Lead Developers
 
-HayashiUme · Gaoshu · NextBep
+HayashiUme
 
 ©2026 NextBep
 

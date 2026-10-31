@@ -8,7 +8,7 @@ Launcher genérico do BepInEx para Android com gerenciamento de modpacks para qu
 
 - Injeção do BepInEx com um toque em jogos Unity IL2CPP
 - Detecção automática de jogos Unity IL2CPP instalados
-- Gerenciamento de modpacks: criar, importar/exportar (.rhp/.zip), ativar/desativar combinações de mods
+- Gerenciamento de modpacks: criar, importar/exportar (.bal/.zip), ativar/desativar combinações de mods
 - Configurações por jogo: log flutuante, libunity não depurado, bloqueio do Unity Kill
 - Editor de arquivos de configuração integrado com destaque de sintaxe JSON/Lua
 - Visualizador de logs do jogo com integração logcat
@@ -38,7 +38,7 @@ Launcher genérico do BepInEx para Android com gerenciamento de modpacks para qu
 
 ### Lead Developers
 
-HayashiUme · Gaoshu · NextBep
+HayashiUme
 
 ©2026 NextBep
 

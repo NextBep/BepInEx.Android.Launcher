@@ -8,7 +8,7 @@ Generic BepInEx Android launcher with modpack management for any Unity IL2CPP ga
 
 - One-tap BepInEx injection into Unity IL2CPP games
 - Auto-detect installed Unity IL2CPP games
-- Modpack management: create, import/export (.rhp/.zip), activate/deactivate mod combinations
+- Modpack management: create, import/export (.bal/.zip), activate/deactivate mod combinations
 - Per-game settings: floating log, unstripped libunity, Unity Kill blocking
 - Built-in config file editor with JSON/Lua syntax highlighting
 - Game log viewer with logcat integration
@@ -38,7 +38,7 @@ Generic BepInEx Android launcher with modpack management for any Unity IL2CPP ga
 
 ### Lead Developers
 
-HayashiUme · Gaoshu · NextBep
+HayashiUme
 
 ©2026 NextBep
 

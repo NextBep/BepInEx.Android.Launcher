@@ -147,7 +147,7 @@ fun AboutScreen(
                     val url = if (isZh) {
                         "https://qm.qq.com/q/Ig1yGGlkek"
                     } else {
-                        "https://github.com/ModPVZRH/PVZRH.Android.Launcher/discussions"
+                        "https://github.com/NextBep/BepInEx.Android.Launcher/discussions"
                     }
                     context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                 }
@@ -157,8 +157,8 @@ fun AboutScreen(
                 subtitle = stringResource(R.string.about_privacy_policy_desc),
                 onClick = {
                     val isZh = context.resources.configuration.locales[0]?.toLanguageTag()?.let { it == "zh" || it == "zh-CN" } ?: false
-                    val url = if (isZh) "https://modpvzrh.github.io/zh/privacy"
-                              else "https://modpvzrh.github.io/privacy"
+                    val url = if (isZh) "https://nextbep.github.io/zh/privacy"
+                              else "https://nextbep.github.io/privacy"
                     context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                 }
             )
@@ -167,8 +167,8 @@ fun AboutScreen(
                 subtitle = stringResource(R.string.about_official_docs_desc),
                 onClick = {
                     val isZh = context.resources.configuration.locales[0]?.toLanguageTag()?.let { it == "zh" || it == "zh-CN" } ?: false
-                    val url = if (isZh) "https://modpvzrh.github.io/zh/docs"
-                              else "https://modpvzrh.github.io/docs"
+                    val url = if (isZh) "https://nextbep.github.io/zh/guide/getting-started"
+                              else "https://nextbep.github.io/guide/getting-started"
                     context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                 }
             )

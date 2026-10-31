@@ -797,7 +797,7 @@ private fun loadRemoteBitmap(url: String): ImageBitmap? {
             connectTimeout = 8000
             readTimeout = 8000
             instanceFollowRedirects = true
-            setRequestProperty("User-Agent", "PVZRH-Launcher/1.0")
+            setRequestProperty("User-Agent", "BepInEx-Launcher/1.0")
         }
         if (conn.responseCode !in 200..299) return null
         conn.inputStream.use { BitmapFactory.decodeStream(it)?.asImageBitmap() }

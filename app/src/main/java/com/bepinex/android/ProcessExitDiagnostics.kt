@@ -10,7 +10,7 @@ import java.util.Date
 /**
  * Reads the OS-owned exit record, which survives native crashes and process death.
  *
- * Ported from the PVZRH launcher so crash reports include the reason the game
+ * Ported from the upstream BepInEx Android launcher so crash reports include the reason the game
  * process (or the launcher itself) went away, not just whatever the logs said.
  */
 object ProcessExitDiagnostics {

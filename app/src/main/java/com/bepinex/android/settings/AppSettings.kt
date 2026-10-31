@@ -17,7 +17,7 @@ object AppSettings {
     private const val KEY_FLOATING_MOD_MENU = "floating_mod_menu"
     private const val KEY_ACTIVE_MODPACK_PREFIX = "active_modpack_"
     private const val KEY_USE_UNSTRIPPED_LIBUNITY = "use_unstripped_libunity"
-    // B-specific: per-game overrides (kept alongside the global PVZRH keys)
+    // B-specific: per-game overrides (kept alongside the global keys)
     private const val KEY_BLOCK_UNITY_KILL_PREFIX = "block_unity_kill_"
     private const val KEY_USE_UNSTRIPPED_LIBUNITY_PREFIX = "use_unstripped_libunity_"
     private const val KEY_USE_DYNAMIC_COLOR = "use_dynamic_color"

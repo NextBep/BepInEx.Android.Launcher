@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
  * to capture logcat, the system crash buffer, process exit records and the
  * BepInEx logs of every game is the next launcher start.
  *
- * Ported from the PVZRH launcher and adapted to the per-game directory layout
+ * Ported from the upstream BepInEx Android launcher and adapted to the per-game directory layout
  * used here (`BepInEx_Android/<packageName>/BepInEx/...`).
  */
 object DebugCrashCollector {

@@ -6,9 +6,9 @@ import android.os.Looper
 import com.bepinex.android.BepInExLog
 
 /**
- * Attaches the in-game floating log overlay, mirroring PVZRH's UnityPlayerHooks.
+ * Attaches the in-game floating log overlay, mirroring the upstream UnityPlayerHooks.
  *
- * PVZRH shows the overlay from a Pine hook on the UnityPlayer constructor; this
+ * The upstream launcher shows the overlay from a Pine hook on the UnityPlayer constructor; this
  * port uses the Instrumentation-based runtime instead, so it is triggered once
  * from [com.bepinex.android.hooks.GameRuntime] after the game Activity resumes.
  * The overlay is always enabled and delayed a little so the game window is
