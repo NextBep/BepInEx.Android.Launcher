@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="confirm_ok">OK</string>
-    <string name="lang_incomplete_title">Terjemahan Belum Lengkap</string>
-    <string name="lang_incomplete_message">Terjemahan untuk bahasa Anda belum lengkap. Jika Anda ingin membantu meningkatkan terjemahan, silakan kunjungi [di sini](https://github.com/ModPVZRH/PVZRH.Android.Launcher/blob/main/docs/TRANSLATING.md) untuk berkontribusi.</string>
-</resources>

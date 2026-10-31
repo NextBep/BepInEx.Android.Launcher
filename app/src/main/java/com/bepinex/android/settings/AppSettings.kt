@@ -59,27 +59,7 @@ object AppSettings {
         SYSTEM("system"),
         ENGLISH("en"),
         CHINESE("zh"),
-        CHINESE_TW("zh-TW"),
-        JAPANESE("ja"),
-        KOREAN("ko"),
-        RUSSIAN("ru"),
-        PORTUGUESE("pt"),
-        PORTUGUESE_BR("pt-BR"),
-        SPANISH("es"),
-        GERMAN("de"),
-        FRENCH("fr"),
-        ITALIAN("it"),
-        DUTCH("nl"),
-        ARABIC("ar"),
-        ARABIC_EG("ar-EG"),
-        ARABIC_SA("ar-SA"),
-        INDONESIAN("id"),
-        MALAY("ms"),
-        MALAYALAM("ml"),
-        THAI("th"),
-        TURKISH("tr"),
-        UKRAINIAN("uk"),
-        VENETIAN("vec");
+        CHINESE_TW("zh-TW");
 
         companion object {
             fun fromKey(value: String?): Language = entries.find { it.key == value } ?: SYSTEM

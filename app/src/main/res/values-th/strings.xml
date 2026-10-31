@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="confirm_ok">ตกลง</string>
-    <string name="lang_incomplete_title">ยังไม่มีการแปลภาษา</string>
-    <string name="lang_incomplete_message">การแปลภาษาของคุณยังไม่สมบูรณ์ หากคุณต้องการช่วยปรับปรุงการแปล โปรดเยี่ยมชม[ที่นี่](https://github.com/ModPVZRH/PVZRH.Android.Launcher/blob/main/docs/TRANSLATING.md)เพื่อมีส่วนร่วม</string>
-</resources>
