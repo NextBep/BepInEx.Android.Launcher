@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.22.1)
-project(fusion)
+project(nextbep)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(LIB_FOLDER ${CMAKE_SOURCE_DIR}/../jniLibs/${CMAKE_ANDROID_ARCH_ABI})
 
-add_library(fusion SHARED
+add_library(nextbep SHARED
         src/fusion.cpp
         src/fusion_config.cpp
         src/dotnet.cpp
@@ -22,10 +22,10 @@ add_library(fusion SHARED
         src/utilities/java.cpp
 )
 
-target_include_directories(fusion PUBLIC include)
+target_include_directories(nextbep PUBLIC include)
 
 target_link_libraries(
-        fusion
+        nextbep
         PUBLIC
         main
         android

@@ -48,7 +48,7 @@ import java.util.concurrent.atomic.AtomicReference
  *   1. build a game classloader on top of ours ([GameRuntime.prepareGameContext])
  *   2. prepare per-game state: assets, BepInEx runtime, .NET runtime, libunity, config
  *   3. install the Java-side hooks (package manager / activity manager / instrumentation)
- *   4. wire up native library routing (libmain + libfusion)
+ *   4. wire up native library routing (libmain + libnextbep)
  *   5. start the game through a dynamic [StubActivity] intent that [GameRuntime]'s
  *      instrumentation hook rewrites back into the real game launcher activity.
  */
@@ -628,7 +628,7 @@ class BootstrapActivity : Activity() {
 
         try {
             NativeLibraryManager.addFusionLibrary("main")
-            NativeLibraryManager.addFusionLibrary("fusion")
+            NativeLibraryManager.addFusionLibrary("nextbep")
             NativeLibraryManager.addCacheLibrary("il2cpp")
             NativeLibraryManager.addCacheLibrary("unity")
             NativeLibraryManager.setupLibraryHooks(config)

@@ -99,17 +99,17 @@ static bool preload_dotnet_runtime_libraries()
     return true;
 }
 
-static void *resolve_or_load_fusion_handle()
+static void *resolve_or_load_nextbep_handle()
 {
     dlerror();
-    void *fusionHandle = dlopen("libfusion.so", RTLD_NOW | RTLD_NOLOAD);
-    if (fusionHandle) {
-        return fusionHandle;
+    void *nextbepHandle = dlopen("libnextbep.so", RTLD_NOW | RTLD_NOLOAD);
+    if (nextbepHandle) {
+        return nextbepHandle;
     }
 
     const char *defaultScopeError = dlerror();
     if (defaultScopeError) {
-        LOGI("resolve_or_load_fusion_handle: libfusion.so missing from namespace: %s", defaultScopeError)
+        LOGI("resolve_or_load_nextbep_handle: libnextbep.so missing from namespace: %s", defaultScopeError)
     }
 
     preload_sibling_library("libdobby.so");
@@ -117,40 +117,40 @@ static void *resolve_or_load_fusion_handle()
         return nullptr;
     }
 
-    if (!preload_sibling_library("libfusion.so")) {
+    if (!preload_sibling_library("libnextbep.so")) {
         return nullptr;
     }
 
     dlerror();
-    fusionHandle = dlopen("libfusion.so", RTLD_NOW | RTLD_GLOBAL);
-    if (!fusionHandle) {
+    nextbepHandle = dlopen("libnextbep.so", RTLD_NOW | RTLD_GLOBAL);
+    if (!nextbepHandle) {
         const char *noLoadErr = dlerror();
-        LOGE("resolve_or_load_fusion_handle: libfusion.so still not visible after preload: %s",
+        LOGE("resolve_or_load_nextbep_handle: libnextbep.so still not visible after preload: %s",
              noLoadErr ? noLoadErr : "(no dlerror)")
         return nullptr;
     }
 
-    LOGI("resolve_or_load_fusion_handle: loaded libfusion.so into current namespace via sibling preload")
-    return fusionHandle;
+    LOGI("resolve_or_load_nextbep_handle: loaded libnextbep.so into current namespace via sibling preload")
+    return nextbepHandle;
 }
 
-static bool resolve_fusion_symbols(FusionBootstrapFromLibMain_t *bootstrap)
+static bool resolve_nextbep_symbols(FusionBootstrapFromLibMain_t *bootstrap)
 {
-    void *fusionHandle = resolve_or_load_fusion_handle();
-    if (!fusionHandle) {
+    void *nextbepHandle = resolve_or_load_nextbep_handle();
+    if (!nextbepHandle) {
         return false;
     }
 
     dlerror();
-    *bootstrap = reinterpret_cast<FusionBootstrapFromLibMain_t>(dlsym(fusionHandle, "fusion_bootstrap_from_libmain"));
+    *bootstrap = reinterpret_cast<FusionBootstrapFromLibMain_t>(dlsym(nextbepHandle, "fusion_bootstrap_from_libmain"));
     if (!*bootstrap) {
         const char *symErr = dlerror();
-        LOGE("resolve_fusion_symbols: dlsym failed for fusion_bootstrap_from_libmain: %s",
+        LOGE("resolve_nextbep_symbols: dlsym failed for fusion_bootstrap_from_libmain: %s",
              symErr ? symErr : "(no dlerror)")
         return false;
     }
 
-    FusionJvmInit_t loadJni = reinterpret_cast<FusionJvmInit_t>(dlsym(fusionHandle, "init_java"));
+    FusionJvmInit_t loadJni = reinterpret_cast<FusionJvmInit_t>(dlsym(nextbepHandle, "init_java"));
     if (loadJni) {
         loadJni(g_vm);
         LOGI("initialized fusion java")
@@ -301,7 +301,7 @@ load(JNIEnv *env, jobject activityObject, jstring path)
     (void) path;
 
     FusionBootstrapFromLibMain_t bootstrap = nullptr;
-    if (!resolve_fusion_symbols(&bootstrap)) {
+    if (!resolve_nextbep_symbols(&bootstrap)) {
         return JNI_FALSE;
     }
 

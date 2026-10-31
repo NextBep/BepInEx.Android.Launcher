@@ -116,7 +116,7 @@ The launcher injects BepInEx into the game process via native bootstrap librarie
 7. `UnityPlayer` constructor hook sets the activity field.
 8. `UnityPlayer.kill()` hook optionally blocks the first call for 5 seconds (per-game opt-in).
 
-All hooks are installed from Kotlin/Java via Pine — with native `libmain.so`/`libfusion.so` controlling dlopen order and CoreCLR bootstrap.
+All hooks are installed from Kotlin/Java via Pine — with native `libmain.so`/`libnextbep.so` controlling dlopen order and CoreCLR bootstrap.
 
 ## Debug Snapshots
 

@@ -399,7 +399,7 @@
     <string name="about_project_pine_name">Pine</string>
     <string name="about_project_pine_desc">ART Java 方法 Hook 框架 (top.canyie.pine:core:0.3.0)。用于 ClassLoader、PackageManager 和 UnityPlayer hook。</string>
     <string name="about_project_dobby_name">Dobby</string>
-    <string name="about_project_dobby_desc">ARM64 原生 Hook 框架。用于 libfusion 中的 il2cpp_init hook。</string>
+    <string name="about_project_dobby_desc">ARM64 原生 Hook 框架。用于 libnextbep 中的 il2cpp_init hook。</string>
     <string name="about_project_cpp2il_name">Cpp2IL</string>
     <string name="about_project_cpp2il_desc">IL2CPP 逆向工程工具。用于 interop 程序集生成。</string>
     <string name="about_url_bepinex">https://github.com/BepInEx/BepInEx</string>

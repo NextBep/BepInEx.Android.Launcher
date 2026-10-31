@@ -35,7 +35,7 @@ android {
 
         externalNativeBuild {
             cmake {
-                // NOTE: Do NOT set -DANDROID_STL=c++_shared here: libmain.so/libfusion.so are
+                // NOTE: Do NOT set -DANDROID_STL=c++_shared here: libmain.so/libnextbep.so are
                 // dlopen'ed from the game's classloader namespace, which cannot resolve
                 // bare-name dependencies like libc++_shared.so. FusionCore uses the default
                 // static STL so the native libraries are self-contained.

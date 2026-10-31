@@ -143,7 +143,7 @@ extern "C" void init_java(JavaVM *vm) {
         return;
     }
 
-    log(LogLevel::INFO, TAG, "Successfully loaded libfusion!");
+    log(LogLevel::INFO, TAG, "Successfully loaded libnextbep!");
 }
 
 
