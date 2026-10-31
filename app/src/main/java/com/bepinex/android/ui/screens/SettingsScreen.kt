@@ -31,7 +31,6 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Animation
-import androidx.compose.material.icons.outlined.Terminal
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material3.AlertDialog
@@ -79,14 +78,12 @@ fun SettingsScreen(
     language: AppSettings.Language,
     dynamicColor: Boolean,
     animationDisabled: Boolean,
-    floatingLogInGame: Boolean,
     useUnstrippedLibUnity: Boolean,
     onNavigateToAbout: () -> Unit,
     onThemeChanged: (AppSettings.ThemeMode) -> Unit,
     onLanguageChanged: (AppSettings.Language) -> Unit,
     onDynamicColorChanged: (Boolean) -> Unit,
     onAnimationDisabledChanged: (Boolean) -> Unit,
-    onFloatingLogInGameChanged: (Boolean) -> Unit,
     onUseUnstrippedLibUnityChanged: (Boolean) -> Unit,
     onClearBepInEx: () -> Unit,
     onClearDotnet: () -> Unit,
@@ -193,20 +190,6 @@ fun SettingsScreen(
             }
 
             item { SettingsSectionHeader(stringResource(R.string.settings_section_ingame)) }
-            item {
-                SettingListItem(
-                    title = stringResource(R.string.settings_floating_log),
-                    summary = stringResource(R.string.settings_floating_log_desc),
-                    icon = { Icon(Icons.Outlined.Terminal, contentDescription = null) },
-                    trailing = {
-                        Switch(
-                            checked = floatingLogInGame,
-                            onCheckedChange = { checked -> onFloatingLogInGameChanged(checked) }
-                        )
-                    },
-                    onClick = { onFloatingLogInGameChanged(!floatingLogInGame) }
-                )
-            }
             item {
                 SettingListItem(
                     title = stringResource(R.string.settings_unstripped_libunity),

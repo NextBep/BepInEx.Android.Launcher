@@ -453,8 +453,6 @@
     <string name="storage_permission_grant">授予权限</string>
     <!-- In-Game Settings -->
     <string name="settings_ingame_section">游戏内</string>
-    <string name="settings_floating_log">游戏内悬浮日志</string>
-    <string name="settings_floating_log_desc">在游戏画面上显示一个悬浮日志按钮。点击可查看实时 BepInEx 日志。</string>
     <string name="settings_floating_mod_menu">游戏内模组菜单</string>
     <string name="settings_floating_mod_menu_desc">在游戏画面显示悬浮按钮。插件可通过 TCP 发送 UI 树，由启动器生成可操作的原生控件。</string>
     <string name="bridge_mods_title">模组</string>

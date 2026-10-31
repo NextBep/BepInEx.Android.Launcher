@@ -27,11 +27,9 @@ import com.bepinex.android.settings.AppSettings
 fun GameSettingsScreen(
     packageName: String,
     gameLabel: String,
-    floatingLogInGame: Boolean,
     blockUnityKill: Boolean,
     useUnstrippedLibUnity: Boolean,
     onNavigateBack: () -> Unit,
-    onFloatingLogInGameChanged: (Boolean) -> Unit,
     onBlockUnityKillChanged: (Boolean) -> Unit,
     onUseUnstrippedLibUnityChanged: (Boolean) -> Unit,
     onClearBepInEx: () -> Unit,
@@ -86,21 +84,6 @@ fun GameSettingsScreen(
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
-            }
-
-            // Floating Log
-            item {
-                ListItem(
-                    headlineContent = { Text(stringResource(R.string.settings_floating_log)) },
-                    supportingContent = { Text(stringResource(R.string.settings_floating_log_desc)) },
-                    leadingContent = {
-                        Icon(Icons.Outlined.Terminal, null,
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant)
-                    },
-                    trailingContent = {
-                        Switch(checked = floatingLogInGame, onCheckedChange = onFloatingLogInGameChanged)
-                    }
                 )
             }
 

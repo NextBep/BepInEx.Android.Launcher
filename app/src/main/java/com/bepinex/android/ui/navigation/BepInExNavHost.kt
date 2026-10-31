@@ -681,9 +681,6 @@ fun BepInExNavHost(
                             2 -> {
                                 val packageName = selectedGame?.packageName ?: ""
                                 val settingsContext = LocalContext.current
-                                var floatingLogInGame by remember {
-                                    mutableStateOf(AppSettings.isFloatingLogInGameEnabled(settingsContext))
-                                }
                                 var useUnstrippedLibUnity by remember {
                                     mutableStateOf(AppSettings.isUseUnstrippedLibUnity(settingsContext))
                                 }
@@ -698,7 +695,6 @@ fun BepInExNavHost(
                                     language = language,
                                     dynamicColor = dynamicColorSetting,
                                     animationDisabled = animationDisabledSetting,
-                                    floatingLogInGame = floatingLogInGame,
                                     useUnstrippedLibUnity = useUnstrippedLibUnity,
                                     onNavigateToAbout = { navController.navigate(NavRoutes.ABOUT) },
                                     onNavigateToGameSettings = {
@@ -718,10 +714,6 @@ fun BepInExNavHost(
                                     onAnimationDisabledChanged = { disabled ->
                                         AppSettings.setAnimationDisabled(settingsContext, disabled)
                                         animationDisabledSetting = disabled
-                                    },
-                                    onFloatingLogInGameChanged = { enabled ->
-                                        AppSettings.setFloatingLogInGameEnabled(settingsContext, enabled)
-                                        floatingLogInGame = enabled
                                     },
                                     onUseUnstrippedLibUnityChanged = { enabled ->
                                         AppSettings.setUseUnstrippedLibUnity(settingsContext, enabled)
@@ -1049,9 +1041,6 @@ fun BepInExNavHost(
                         backStackEntry.arguments?.getString("gameLabel") ?: "", "UTF-8"
                     )
                     val gsContext = LocalContext.current
-                    var gsFloatingLog by remember {
-                        mutableStateOf(AppSettings.isFloatingLogInGameEnabled(gsContext))
-                    }
                     var gsBlockKill by remember(pkg) {
                         mutableStateOf(AppSettings.isUnityKillBlockEnabled(gsContext, pkg))
                     }
@@ -1061,14 +1050,9 @@ fun BepInExNavHost(
                     GameSettingsScreen(
                         packageName = pkg,
                         gameLabel = label,
-                        floatingLogInGame = gsFloatingLog,
                         blockUnityKill = gsBlockKill,
                         useUnstrippedLibUnity = gsUnstripped,
                         onNavigateBack = { navController.safePopBackStack() },
-                        onFloatingLogInGameChanged = { enabled ->
-                            AppSettings.setFloatingLogInGameEnabled(gsContext, enabled)
-                            gsFloatingLog = enabled
-                        },
                         onBlockUnityKillChanged = { enabled ->
                             AppSettings.setUnityKillBlockEnabled(gsContext, pkg, enabled)
                             gsBlockKill = enabled

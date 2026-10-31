@@ -455,8 +455,6 @@
     <string name="storage_permission_grant">Grant Permission</string>
     <!-- In-Game Settings -->
     <string name="settings_ingame_section">In-Game</string>
-    <string name="settings_floating_log">Floating Log in Game</string>
-    <string name="settings_floating_log_desc">Show a floating log button on top of the game. Tap to view real-time BepInEx logs.</string>
     <string name="settings_floating_mod_menu">Floating Mod Menu</string>
     <string name="settings_floating_mod_menu_desc">Show a floating button in-game. Plugins can send a UI tree over TCP and the launcher renders native controls.</string>
     <string name="bridge_mods_title">Mods</string>
