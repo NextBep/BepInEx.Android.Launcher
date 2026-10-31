@@ -445,6 +445,9 @@
     <string name="log_overlay_share_chooser">分享日誌</string>
     <string name="log_overlay_share_subject">BepInEx 日誌 - %1$s</string>
     <string name="log_overlay_open">開啟日誌</string>
+    <string name="log_overlay_drag_hint">拖動移動</string>
+    <string name="log_overlay_minimize">最小化懸浮日誌</string>
+    <string name="log_overlay_waiting">等待日誌…</string>
 
     <!-- Storage Permission -->
     <string name="storage_permission_title">Storage Permission Required</string>

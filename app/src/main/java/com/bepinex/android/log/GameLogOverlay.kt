@@ -1,32 +1,37 @@
 package com.bepinex.android.log
 
 import android.app.Activity
-import android.graphics.Color
+import android.graphics.BitmapFactory
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
-import android.content.Intent
 import android.os.Handler
 import android.os.Looper
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.HorizontalScrollView
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import com.bepinex.android.BepInExPaths
+import com.bepinex.android.BoundedTextFile
 import com.bepinex.android.R
 import java.io.File
-import java.io.RandomAccessFile
+import java.util.ArrayDeque
 
 /**
  * Floating FAB + log panel added directly to the game Activity's DecorView.
  * Only the view's own bounds intercept touches — game stays fully playable.
+ *
+ * Ported from PVZRH's GameLogOverlay. Text resolves through [LogText] so the
+ * overlay keeps the launcher language even after the runtime swaps the game's
+ * resources onto the Activity.
  */
 object GameLogOverlay {
 
+    private const val MAX_LOG_LINES = 400
     private val handler = Handler(Looper.getMainLooper())
     private var fab: View? = null
     private var panel: View? = null
@@ -44,31 +49,33 @@ object GameLogOverlay {
         remove(decorView)
 
         val density = activity.resources.displayMetrics.density
-        val fabSize = (40 * density).toInt()
-        val panelWidth = (360 * density).toInt()
-        val panelHeight = (280 * density).toInt()
         val margin = (12 * density).toInt()
-
+        val fabSize = (44 * density).toInt()
+        val panelWidth = (360 * density).toInt().coerceAtMost(
+            (decorView.width - margin * 2).coerceAtLeast(fabSize)
+        )
+        val panelHeight = (280 * density).toInt().coerceAtMost(
+            (decorView.height - margin * 2).coerceAtLeast(fabSize)
+        )
         // --- FAB ---
-        val fabBg = GradientDrawable().apply {
-            shape = GradientDrawable.OVAL
-            setColor(Color.parseColor("#CC1E1E2E"))
-        }
-        val fabIcon = TextView(activity).apply {
-            text = ">_"
-            setTextColor(Color.parseColor("#89B4FA"))
-            textSize = 14f
-            gravity = Gravity.CENTER
-            typeface = Typeface.MONOSPACE
+        val fabIcon = ImageView(activity).apply {
+            val icon = BitmapFactory.decodeResource(res.resources, R.drawable.console_icon)
+            if (icon != null) setImageBitmap(icon)
+            visibility = View.VISIBLE
+            alpha = 1f
+            scaleType = ImageView.ScaleType.CENTER_INSIDE
+            setPadding((5 * density).toInt(), (5 * density).toInt(),
+                (5 * density).toInt(), (5 * density).toInt())
+            contentDescription = res.getString(R.string.log_overlay_open)
         }
         val fabView = FrameLayout(activity).apply {
-            background = fabBg
+            background = null
             addView(fabIcon, FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 Gravity.CENTER
             ))
-            elevation = 10f * density
+            elevation = 0f
         }
         val fabParams = FrameLayout.LayoutParams(fabSize, fabSize).apply {
             gravity = Gravity.BOTTOM or Gravity.START
@@ -77,68 +84,139 @@ object GameLogOverlay {
 
         // --- Panel ---
         val panelBg = GradientDrawable().apply {
-            cornerRadius = 10f * density
-            setColor(Color.parseColor("#DD1E1E2E"))
+            cornerRadius = 16f * density
+            setColor(LogColorizer.panelBackground)
+            setStroke((1.2f * density).toInt(), LogColorizer.panelStroke)
         }
-        val scrollView = ScrollView(activity)
+        val scrollView = ScrollView(activity).apply {
+            isFillViewport = true
+            overScrollMode = View.OVER_SCROLL_IF_CONTENT_SCROLLS
+        }
         val logTextView = TextView(activity).apply {
-            setTextColor(Color.parseColor("#CDD6F4"))
-            textSize = 9f
+            setTextColor(LogColorizer.muted)
+            textSize = 10.5f
             typeface = Typeface.MONOSPACE
-            setPadding((6 * density).toInt(), (4 * density).toInt(),
-                (6 * density).toInt(), (4 * density).toInt())
+            setLineSpacing(0f, 1.15f)
+            setPadding(
+                (10 * density).toInt(),
+                (8 * density).toInt(),
+                (10 * density).toInt(),
+                (10 * density).toInt()
+            )
             setTextIsSelectable(true)
+            text = res.getString(R.string.log_overlay_waiting)
         }
-        scrollView.addView(logTextView, ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        ))
-
-        val headerText = TextView(activity).apply {
-            text = " ${res.getString(R.string.log_title)} "
-            setTextColor(Color.parseColor("#89B4FA"))
-            textSize = 11f
-            typeface = Typeface.DEFAULT_BOLD
-            setPadding((8 * density).toInt(), (6 * density).toInt(), 0, (4 * density).toInt())
-        }
-        val shareBtn = TextView(activity).apply {
-            text = "\u2922"
-            setTextColor(Color.parseColor("#A6E3A1"))
-            textSize = 14f
-            gravity = Gravity.CENTER
-            setPadding((8 * density).toInt(), (4 * density).toInt(),
-                (4 * density).toInt(), (4 * density).toInt())
-        }
-        val closeBtn = TextView(activity).apply {
-            text = "\u2715"
-            setTextColor(Color.parseColor("#F38BA8"))
-            textSize = 14f
-            gravity = Gravity.CENTER
-            setPadding((4 * density).toInt(), (4 * density).toInt(),
-                (8 * density).toInt(), (4 * density).toInt())
-        }
-
-        val header = android.widget.LinearLayout(activity).apply {
-            orientation = android.widget.LinearLayout.HORIZONTAL
-            addView(headerText, android.widget.LinearLayout.LayoutParams(
-                0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f
-            ))
-            addView(shareBtn)
-            addView(closeBtn)
-        }
-
-        val panelLayout = android.widget.LinearLayout(activity).apply {
-            orientation = android.widget.LinearLayout.VERTICAL
-            background = panelBg
-            elevation = 12f * density
-            addView(header, ViewGroup.LayoutParams(
+        scrollView.addView(
+            logTextView,
+            ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
-            ))
-            addView(scrollView, android.widget.LinearLayout.LayoutParams(
-                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
-                0, 1f
-            ))
+            )
+        )
+
+        val accentBar = View(activity).apply {
+            background = GradientDrawable().apply {
+                cornerRadius = 2f * density
+                setColor(LogColorizer.accent)
+            }
+            layoutParams = LinearLayout.LayoutParams(
+                (3 * density).toInt(),
+                (14 * density).toInt()
+            ).apply {
+                marginStart = (12 * density).toInt()
+                marginEnd = (8 * density).toInt()
+                gravity = Gravity.CENTER_VERTICAL
+            }
+        }
+        val headerTitle = TextView(activity).apply {
+            text = res.getString(R.string.log_title)
+            setTextColor(LogColorizer.accent)
+            textSize = 13f
+            typeface = Typeface.DEFAULT_BOLD
+            includeFontPadding = false
+        }
+        val headerHint = TextView(activity).apply {
+            text = res.getString(R.string.log_overlay_drag_hint)
+            setTextColor(LogColorizer.muted)
+            textSize = 10f
+            includeFontPadding = false
+        }
+        val headerText = LinearLayout(activity).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(0, (8 * density).toInt(), 0, (8 * density).toInt())
+            addView(headerTitle)
+            addView(
+                headerHint,
+                LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply { topMargin = (2 * density).toInt() }
+            )
+        }
+        val minimizeBtn = TextView(activity).apply {
+            text = "−"
+            contentDescription = res.getString(R.string.log_overlay_minimize)
+            setTextColor(LogColorizer.text)
+            textSize = 18f
+            gravity = Gravity.CENTER
+            includeFontPadding = false
+            background = null
+            layoutParams = LinearLayout.LayoutParams(
+                (30 * density).toInt(),
+                (30 * density).toInt()
+            ).apply {
+                marginStart = (4 * density).toInt()
+                marginEnd = (10 * density).toInt()
+                gravity = Gravity.CENTER_VERTICAL
+            }
+        }
+        val header = LinearLayout(activity).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            background = GradientDrawable().apply {
+                setColor(LogColorizer.headerBackground)
+                cornerRadii = floatArrayOf(
+                    16f * density, 16f * density,
+                    16f * density, 16f * density,
+                    0f, 0f, 0f, 0f
+                )
+            }
+            addView(accentBar)
+            addView(
+                headerText,
+                LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+            )
+            addView(minimizeBtn)
+        }
+        val divider = View(activity).apply {
+            setBackgroundColor(LogColorizer.panelStroke)
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                (1 * density).toInt()
+            )
+        }
+        val panelLayout = LinearLayout(activity).apply {
+            orientation = LinearLayout.VERTICAL
+            background = panelBg
+            elevation = 16f * density
+            clipToOutline = true
+            addView(
+                header,
+                ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+            )
+            addView(divider)
+            addView(
+                scrollView,
+                LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    0,
+                    1f
+                )
+            )
         }
 
         val panelParams = FrameLayout.LayoutParams(panelWidth, panelHeight).apply {
@@ -161,6 +239,52 @@ object GameLogOverlay {
         var downFabX = 0f
         var downFabY = 0f
         var isDragging = false
+        var downPanelX = 0f
+        var downPanelY = 0f
+        var isPanelDragging = false
+
+        headerText.setOnTouchListener { _, event ->
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    downX = event.rawX
+                    downY = event.rawY
+                    downPanelX = panelContainer.left.toFloat()
+                    downPanelY = panelContainer.top.toFloat()
+                    isPanelDragging = false
+                    true
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    val dx = event.rawX - downX
+                    val dy = event.rawY - downY
+                    if (!isPanelDragging && (dx * dx + dy * dy) > 25 * density * density) {
+                        isPanelDragging = true
+                    }
+                    if (isPanelDragging) {
+                        val maxLeft = (decorView.width - panelWidth).coerceAtLeast(0)
+                        val maxTop = (decorView.height - panelHeight).coerceAtLeast(0)
+                        val updatedParams = panelContainer.layoutParams as FrameLayout.LayoutParams
+                        updatedParams.gravity = Gravity.TOP or Gravity.START
+                        updatedParams.leftMargin = (downPanelX + dx).toInt().coerceIn(0, maxLeft)
+                        updatedParams.topMargin = (downPanelY + dy).toInt().coerceIn(0, maxTop)
+                        panelContainer.layoutParams = updatedParams
+                    }
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    isPanelDragging = false
+                    true
+                }
+                else -> false
+            }
+        }
+
+        fun jumpToBottom() {
+            scrollView.post {
+                val child = scrollView.getChildAt(0) ?: return@post
+                val target = (child.bottom - scrollView.height).coerceAtLeast(0)
+                scrollView.scrollTo(0, target)
+            }
+        }
 
         fabView.setOnTouchListener { _, event ->
             when (event.action) {
@@ -195,6 +319,7 @@ object GameLogOverlay {
                     if (!isDragging) {
                         panelVisible = !panelVisible
                         panelContainer.visibility = if (panelVisible) View.VISIBLE else View.GONE
+                        if (panelVisible) jumpToBottom()
                     }
                     true
                 }
@@ -202,32 +327,13 @@ object GameLogOverlay {
             }
         }
 
-        closeBtn.setOnClickListener {
+        minimizeBtn.setOnClickListener {
             panelVisible = false
             panelContainer.visibility = View.GONE
         }
 
-        shareBtn.setOnClickListener {
-            if (!resolvedLogFile.exists()) return@setOnClickListener
-            val uri = androidx.core.content.FileProvider.getUriForFile(
-                activity,
-                "${activity.packageName}.provider",
-                resolvedLogFile
-            )
-            val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                type = "text/plain"
-                putExtra(Intent.EXTRA_STREAM, uri)
-                putExtra(Intent.EXTRA_SUBJECT, res.getString(R.string.log_overlay_share_subject, packageName))
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            }
-            activity.startActivity(Intent.createChooser(shareIntent, res.getString(R.string.log_overlay_share_chooser)))
-        }
-
         // Add to DecorView
-        decorView.addView(panelContainer, FrameLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        ))
+        decorView.addView(panelContainer, panelParams)
         if (showFab) {
             decorView.addView(fabView, fabParams)
             this.fab = fabView
@@ -242,31 +348,41 @@ object GameLogOverlay {
 
         // Poll log
         var lastSize = 0L
+        val logLines = ArrayDeque<String>(MAX_LOG_LINES)
         pollJob = object : Runnable {
             override fun run() {
                 try {
-                    if (resolvedLogFile.exists() && resolvedLogFile.length() > lastSize) {
-                        RandomAccessFile(resolvedLogFile, "r").use { raf ->
-                            raf.seek(lastSize)
-                            val buf = ByteArray((raf.length() - lastSize).toInt())
-                            raf.readFully(buf)
-                            val newLines = String(buf, Charsets.UTF_8)
-                                .lines()
-                                .filter { it.isNotBlank() }
-                            if (newLines.isNotEmpty()) {
-                                val sb = StringBuilder(logTextView.text)
-                                for (line in newLines) {
-                                    sb.appendLine(line)
-                                }
-                                // Keep last 5000 chars
-                                val full = sb.toString()
-                                if (full.length > 5000) {
-                                    logTextView.text = full.substring(full.length - 5000)
-                                } else {
-                                    logTextView.text = full
-                                }
+                    if (resolvedLogFile.isFile) {
+                        val length = resolvedLogFile.length()
+                        if (length < lastSize) {
+                            logLines.clear()
+                            lastSize = 0L
+                            logTextView.text = ""
+                        }
+                        if (length > lastSize) {
+                            val start = if (length - lastSize > BoundedTextFile.LIMIT_BYTES) {
+                                logLines.clear()
+                                length - BoundedTextFile.LIMIT_BYTES
+                            } else {
+                                lastSize
                             }
-                            lastSize = resolvedLogFile.length()
+                            val text = BoundedTextFile.decodeTail(
+                                BoundedTextFile.readRange(resolvedLogFile, start, length),
+                                skipPartialLine = BoundedTextFile.startsMidLine(resolvedLogFile, start)
+                            )
+                            val newLines = text.lines().filter { it.isNotBlank() }
+                            if (newLines.isNotEmpty()) {
+                                for (line in newLines) {
+                                    if (logLines.size >= MAX_LOG_LINES) logLines.removeFirst()
+                                    logLines.addLast(line)
+                                }
+                                logTextView.setText(
+                                    LogColorizer.spannable(logLines),
+                                    TextView.BufferType.SPANNABLE
+                                )
+                                jumpToBottom()
+                            }
+                            lastSize = length
                         }
                     }
                 } catch (_: Exception) { }

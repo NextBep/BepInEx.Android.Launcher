@@ -444,6 +444,9 @@
     <string name="log_overlay_share_chooser">分享日志</string>
     <string name="log_overlay_share_subject">BepInEx 日志 - %1$s</string>
     <string name="log_overlay_open">打开日志</string>
+    <string name="log_overlay_drag_hint">拖动移动</string>
+    <string name="log_overlay_minimize">最小化悬浮日志</string>
+    <string name="log_overlay_waiting">等待日志…</string>
     <!-- Storage Permission -->
     <string name="storage_permission_title">需要存储权限</string>
     <string name="storage_permission_message">BepInEx Launcher 需要访问所有文件以解压 BepInEx 和管理模组。</string>

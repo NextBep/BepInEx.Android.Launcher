@@ -466,6 +466,9 @@
     <string name="log_overlay_share_chooser">Share Log</string>
     <string name="log_overlay_share_subject">BepInEx Log - %1$s</string>
     <string name="log_overlay_open">Open log</string>
+    <string name="log_overlay_drag_hint">Drag to move</string>
+    <string name="log_overlay_minimize">Minimize log overlay</string>
+    <string name="log_overlay_waiting">Waiting for logs…</string>
 
     <!-- Storage Permission -->
     <string name="storage_permission_title">Storage Permission Required</string>

@@ -193,6 +193,13 @@ public final class GameRuntime {
         }
         @Override public void callActivityOnResume(Activity activity) {
             original.callActivityOnResume(activity);
+            if (gameActivities.contains(activity)) {
+                try {
+                    com.bepinex.android.log.FloatingLog.maybeAttach(activity, gameContext.getPackageName());
+                } catch (Throwable t) {
+                    Log.e("GameRuntime", "Failed to attach floating log overlay", t);
+                }
+            }
         }
         @Override public void callActivityOnNewIntent(Activity activity, Intent intent) {
             Intent target = InstrumentationHooks.resolveOriginalIntent(intent);
