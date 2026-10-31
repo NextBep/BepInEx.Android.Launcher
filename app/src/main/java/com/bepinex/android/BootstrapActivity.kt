@@ -457,7 +457,7 @@ class BootstrapActivity : Activity() {
                 runOnMainThread {
                     Toast.makeText(
                         this,
-                        "WARNING: no il2cpp api deobfuscation map selected. Mods may fail to load.",
+                        getString(R.string.bootstrap_no_il2cpp_map),
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -553,7 +553,7 @@ class BootstrapActivity : Activity() {
             if (fileName != null && !fileName.lowercase(Locale.ROOT).endsWith(".$cleanExt")) {
                 BepInExLog.w("Selected file '$fileName' does not match required extension: .$cleanExt")
                 runOnMainThread {
-                    Toast.makeText(this, "Selected file must be a .$cleanExt file", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.bootstrap_file_ext_mismatch, cleanExt), Toast.LENGTH_LONG).show()
                 }
                 return null
             }

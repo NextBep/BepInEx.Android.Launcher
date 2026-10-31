@@ -2,11 +2,9 @@
 <resources>
     <!-- App -->
     <string name="app_name">BepInEx 启动器</string>
-    <string name="app_tagline">BepInEx 模组启动器</string>
     <!-- Navigation -->
     <string name="nav_games">游戏</string>
     <string name="nav_modpacks">整合包</string>
-    <string name="nav_market">市场</string>
     <string name="nav_settings">设置</string>
     <string name="nav_about">关于</string>
     <!-- Game Detection -->
@@ -20,42 +18,26 @@
     <string name="framework_ready">BepInEx 就绪</string>
     <string name="framework_setting_up">正在设置…</string>
     <string name="framework_setup_failed">设置失败</string>
-    <string name="framework_setup_failed_permission">需要「所有文件访问权限」才能解压 BepInEx</string>
     <string name="framework_retry">重试设置</string>
     <string name="extracting">正在解压 BepInEx…</string>
-    <string name="mod_count">%d 个模组</string>
     <!-- Actions -->
-    <string name="import_mod">导入模组</string>
     <string name="launch">启动</string>
-    <string name="game_manage_saves">管理存档</string>
-    <string name="game_manage_saves_desc">管理该游戏的备份与还原</string>
     <string name="refresh">刷新</string>
     <string name="delete">删除</string>
     <!-- Mods -->
     <string name="installed_mods">已安装的模组</string>
-    <string name="no_mods_installed">暂无模组</string>
-    <string name="no_mods_hint">点击\"导入模组\"添加 .dll 文件</string>
-    <string name="mod_deleted">已删除: %s</string>
-    <string name="mod_imported">已导入: %s</string>
     <string name="import_failed">导入失败</string>
     <!-- Modpacks -->
     <string name="modpack_title">整合包</string>
     <string name="modpack_create">创建整合包</string>
-    <string name="modpack_create_action">创建</string>
-    <string name="modpack_import_action">导入</string>
     <string name="modpack_actions">整合包操作</string>
     <string name="modpack_actions_close">关闭操作菜单</string>
-    <string name="modpack_delete">删除整合包</string>
     <string name="modpack_rename">重命名</string>
     <string name="modpack_rename_failed">名称无效或已存在</string>
     <string name="modpack_edit">编辑整合包</string>
     <string name="modpack_icon">图标</string>
     <string name="modpack_icon_hint">点击选择图片</string>
-    <string name="modpack_shortcut">桌面快捷方式</string>
-    <string name="modpack_shortcut_desc">创建快捷方式以直接启动此整合包</string>
     <string name="modpack_shortcut_create">创建桌面快捷方式</string>
-    <string name="modpack_shortcut_enabled">桌面快捷方式已启用</string>
-    <string name="shortcut_permission_required">未授予快捷方式权限，正在打开设置…</string>
     <string name="shortcut_permission_title">需要权限</string>
     <string name="shortcut_permission_guide">创建桌面快捷方式需要「桌面快捷方式」权限。请在接下来打开的设置页面中开启该权限。</string>
     <string name="shortcut_permission_open_settings">打开设置</string>
@@ -68,16 +50,15 @@
     <string name="modpack_export_preparing">正在准备导出…</string>
     <string name="modpack_export_progress">正在导出：%1$d / %2$d 个文件</string>
     <string name="modpack_export_cancel">取消</string>
+    <string name="share_modpack">分享整合包</string>
+    <string name="export_failed">导出失败</string>
     <string name="modpack_import">导入整合包</string>
-    <string name="modpack_import_dialog_title">导入整合包</string>
-    <string name="modpack_import_dialog_message">导入经其他玩家预制的整合包</string>
     <string name="modpack_import_auto_scan">自动扫描</string>
     <string name="modpack_import_manual">手动导入</string>
     <string name="modpack_importing">正在导入整合包…</string>
     <string name="modpack_import_cancel">取消</string>
     <string name="modpack_invalid_file">仅可导入 .bal 与 .zip 后缀的整合包</string>
     <string name="modpack_invalid_archive">整合包必须含有 modpack.json</string>
-    <string name="modpack_select_active">激活</string>
     <string name="modpack_vanilla">纯净模式（无模组）</string>
     <string name="modpack_name_hint">整合包名称</string>
     <string name="modpack_game_version">适配游戏版本</string>
@@ -87,21 +68,14 @@
     <string name="modpack_game_version_any">任意版本</string>
     <string name="modpack_game_version_mismatch_title">版本不匹配</string>
     <string name="modpack_game_version_mismatch_message">此整合包适配 %1$s，当前游戏版本为 %2$s。仍要导入吗？</string>
-    <string name="modpack_game_version_mismatch_batch">有 %1$d 个整合包的适配版本与当前游戏（%2$s）不一致。仍要导入吗？</string>
     <string name="modpack_game_version_mismatch_continue">仍然导入</string>
     <string name="modpack_confirm_delete_title">删除整合包</string>
     <string name="modpack_confirm_delete_msg">确定要删除\"%s\"及其所有模组吗？此操作不可撤销。</string>
-    <string name="modpack_created">已创建整合包: %s</string>
-    <string name="modpack_deleted">已删除整合包: %s</string>
-    <string name="modpack_exported">已导出: %s</string>
-    <string name="modpack_imported">已导入: %s</string>
-    <string name="modpack_scan_downloads">从下载目录导入</string>
     <string name="modpack_scan_downloads_title">下载目录中的整合包</string>
     <string name="modpack_scan_downloads_message">在下载目录找到 %d 个 .bal 文件，要导入选中的文件吗？</string>
     <string name="modpack_scan_downloads_import">导入</string>
     <string name="modpack_scan_downloads_skip">暂不</string>
     <string name="modpack_scan_downloads_empty">下载目录没有 .bal 整合包</string>
-    <string name="modpack_scan_downloads_imported">已导入 %1$d / %2$d 个整合包</string>
     <string name="modpack_scan_dlls_title">下载目录中的模组</string>
     <string name="modpack_scan_dlls_message">在下载目录找到 %d 个 .dll 文件，要导入到此整合包吗？</string>
     <string name="modpack_scan_dlls_empty">下载目录没有 .dll 模组</string>
@@ -122,7 +96,6 @@
     <string name="modpack_browse_mod_files">浏览模组文件</string>
     <string name="modpack_browse_mod_files_desc">查看此整合包中的所有文件和目录</string>
     <string name="modpack_target_game">目标游戏：%s</string>
-    <string name="modpack_mod_count">%d 个模组</string>
     <string name="modpack_mod_count_ratio">%1$d / %2$d 个模组</string>
     <string name="modpack_active">已激活</string>
     <string name="modpack_mod_rename">重命名模组</string>
@@ -138,8 +111,6 @@
     <string name="modpack_mod_category_existing">已有分类</string>
     <string name="modpack_mod_category_clear">清除</string>
     <string name="modpack_mod_enable">加载此模组</string>
-    <string name="modpack_mod_disabled">已关闭</string>
-    <string name="modpack_mod_disabled_count">已关闭 %d 个</string>
     <string name="modpack_mod_sort">排序</string>
     <string name="modpack_mod_sort_name">显示名称</string>
     <string name="modpack_mod_sort_file">文件名</string>
@@ -151,13 +122,11 @@
     <string name="modpack_scroll_to_top">回到顶部</string>
     <string name="modpack_scrollbar">滚动列表</string>
     <!-- Config Editor -->
-    <string name="config_editor_title">配置编辑器</string>
     <string name="config_editor_save">保存</string>
     <string name="config_editor_save_failed">文件保存失败</string>
     <string name="config_editor_unsaved">有未保存的更改</string>
     <string name="config_editor_discard_title">放弃更改？</string>
     <string name="config_editor_discard_msg">您有未保存的更改，确定要放弃吗？</string>
-    <string name="config_editor_no_configs">无配置文件</string>
     <!-- Viewer -->
     <string name="viewer_settings">编辑器设置</string>
     <string name="viewer_word_wrap">自动换行</string>
@@ -167,7 +136,6 @@
     <string name="viewer_empty">文件为空</string>
     <string name="viewer_cursor_position">第 %1$d 行，第 %2$d 列</string>
     <string name="viewer_preview">预览</string>
-    <string name="viewer_preview_text">“每项艺术和每项调查以及同样每项行动和追求都被认为是为了某种好事； 正因为如此，人们正确地宣布，善意是一切事情的目的。 - 亚里士多德，*尼科马丘亚伦理学*</string>
     <!-- Log Viewer -->
     <string name="log_settings">日志设置</string>
     <string name="log_auto_scroll_desc">输出新内容时自动滚动到底部</string>
@@ -189,6 +157,9 @@
     <string name="mod_file_browser_delete_failed">文件删除失败</string>
     <string name="mod_file_browser_protected">受保护文件</string>
     <string name="mod_file_browser_protected_file">受保护的整合包元数据 · 不允许编辑或删除</string>
+    <!-- Permissions -->
+    <string name="storage_permission_extract">需要存储权限才能解压 BepInEx 文件</string>
+    <string name="storage_permission_all_files">请在应用设置中授予「所有文件访问权限」</string>
     <!-- Settings sections -->
     <string name="settings_title">设置</string>
     <string name="settings_section_appearance">外观</string>
@@ -200,9 +171,10 @@
     <string name="settings_clear_dotnet">清空 .NET 数据</string>
     <string name="settings_clear_dotnet_desc">删除 .NET 运行时和复制的游戏数据。下次启动将重新解压。</string>
     <string name="settings_clear_libunity">清除 libunity 缓存</string>
-    <string name="settings_clear_libunity_desc">Delete cached unstripped libunity.so files. They will be restored on next launch.</string>
+    <string name="settings_clear_libunity_desc">删除已缓存的未裁剪 libunity.so 文件，下次启动将重新恢复。</string>
     <string name="settings_copy_resources">复制游戏资源库</string>
     <string name="settings_copy_resources_desc">将游戏的资源数据复制到本地存储以用于 interop 生成。</string>
+    <string name="copy_resources_next_launch">资源将在下次启动时复制</string>
     <string name="settings_theme">主题</string>
     <string name="settings_language">语言</string>
     <string name="settings_dynamic_color">莫奈取色</string>
@@ -213,62 +185,19 @@
     <string name="animation_restart_message">重启后才可禁用动画，是否重启？</string>
     <string name="animation_restart_now">重启</string>
     <string name="settings_about">关于</string>
-    <string name="settings_onboarding">新手指引</string>
-    <string name="settings_onboarding_desc">查看启动、整合包、权限，以及崩溃后如何分享日志</string>
-    <!-- Onboarding -->
-    <string name="onboarding_skip">跳过</string>
-    <string name="onboarding_later">稍后</string>
-    <string name="onboarding_back">上一步</string>
-    <string name="onboarding_next">下一步</string>
-    <string name="onboarding_done">开始使用</string>
-    <string name="onboarding_step_of">%1$d / %2$d</string>
-    <string name="onboarding_welcome_title">用启动器打开游戏</string>
-    <string name="onboarding_welcome_body">模组由启动器注入。请从本应用启动，不要点桌面上的原版图标。</string>
-    <string name="onboarding_game_title">先安装游戏</string>
-    <string name="onboarding_game_body_missing">未检测到可用游戏。安装后再点重新扫描。</string>
-    <string name="onboarding_game_body_found">已找到 %s，可以继续。</string>
-    <string name="onboarding_game_scanning">正在查找游戏…</string>
-    <string name="onboarding_permission_title">需要文件权限</string>
-    <string name="onboarding_permission_body">启动器要把模组框架解压到存储空间。请授予「所有文件访问权限」。</string>
-    <string name="onboarding_permission_granted">已授予所有文件访问权限</string>
-    <string name="onboarding_applist_permission_body">The launcher also needs to read the installed app list to find games.</string>
-    <string name="onboarding_applist_permission_grant">Grant app list access</string>
-    <string name="onboarding_applist_permission_granted">App list access is granted</string>
-    <string name="onboarding_first_launch_title">第一次启动请稍等</string>
-    <string name="onboarding_first_launch_body">首次启动会准备运行环境，可能下载文件。保持网络畅通，不要切走应用。</string>
-    <string name="onboarding_crash_logs_title">崩溃后请分享日志</string>
-    <string name="onboarding_crash_logs_body">游戏闪退时，点游戏页右上角的分享图标导出日志，发给开发者排查。</string>
-    <string name="onboarding_troubleshooting_title">故障排查</string>
-    <string name="onboarding_troubleshooting_body">如果发生崩溃，请访问 [此页面](https://nextbep.github.io/zh/guide/troubleshooting) 诊断和解决问题。通常清理 BepInEx 和 libunity 数据后再重启会有帮助。</string>
-    <string name="coach_next">下一步</string>
-    <string name="coach_skip">跳过提示</string>
-    <string name="coach_done">知道了</string>
-    <string name="coach_launch_title">启动</string>
-    <string name="coach_launch_body">点这里启动游戏。第一次会准备运行时，请等进度走完。</string>
-    <string name="coach_modpacks_title">整合包</string>
-    <string name="coach_modpacks_body">模组请做成整合包再启用。ZIP/BAL 走整合包页，不要当单个 DLL 导入。</string>
-    <string name="coach_export_logs_title">导出日志</string>
-    <string name="coach_export_logs_body">游戏崩溃时，点这里导出日志并分享，方便排查问题。</string>
-    <string name="coach_modpack_actions_title">创建或导入</string>
-    <string name="coach_modpack_actions_body">点右下角 + 可以创建整合包、手动导入 .bal/.zip，或扫描下载目录。</string>
-    <string name="coach_modpack_vanilla_title">纯净模式</string>
-    <string name="coach_modpack_vanilla_body">选中后启动游戏将不加载模组。启动时用的是当前激活的那一个。</string>
-    <string name="coach_modpack_card_title">打开整合包</string>
-    <string name="coach_modpack_card_body">点卡片可以管理模组和文件。点圆圈把它设为激活，再去启动游戏。</string>
     <!-- Confirm Dialogs -->
     <string name="confirm_clear_bepinex_title">清除 BepInEx 文件？</string>
     <string name="confirm_clear_bepinex_msg">这将删除此游戏的所有 BepInEx 文件和 interop 程序集。下次启动需要重新解压。</string>
     <string name="confirm_clear_dotnet_title">清空 .NET 数据？</string>
     <string name="confirm_clear_dotnet_msg">这将删除此游戏的 .NET 运行时和复制的游戏数据。下次启动将重新解压。</string>
     <string name="confirm_clear_libunity_title">清除 libunity 缓存？</string>
-    <string name="confirm_clear_libunity_msg">This will delete cached unstripped libunity.so files. They will be restored on next launch.</string>
+    <string name="confirm_clear_libunity_msg">这将删除已缓存的未裁剪 libunity.so 文件。下次启动将重新恢复。</string>
     <string name="clear_libunity_done">libunity 缓存已清除</string>
     <string name="clear_libunity_none">没有可清除的 libunity 缓存</string>
     <string name="confirm_copy_resources_title">复制游戏资源？</string>
     <string name="confirm_copy_resources_msg">将游戏 APK 中的资源数据复制到本地存储。</string>
     <string name="confirm_yes">确定</string>
     <string name="confirm_no">取消</string>
-    <string name="confirm_ok">确定</string>
     <string name="confirm_cancel">取消</string>
     <string name="confirm_delete">删除</string>
     <!-- Theme -->
@@ -280,32 +209,11 @@
     <string name="lang_english">English</string>
     <string name="lang_chinese">简体中文</string>
     <string name="lang_chinese_tw">繁體中文</string>
-    <string name="lang_japanese">日本語</string>
-    <string name="lang_korean">한국어</string>
-    <string name="lang_russian">Русский</string>
-    <string name="lang_portuguese">Português</string>
-    <string name="lang_portuguese_br">Português (BR)</string>
-    <string name="lang_spanish">Español</string>
-    <string name="lang_german">Deutsch</string>
-    <string name="lang_french">Français</string>
-    <string name="lang_italian">Italiano</string>
-    <string name="lang_dutch">Nederlands</string>
-    <string name="lang_arabic">العربية</string>
-    <string name="lang_arabic_eg">العربية (مصر)</string>
-    <string name="lang_arabic_sa">العربية (السعودية)</string>
-    <string name="lang_indonesian">Bahasa Indonesia</string>
-    <string name="lang_malay">Bahasa Melayu</string>
-    <string name="lang_malayalam">മലയാളം</string>
-    <string name="lang_thai">ไทย</string>
-    <string name="lang_turkish">Türkçe</string>
-    <string name="lang_ukrainian">Українська</string>
-    <string name="lang_venetian">Vèneto</string>
     <string name="lang_incomplete_title">本地化无人贡献</string>
     <string name="lang_incomplete_message">您所使用的语言翻译并不完全，若您想获取更好的本地化体验，请前往[这里](https://nextbep.github.io/zh/guide/translations)来为您的语言贡献翻译。</string>
     <!-- About -->
     <string name="about_title">BepInEx Android 启动器</string>
     <string name="about_description">一个在 arm64 平台上的 BepInEx 启动器</string>
-    <string name="about_version">版本 %1$s (Build %2$d)</string>
     <string name="about_disclaimer">⚠ BepInEx 启动器 未获得 BepInEx 的官方支持。</string>
     <string name="about_projects_section">本项目使用 &amp; 借鉴的项目</string>
     <string name="about_project_bepinex_name">BepInEx</string>
@@ -352,49 +260,29 @@
     <string name="log_title">BepInEx 日志</string>
     <string name="log_share">分享</string>
     <string name="log_copy">复制</string>
-    <string name="log_clear">清除</string>
     <string name="log_empty">暂无日志。启动游戏后可查看 BepInEx 日志。</string>
-    <string name="log_copied">日志已复制到剪贴板</string>
-    <string name="log_filter_all">全部</string>
-    <string name="log_filter_errors">错误</string>
-    <string name="log_filter_warnings">警告</string>
     <string name="log_auto_scroll">自动滚动</string>
     <!-- 游戏内悬浮日誌 -->
     <string name="log_overlay_channel_name">BepInEx 悬浮日志</string>
     <string name="log_overlay_channel_desc">游戏内悬浮日志开启时显示</string>
     <string name="log_overlay_notification_text">悬浮日志已开启 — 点按返回游戏</string>
-    <string name="log_overlay_share_chooser">分享日志</string>
-    <string name="log_overlay_share_subject">BepInEx 日志 - %1$s</string>
     <string name="log_overlay_open">打开日志</string>
     <string name="log_overlay_drag_hint">拖动移动</string>
     <string name="log_overlay_minimize">最小化悬浮日志</string>
     <string name="log_overlay_waiting">等待日志…</string>
-    <!-- Storage Permission -->
-    <string name="storage_permission_title">需要存储权限</string>
-    <string name="storage_permission_message">BepInEx Launcher 需要访问所有文件以解压 BepInEx 和管理模组。</string>
-    <string name="storage_permission_grant">授予权限</string>
     <!-- In-Game Settings -->
-    <string name="settings_ingame_section">游戏内</string>
-    <string name="settings_floating_mod_menu">游戏内模组菜单</string>
-    <string name="settings_floating_mod_menu_desc">在游戏画面显示悬浮按钮。插件可通过 TCP 发送 UI 树，由启动器生成可操作的原生控件。</string>
-    <string name="bridge_mods_title">模组</string>
-    <string name="bridge_mods_empty">尚未连接插件</string>
-    <string name="bridge_mods_fab">打开模组菜单</string>
-    <string name="bridge_mods_minimize">最小化模组菜单</string>
     <string name="settings_unstripped_libunity">使用未裁剪 libunity</string>
-    <string name="settings_unstripped_libunity_desc">Use unstripped libunity.so with full icalls.</string>
+    <string name="settings_unstripped_libunity_desc">使用带完整 icall 的未裁剪 libunity.so。</string>
     <!-- Launch -->
     <string name="launch_failed">启动失败</string>
     <string name="launch_wait_extraction">请等待 — BepInEx 正在解压中</string>
-    <string name="launch_no_game">未选择游戏</string>
     <!-- Crash -->
     <string name="crash_title">检测到运行时错误</string>
     <string name="crash_game_info">%1$s 异常退出</string>
     <string name="crash_signal">信号: %1$s</string>
-    <string name="crash_bepinex">BepInEx 报错</string>
     <string name="crash_hint">建议将导出的日志发送给开发者以便排查问题。</string>
     <string name="crash_export_logs">导出日志</string>
-    <string name="crash_copy">Copy</string>
+    <string name="crash_copy">复制</string>
     <!-- Generic -->
     <string name="ok">确定</string>
     <string name="back">返回</string>
@@ -409,6 +297,7 @@
     <string name="loader_generating_interop">正在生成 IL2CPP 互操作文件…</string>
     <string name="error">错误</string>
     <string name="done">完成</string>
+    <string name="operation_failed">失败：%1$s</string>
     <string name="share_saved">消息已保存，切回游戏继续</string>
     <!-- Update -->
     <string name="update_announcement">公告</string>
@@ -418,86 +307,21 @@
     <string name="update_skip">跳过</string>
     <string name="update_blocked_title">已停止运营</string>
     <string name="update_blocked_message">本应用已停止运营，不再可用。</string>
-    <!-- Market -->
-    <string name="market_explore">探索</string>
-    <string name="market_search">搜索模组</string>
-    <string name="market_search_results">搜索结果</string>
-    <string name="market_hot">热门模组</string>
-    <string name="market_browse_all">浏览全部</string>
-    <string name="market_tag_mod">模组</string>
-    <string name="market_tag_modpack">整合包</string>
-    <string name="market_tag_preposition">前置</string>
-    <string name="market_unknown_author">未知作者</string>
-    <string name="market_empty">没有找到模组</string>
-    <string name="market_error">模组市场加载失败</string>
-    <string name="market_retry">重试</string>
-    <string name="market_time_just_now">刚刚</string>
-    <string name="market_time_minutes">%d分钟前</string>
-    <string name="market_time_hours">%d小时前</string>
-    <string name="market_time_days">%d天前</string>
-    <string name="market_detail">模组详情</string>
-    <string name="market_detail_version">版本</string>
-    <string name="market_detail_size">大小</string>
-    <string name="market_detail_downloads">下载</string>
-    <string name="market_detail_game">游戏</string>
-    <string name="market_detail_compatible">兼容</string>
-    <string name="market_compatible_version">适配 %s</string>
-    <string name="market_detail_updated">更新</string>
-    <string name="market_detail_description">简介</string>
-    <string name="market_download">下载</string>
-    <string name="market_cloud_download">网盘下载</string>
-    <string name="market_no_download">暂无下载地址</string>
-    <string name="market_open_failed">无法打开下载链接</string>
-    <string name="market_install">下载 (%1$s)</string>
-    <string name="market_install_no_version">下载</string>
-    <string name="market_downloads_count">%s次下载</string>
-    <string name="market_tab_info">介绍</string>
-    <string name="market_tab_download">下载</string>
-    <string name="market_tab_source">来源</string>
-    <string name="market_latest_version">最新版本</string>
-    <string name="market_mod_id">模组ID</string>
-    <string name="market_created">创建</string>
-    <string name="market_no_description">暂无介绍</string>
-    <string name="market_no_source">暂无来源</string>
-    <string name="market_open_video">打开视频</string>
-    <string name="market_open_link">打开链接</string>
-    <string name="market_filter_all">全部</string>
-    <string name="market_filter_featured">精选</string>
-    <string name="market_filter_mods">模组</string>
-    <string name="market_filter_preposition">前置</string>
-    <string name="market_filter_modpacks">整合包</string>
-    <string name="market_filter_author">作者</string>
-    <string name="market_category_all">全部分类</string>
-    <string name="market_detail_category">分类</string>
-    <string name="market_detail_tags">标签</string>
-    <string name="market_search_author">搜索作者</string>
-    <string name="market_all_authors">全部作者</string>
-    <string name="market_sort">排序</string>
-    <string name="market_sort_updated">最近更新</string>
-    <string name="market_sort_created">最近添加</string>
-    <string name="market_sort_downloads">下载最多</string>
-    <string name="market_sort_views">浏览最多</string>
-    <string name="market_sort_name">名称</string>
-    <string name="market_result_count">共 %d 个</string>
     <!-- Bootstrap Loading -->
-    <string name="bootstrap_title">正在启动游戏</string>
     <string name="bootstrap_status_preparing">正在准备目标包…</string>
     <string name="bootstrap_status_copy_assets">正在复制 Unity 数据…</string>
     <string name="bootstrap_status_detecting_version">正在检测 Unity 版本…</string>
-    <string name="bootstrap_status_downloading_libunity">Preparing unstripped libunity…</string>
+    <string name="bootstrap_status_downloading_libunity">正在准备未裁剪的 libunity…</string>
     <string name="bootstrap_status_preparing_unity_libraries">正在准备 Unity 基础库…</string>
     <string name="bootstrap_status_extracting_runtime">正在解压运行时文件…</string>
-    <string name="bootstrap_status_registering_libraries">正在注册原生库…</string>
     <string name="bootstrap_status_installing_hooks">正在安装 Hook…</string>
     <string name="bootstrap_status_launching">正在启动游戏…</string>
     <string name="bootstrap_status_error">启动失败</string>
-    <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
+    <string name="bootstrap_request_il2cpp_map">选择 IL2CPP 反混淆映射文件（.map）</string>
+    <string name="bootstrap_file_ext_mismatch">所选文件必须是 .%1$s 文件</string>
+    <string name="bootstrap_no_il2cpp_map">未选择 IL2CPP 反混淆映射文件。模组可能无法加载。</string>
     <string name="settings_block_unity_kill">阻止 Unity 启动退出</string>
     <string name="settings_block_unity_kill_desc">在启动阶段短暂拦截 UnityPlayer.kill()。仅在游戏因注入而退出时开启。</string>
-    <string name="crash_detected_title">上次游戏启动未正常返回</string>
-    <string name="crash_detected_message">上次启动 %1$s 可能发生了崩溃。你可以导出诊断信息以便排查。</string>
-    <string name="crash_export">导出诊断信息</string>
     <string name="crash_export_failed">诊断信息导出失败</string>
     <string name="game_settings_title">游戏设置</string>
-    <string name="game_settings_desc">针对单个游戏的启动器选项</string>
 </resources>

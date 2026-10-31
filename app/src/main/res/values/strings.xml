@@ -2,12 +2,10 @@
 <resources>
     <!-- App -->
     <string name="app_name">BepInEx Launcher</string>
-    <string name="app_tagline">BepInEx Launcher</string>
 
     <!-- Navigation -->
     <string name="nav_games">Games</string>
     <string name="nav_modpacks">Modpacks</string>
-    <string name="nav_market">Market</string>
     <string name="nav_settings">Settings</string>
     <string name="nav_about">About</string>
 
@@ -23,45 +21,29 @@
     <string name="framework_ready">BepInEx Ready</string>
     <string name="framework_setting_up">Setting up…</string>
     <string name="framework_setup_failed">Setup failed</string>
-    <string name="framework_setup_failed_permission">All files access is required to extract BepInEx</string>
     <string name="framework_retry">Retry setup</string>
     <string name="extracting">Extracting BepInEx…</string>
-    <string name="mod_count">%d mod(s)</string>
 
     <!-- Actions -->
-    <string name="import_mod">Import Mod</string>
     <string name="launch">Launch</string>
-    <string name="game_manage_saves">Manage Saves</string>
-    <string name="game_manage_saves_desc">Manage backups and restores for this game</string>
     <string name="refresh">Refresh</string>
     <string name="delete">Delete</string>
 
     <!-- Mods -->
     <string name="installed_mods">Installed Mods</string>
-    <string name="no_mods_installed">No Mods Installed</string>
-    <string name="no_mods_hint">Tap Import Mod to add a .dll file</string>
-    <string name="mod_deleted">Deleted: %s</string>
-    <string name="mod_imported">Imported: %s</string>
     <string name="import_failed">Import failed</string>
 
     <!-- Modpacks -->
     <string name="modpack_title">Modpacks</string>
     <string name="modpack_create">Create Modpack</string>
-    <string name="modpack_create_action">Create</string>
-    <string name="modpack_import_action">Import</string>
     <string name="modpack_actions">Modpack actions</string>
     <string name="modpack_actions_close">Close actions</string>
-    <string name="modpack_delete">Delete Modpack</string>
     <string name="modpack_rename">Rename</string>
     <string name="modpack_rename_failed">The name is invalid or already exists</string>
     <string name="modpack_edit">Edit Modpack</string>
     <string name="modpack_icon">Icon</string>
     <string name="modpack_icon_hint">Tap to pick an image</string>
-    <string name="modpack_shortcut">Desktop Shortcut</string>
-    <string name="modpack_shortcut_desc">Create a shortcut to launch this modpack directly</string>
     <string name="modpack_shortcut_create">Create Desktop Shortcut</string>
-    <string name="modpack_shortcut_enabled">Desktop Shortcut Enabled</string>
-    <string name="shortcut_permission_required">Shortcut permission not granted. Opening settings…</string>
     <string name="shortcut_permission_title">Permission Required</string>
     <string name="shortcut_permission_guide">Creating desktop shortcuts requires the \"Home screen shortcut\" permission. Please enable it in the settings page that opens next.</string>
     <string name="shortcut_permission_open_settings">Open Settings</string>
@@ -74,16 +56,15 @@
     <string name="modpack_export_preparing">Preparing export…</string>
     <string name="modpack_export_progress">Exporting %1$d / %2$d files</string>
     <string name="modpack_export_cancel">Cancel</string>
+    <string name="share_modpack">Share Modpack</string>
+    <string name="export_failed">Export failed</string>
     <string name="modpack_import">Import Modpack</string>
-    <string name="modpack_import_dialog_title">Import Modpack</string>
-    <string name="modpack_import_dialog_message">Import a prepared modpack into the launcher</string>
     <string name="modpack_import_auto_scan">Auto Scan</string>
     <string name="modpack_import_manual">Manual Import</string>
     <string name="modpack_importing">Importing modpack…</string>
     <string name="modpack_import_cancel">Cancel</string>
     <string name="modpack_invalid_file">Only .bal or .zip modpack files can be imported</string>
     <string name="modpack_invalid_archive">The archive must contain modpack.json</string>
-    <string name="modpack_select_active">Activate</string>
     <string name="modpack_vanilla">Vanilla (No Mods)</string>
     <string name="modpack_name_hint">Modpack name</string>
     <string name="modpack_game_version">Compatible game version</string>
@@ -93,21 +74,14 @@
     <string name="modpack_game_version_any">Any version</string>
     <string name="modpack_game_version_mismatch_title">Version mismatch</string>
     <string name="modpack_game_version_mismatch_message">This modpack targets %1$s, but the current game is %2$s. Import anyway?</string>
-    <string name="modpack_game_version_mismatch_batch">%1$d selected modpack(s) target a different version than the current game (%2$s). Import anyway?</string>
     <string name="modpack_game_version_mismatch_continue">Import anyway</string>
     <string name="modpack_confirm_delete_title">Delete Modpack</string>
     <string name="modpack_confirm_delete_msg">Delete \"%s\" and all its mods? This cannot be undone.</string>
-    <string name="modpack_created">Created modpack: %s</string>
-    <string name="modpack_deleted">Deleted modpack: %s</string>
-    <string name="modpack_exported">Exported: %s</string>
-    <string name="modpack_imported">Imported: %s</string>
-    <string name="modpack_scan_downloads">Import from Downloads</string>
     <string name="modpack_scan_downloads_title">Modpacks in Downloads</string>
     <string name="modpack_scan_downloads_message">Found %d .bal file(s) in Downloads. Import the selected files?</string>
     <string name="modpack_scan_downloads_import">Import</string>
     <string name="modpack_scan_downloads_skip">Not now</string>
     <string name="modpack_scan_downloads_empty">No .bal modpacks found in Downloads</string>
-    <string name="modpack_scan_downloads_imported">Imported %1$d of %2$d modpack(s)</string>
     <string name="modpack_scan_dlls_title">Mods in Downloads</string>
     <string name="modpack_scan_dlls_message">Found %d .dll file(s) in Downloads. Import the selected files into this modpack?</string>
     <string name="modpack_scan_dlls_empty">No .dll mods found in Downloads</string>
@@ -128,7 +102,6 @@
     <string name="modpack_browse_mod_files">Browse Mod Files</string>
     <string name="modpack_browse_mod_files_desc">View all files and directories in this modpack</string>
     <string name="modpack_target_game">For: %s</string>
-    <string name="modpack_mod_count">%d mod(s)</string>
     <string name="modpack_mod_count_ratio">%1$d / %2$d mods</string>
     <string name="modpack_active">Active</string>
     <string name="modpack_mod_rename">Rename Mod</string>
@@ -144,8 +117,6 @@
     <string name="modpack_mod_category_existing">Existing categories</string>
     <string name="modpack_mod_category_clear">Remove</string>
     <string name="modpack_mod_enable">Load this mod</string>
-    <string name="modpack_mod_disabled">Disabled</string>
-    <string name="modpack_mod_disabled_count">%d disabled</string>
     <string name="modpack_mod_sort">Sort</string>
     <string name="modpack_mod_sort_name">Display name</string>
     <string name="modpack_mod_sort_file">File name</string>
@@ -158,13 +129,11 @@
     <string name="modpack_scrollbar">Scroll list</string>
 
     <!-- Config Editor -->
-    <string name="config_editor_title">Config Editor</string>
     <string name="config_editor_save">Save</string>
     <string name="config_editor_save_failed">Failed to save the file</string>
     <string name="config_editor_unsaved">Unsaved changes</string>
     <string name="config_editor_discard_title">Discard Changes?</string>
     <string name="config_editor_discard_msg">You have unsaved changes. Discard them?</string>
-    <string name="config_editor_no_configs">No config files</string>
 
     <!-- Viewer -->
     <string name="viewer_settings">Viewer Settings</string>
@@ -175,7 +144,6 @@
     <string name="viewer_empty">Empty file</string>
     <string name="viewer_cursor_position">Ln %1$d, Col %2$d</string>
     <string name="viewer_preview">Preview</string>
-    <string name="viewer_preview_text">"Every art and every inquiry, and similarly every action and pursuit, is thought to aim at some good; and for this reason the good has rightly been declared to be that at which all things aim." — Aristotle, *Nicomachean Ethics*</string>
 
     <!-- Log Viewer -->
     <string name="log_settings">Log Settings</string>
@@ -200,6 +168,10 @@
     <string name="mod_file_browser_protected">Protected file</string>
     <string name="mod_file_browser_protected_file">Protected modpack metadata · Cannot edit or delete</string>
 
+    <!-- Permissions -->
+    <string name="storage_permission_extract">Need storage permission to extract BepInEx files</string>
+    <string name="storage_permission_all_files">Please grant \'All files access\' in app settings</string>
+
     <!-- Settings sections -->
     <string name="settings_title">Settings</string>
     <string name="settings_section_appearance">Appearance</string>
@@ -214,6 +186,7 @@
     <string name="settings_clear_libunity_desc">Delete cached unstripped libunity.so files. They will be restored on next launch.</string>
     <string name="settings_copy_resources">Copy Game Resources</string>
     <string name="settings_copy_resources_desc">Copy the game\'s asset data to local storage for interop generation.</string>
+    <string name="copy_resources_next_launch">Resources will be copied on next launch</string>
     <string name="settings_theme">Theme</string>
     <string name="settings_language">Language</string>
     <string name="settings_dynamic_color">Monet Color</string>
@@ -224,49 +197,7 @@
     <string name="animation_restart_message">Animations will be disabled after restarting the app. Restart now?</string>
     <string name="animation_restart_now">Restart</string>
     <string name="settings_about">About</string>
-    <string name="settings_onboarding">Beginner guide</string>
-    <string name="settings_onboarding_desc">Review launch, modpacks, permissions, and sharing crash logs</string>
 
-    <!-- Onboarding -->
-    <string name="onboarding_skip">Skip</string>
-    <string name="onboarding_later">Later</string>
-    <string name="onboarding_back">Back</string>
-    <string name="onboarding_next">Next</string>
-    <string name="onboarding_done">Get started</string>
-    <string name="onboarding_step_of">%1$d / %2$d</string>
-    <string name="onboarding_welcome_title">Launch from this app</string>
-    <string name="onboarding_welcome_body">Mods are injected by the launcher. Start the game here — don\'t tap the original game icon on your home screen.</string>
-    <string name="onboarding_game_title">Install the game first</string>
-    <string name="onboarding_game_body_missing">No game was detected. Install one, then tap Scan again.</string>
-    <string name="onboarding_game_body_found">Found %s. You can continue.</string>
-    <string name="onboarding_game_scanning">Looking for the game…</string>
-    <string name="onboarding_permission_title">File access is required</string>
-    <string name="onboarding_permission_body">The launcher extracts the mod framework to storage. Grant All files access to continue.</string>
-    <string name="onboarding_permission_granted">All files access is granted</string>
-    <string name="onboarding_applist_permission_body">The launcher also needs to read the installed app list to find games.</string>
-    <string name="onboarding_applist_permission_grant">Grant app list access</string>
-    <string name="onboarding_applist_permission_granted">App list access is granted</string>
-    <string name="onboarding_first_launch_title">The first launch takes a moment</string>
-    <string name="onboarding_first_launch_body">The first start prepares the runtime and may download files. Keep the network on and stay in the app.</string>
-    <string name="onboarding_crash_logs_title">Share logs after a crash</string>
-    <string name="onboarding_crash_logs_body">If the game crashes, tap the share icon on the Games tab to export logs and send them to the developer.</string>
-    <string name="onboarding_troubleshooting_title">Troubleshooting</string>
-    <string name="onboarding_troubleshooting_body">If a crash occurs, visit the [troubleshooting page](https://nextbep.github.io/guide/troubleshooting) to diagnose and fix the issue. Usually clearing BepInEx and libunity data then restarting helps.</string>
-    <string name="coach_next">Next</string>
-    <string name="coach_skip">Skip tips</string>
-    <string name="coach_done">Got it</string>
-    <string name="coach_launch_title">Launch</string>
-    <string name="coach_launch_body">Tap here to start the game. The first run prepares the runtime — wait for the progress to finish.</string>
-    <string name="coach_modpacks_title">Modpacks</string>
-    <string name="coach_modpacks_body">Enable mods from a modpack. Import .bal or .zip on the Modpacks tab — don\'t treat those archives as a single DLL.</string>
-    <string name="coach_export_logs_title">Export logs</string>
-    <string name="coach_export_logs_body">If the game crashes, tap here to export logs and share them with the developer.</string>
-    <string name="coach_modpack_actions_title">Create or import</string>
-    <string name="coach_modpack_actions_body">Tap + to create a modpack, import a .bal or .zip file, or scan Downloads for packs.</string>
-    <string name="coach_modpack_vanilla_title">Vanilla</string>
-    <string name="coach_modpack_vanilla_body">Select this to launch without mods. The highlighted pack is the one used when you start the game.</string>
-    <string name="coach_modpack_card_title">Open a modpack</string>
-    <string name="coach_modpack_card_body">Tap the card to manage mods and files. Use the circle to make it active before launching.</string>
 
     <!-- Confirm Dialogs -->
     <string name="confirm_clear_bepinex_title">Clear BepInEx Files?</string>
@@ -281,7 +212,6 @@
     <string name="confirm_copy_resources_msg">This will copy the game\'s asset data from the APK to local storage.</string>
     <string name="confirm_yes">Yes</string>
     <string name="confirm_no">No</string>
-    <string name="confirm_ok">OK</string>
     <string name="confirm_cancel">Cancel</string>
     <string name="confirm_delete">Delete</string>
 
@@ -295,33 +225,12 @@
     <string name="lang_english">English</string>
     <string name="lang_chinese">简体中文</string>
     <string name="lang_chinese_tw">繁體中文</string>
-    <string name="lang_japanese">日本語</string>
-    <string name="lang_korean">한국어</string>
-    <string name="lang_russian">Русский</string>
-    <string name="lang_portuguese">Português</string>
-    <string name="lang_portuguese_br">Português (BR)</string>
-    <string name="lang_spanish">Español</string>
-    <string name="lang_german">Deutsch</string>
-    <string name="lang_french">Français</string>
-    <string name="lang_italian">Italiano</string>
-    <string name="lang_dutch">Nederlands</string>
-    <string name="lang_arabic">العربية</string>
-    <string name="lang_arabic_eg">العربية (مصر)</string>
-    <string name="lang_arabic_sa">العربية (السعودية)</string>
-    <string name="lang_indonesian">Bahasa Indonesia</string>
-    <string name="lang_malay">Bahasa Melayu</string>
-    <string name="lang_malayalam">മലയാളം</string>
-    <string name="lang_thai">ไทย</string>
-    <string name="lang_turkish">Türkçe</string>
-    <string name="lang_ukrainian">Українська</string>
-    <string name="lang_venetian">Vèneto</string>
     <string name="lang_incomplete_title">Localization Not Contributed</string>
     <string name="lang_incomplete_message">The translation for your language is not complete. If you would like to help improve the localization, please visit [here](https://nextbep.github.io/guide/translations) to contribute.</string>
 
     <!-- About -->
     <string name="about_title">BepInEx Android Launcher</string>
     <string name="about_description">A BepInEx loader for Unity IL2CPP games on Android</string>
-    <string name="about_version">Version %1$s (Build %2$d)</string>
     <string name="about_disclaimer">⚠ BepInEx Launcher is not officially supported by the BepInEx project.</string>
     <string name="about_projects_section">Projects Used &amp; Referenced</string>
     <string name="about_project_bepinex_name">BepInEx</string>
@@ -369,51 +278,31 @@
     <string name="log_title">BepInEx Log</string>
     <string name="log_share">Share</string>
     <string name="log_copy">Copy</string>
-    <string name="log_clear">Clear</string>
     <string name="log_empty">No log entries yet. Launch a game to see BepInEx logs.</string>
-    <string name="log_copied">Log copied to clipboard</string>
-    <string name="log_filter_all">All</string>
-    <string name="log_filter_errors">Errors</string>
-    <string name="log_filter_warnings">Warnings</string>
     <string name="log_auto_scroll">Auto-scroll</string>
 
     <!-- In-Game Floating Log Overlay -->
     <string name="log_overlay_channel_name">BepInEx Log Overlay</string>
     <string name="log_overlay_channel_desc">Shown while the in-game floating log is active</string>
     <string name="log_overlay_notification_text">Floating log active — tap to return to game</string>
-    <string name="log_overlay_share_chooser">Share Log</string>
-    <string name="log_overlay_share_subject">BepInEx Log - %1$s</string>
     <string name="log_overlay_open">Open log</string>
     <string name="log_overlay_drag_hint">Drag to move</string>
     <string name="log_overlay_minimize">Minimize log overlay</string>
     <string name="log_overlay_waiting">Waiting for logs…</string>
 
-    <!-- Storage Permission -->
-    <string name="storage_permission_title">Storage Permission Required</string>
-    <string name="storage_permission_message">BepInEx Launcher needs access to all files to extract BepInEx and manage mods.</string>
-    <string name="storage_permission_grant">Grant Permission</string>
 
     <!-- In-Game Settings -->
-    <string name="settings_ingame_section">In-Game</string>
-    <string name="settings_floating_mod_menu">Floating Mod Menu</string>
-    <string name="settings_floating_mod_menu_desc">Show a floating button in-game. Plugins can send a UI tree over TCP and the launcher renders native controls.</string>
-    <string name="bridge_mods_title">Mods</string>
-    <string name="bridge_mods_empty">No plugins connected</string>
-    <string name="bridge_mods_fab">Open mod menu</string>
-    <string name="bridge_mods_minimize">Minimize mod menu</string>
     <string name="settings_unstripped_libunity">Use Unstripped libunity</string>
     <string name="settings_unstripped_libunity_desc">Use unstripped libunity.so with full icalls.</string>
 
     <!-- Launch -->
     <string name="launch_failed">Launch failed</string>
     <string name="launch_wait_extraction">Please wait — BepInEx is still extracting</string>
-    <string name="launch_no_game">No game selected</string>
 
     <!-- Crash -->
     <string name="crash_title">Runtime Error Detected</string>
     <string name="crash_game_info">%1$s has exited unexpectedly</string>
     <string name="crash_signal">Signal: %1$s</string>
-    <string name="crash_bepinex">BepInEx error</string>
     <string name="crash_hint">Please send the exported log to the developer for investigation.</string>
     <string name="crash_export_logs">Export Logs</string>
     <string name="crash_copy">Copy</string>
@@ -432,6 +321,7 @@
     <string name="loader_generating_interop">Generating IL2CPP interop files…</string>
     <string name="error">Error</string>
     <string name="done">Done</string>
+    <string name="operation_failed">Failed: %1$s</string>
     <string name="share_saved">Message saved, switch back to game</string>
 
     <!-- Update -->
@@ -443,97 +333,22 @@
     <string name="update_blocked_title">Service Discontinued</string>
     <string name="update_blocked_message">This application has been discontinued and is no longer available.</string>
 
-    <!-- Market -->
-    <string name="market_explore">Explore</string>
-    <string name="market_search">Search mods</string>
-    <string name="market_search_results">Search results</string>
-    <string name="market_hot">Hot mods</string>
-    <string name="market_browse_all">Browse all</string>
-    <string name="market_tag_mod">Mod</string>
-    <string name="market_tag_modpack">Modpack</string>
-    <string name="market_tag_preposition">Prerequisite</string>
-    <string name="market_unknown_author">Unknown author</string>
-    <string name="market_empty">No mods found</string>
-    <string name="market_error">Failed to load marketplace</string>
-    <string name="market_retry">Retry</string>
-    <string name="market_time_just_now">Just now</string>
-    <string name="market_time_minutes">%d min ago</string>
-    <string name="market_time_hours">%d hours ago</string>
-    <string name="market_time_days">%d days ago</string>
-    <string name="market_detail">Mod details</string>
-    <string name="market_detail_version">Version</string>
-    <string name="market_detail_size">Size</string>
-    <string name="market_detail_downloads">Downloads</string>
-    <string name="market_detail_game">Game</string>
-    <string name="market_detail_compatible">Compatible</string>
-    <string name="market_compatible_version">For %s</string>
-    <string name="market_detail_updated">Updated</string>
-    <string name="market_detail_description">Description</string>
-    <string name="market_download">Download</string>
-    <string name="market_cloud_download">Cloud download</string>
-    <string name="market_no_download">No download available</string>
-    <string name="market_open_failed">Unable to open download link</string>
-    <string name="market_install">Download (%1$s)</string>
-    <string name="market_install_no_version">Download</string>
-    <string name="market_downloads_count">%s downloads</string>
-    <string name="market_tab_info">Info</string>
-    <string name="market_tab_download">Downloads</string>
-    <string name="market_tab_source">Source</string>
-    <string name="market_latest_version">Latest version</string>
-    <string name="market_mod_id">Mod ID</string>
-    <string name="market_created">Created</string>
-    <string name="market_no_description">No description</string>
-    <string name="market_no_source">No source available</string>
-    <string name="market_open_video">Open video</string>
-    <string name="market_open_link">Open link</string>
-    <string name="market_filter_all">All</string>
-    <string name="market_filter_featured">Featured</string>
-    <string name="market_filter_mods">Mods</string>
-    <string name="market_filter_preposition">Prerequisites</string>
-    <string name="market_filter_modpacks">Modpacks</string>
-    <string name="market_filter_author">Authors</string>
-    <string name="market_category_all">All categories</string>
-    <string name="market_detail_category">Category</string>
-    <string name="market_detail_tags">Tags</string>
-    <string name="market_search_author">Search authors</string>
-    <string name="market_all_authors">All authors</string>
-    <string name="market_sort">Sort</string>
-    <string name="market_sort_updated">Recently updated</string>
-    <string name="market_sort_created">Recently added</string>
-    <string name="market_sort_downloads">Most downloads</string>
-    <string name="market_sort_views">Most views</string>
-    <string name="market_sort_name">Name</string>
-    <string name="market_result_count">%d mods</string>
 
     <!-- Bootstrap Loading -->
-    <string name="bootstrap_title">Launching selected game</string>
     <string name="bootstrap_status_preparing">Preparing target package…</string>
     <string name="bootstrap_status_copy_assets">Copying Unity data…</string>
     <string name="bootstrap_status_detecting_version">Detecting Unity version…</string>
     <string name="bootstrap_status_downloading_libunity">Preparing unstripped libunity…</string>
     <string name="bootstrap_status_preparing_unity_libraries">Preparing Unity base libraries…</string>
     <string name="bootstrap_status_extracting_runtime">Extracting runtime files…</string>
-    <string name="bootstrap_status_registering_libraries">Registering native libraries…</string>
     <string name="bootstrap_status_installing_hooks">Installing hooks…</string>
     <string name="bootstrap_status_launching">Launching game…</string>
     <string name="bootstrap_status_error">Launch failed</string>
-    <string name="bootstrap_download_progress">%1$d%% (%2$s / %3$s)</string>
     <string name="bootstrap_request_il2cpp_map">Select the IL2CPP deobfuscation map (.map)</string>
-    <string name="modpack_empty_config">No config files in this modpack</string>
-    <string name="modpack_empty_configs">No config files</string>
-    <string name="modpack_browse_files">Browse Mod Files</string>
+    <string name="bootstrap_file_ext_mismatch">Selected file must be a .%1$s file</string>
+    <string name="bootstrap_no_il2cpp_map">No IL2CPP deobfuscation map selected. Mods may fail to load.</string>
     <string name="settings_block_unity_kill">Block Unity startup exit</string>
     <string name="settings_block_unity_kill_desc">Block UnityPlayer.kill() briefly during startup. Enable only for games that exit during injection.</string>
-    <string name="crash_detected_title">Previous game launch did not return</string>
-    <string name="crash_detected_message">The previous launch of %1$s may have crashed. You can export diagnostics for troubleshooting.</string>
-    <string name="crash_export">Export diagnostics</string>
     <string name="crash_export_failed">Failed to export diagnostics</string>
-    <string name="update_title">Update Available</string>
-    <string name="update_current_version">Current: %1$s</string>
-    <string name="update_latest_version">Latest: %1$s</string>
-    <string name="update_release_notes">Release Notes</string>
-    <string name="update_download">Download</string>
-    <string name="update_later">Later</string>
     <string name="game_settings_title">Game Settings</string>
-    <string name="game_settings_desc">Per-game launcher options</string>
 </resources>

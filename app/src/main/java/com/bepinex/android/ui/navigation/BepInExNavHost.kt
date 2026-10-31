@@ -255,16 +255,16 @@ fun BepInExNavHost(
                             putExtra(android.content.Intent.EXTRA_SUBJECT, targetModpackName)
                             addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         }
-                        context.startActivity(android.content.Intent.createChooser(shareIntent, "Share Modpack"))
+                        context.startActivity(android.content.Intent.createChooser(shareIntent, context.getString(R.string.share_modpack)))
                     } else {
-                        android.widget.Toast.makeText(context, "Export failed", android.widget.Toast.LENGTH_SHORT).show()
+                        android.widget.Toast.makeText(context, context.getString(R.string.export_failed), android.widget.Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (_: CancellationException) {
             } catch (error: Exception) {
                 com.bepinex.android.BepInExLog.e("Export failed", error)
                 withContext(Dispatchers.Main) {
-                    android.widget.Toast.makeText(context, "Export failed", android.widget.Toast.LENGTH_SHORT).show()
+                    android.widget.Toast.makeText(context, context.getString(R.string.export_failed), android.widget.Toast.LENGTH_SHORT).show()
                 }
             } finally {
                 withContext(NonCancellable + Dispatchers.Main) {
@@ -350,7 +350,7 @@ fun BepInExNavHost(
                     } catch (error: Exception) {
                         com.bepinex.android.BepInExLog.e("Import failed", error)
                         withContext(Dispatchers.Main) {
-                            android.widget.Toast.makeText(context, "Import failed", android.widget.Toast.LENGTH_SHORT).show()
+                            android.widget.Toast.makeText(context, context.getString(R.string.import_failed), android.widget.Toast.LENGTH_SHORT).show()
                         }
                     } finally {
                         withContext(NonCancellable + Dispatchers.Main) {

@@ -133,7 +133,7 @@ class MainActivity : ComponentActivity() {
 
         if (!storagePermissionGranted) {
             BepInExLog.w("MANAGE_EXTERNAL_STORAGE not granted  -- showing permission dialog")
-            Toast.makeText(this, "Need storage permission to extract BepInEx files", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.storage_permission_extract), Toast.LENGTH_LONG).show()
             requestStoragePermission()
         } else {
             BepInExLog.i("Storage permission granted")
@@ -150,7 +150,7 @@ class MainActivity : ComponentActivity() {
             storagePermissionLauncher.launch(intent)
         } catch (e: Exception) {
             BepInExLog.e("Failed to open storage permission settings", e)
-            Toast.makeText(this, "Please grant 'All files access' in app settings", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.storage_permission_all_files), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -650,12 +650,12 @@ class MainActivity : ComponentActivity() {
                 // Copy will happen on next launch via BootstrapActivity
                 withContext(Dispatchers.Main) {
                     Toast.makeText(this@MainActivity,
-                        "Resources will be copied on next launch", Toast.LENGTH_SHORT).show()
+                        getString(R.string.copy_resources_next_launch), Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 BepInExLog.e("Failed to copy resources", e)
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@MainActivity, "Failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, getString(R.string.operation_failed, e.message ?: ""), Toast.LENGTH_SHORT).show()
                 }
             }
         }
