@@ -18,8 +18,12 @@ object BepInExPaths {
     /** Root directory on external storage */
     private const val ROOT_DIR = "BepInEx_Android"
 
+    /** Directory holding one sub-directory per game package. */
+    fun getGamesRootDir(): File =
+        File(Environment.getExternalStorageDirectory(), ROOT_DIR)
+
     fun getGameRootDir(packageName: String): File =
-        File(Environment.getExternalStorageDirectory(), "$ROOT_DIR/$packageName")
+        File(getGamesRootDir(), packageName)
 
     fun getBepInExDir(packageName: String): File =
         File(getGameRootDir(packageName), "BepInEx")
@@ -38,6 +42,24 @@ object BepInExPaths {
 
     fun getLogFile(packageName: String): File =
         File(getBepInExDir(packageName), "LogOutput.log")
+
+    /** Sidecar written by the :game process so MainActivity can read logcat after a crash. */
+    fun getLogcatCaptureFile(packageName: String): File =
+        File(getBepInExDir(packageName), "logcat-capture.txt")
+
+    /** Older chunks and the previous run are retained so a new launch cannot erase evidence. */
+    fun getLogcatCaptureArchiveFile(packageName: String): File =
+        File(getBepInExDir(packageName), "logcat-capture.1.txt")
+
+    fun getPreviousLogcatCaptureFile(packageName: String): File =
+        File(getBepInExDir(packageName), "logcat-capture-previous.txt")
+
+    /** Full Java/Kotlin exception written synchronously by the :game process. */
+    fun getJavaCrashFile(packageName: String): File =
+        File(getBepInExDir(packageName), "java-crash.txt")
+
+    fun getPreviousJavaCrashFile(packageName: String): File =
+        File(getBepInExDir(packageName), "java-crash-previous.txt")
 
     fun getLogsDir(packageName: String): File =
         File(getBepInExDir(packageName), "logs")

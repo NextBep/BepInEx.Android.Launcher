@@ -1,102 +1,156 @@
 package com.bepinex.android.log
 
-import com.bepinex.android.BepInExLog
 import com.bepinex.android.BepInExPaths
-import kotlinx.coroutines.*
-import java.io.BufferedReader
 import java.io.File
-import java.io.InputStreamReader
+import java.io.FileOutputStream
+import java.util.Date
+import java.util.concurrent.atomic.AtomicReference
 
 /**
- * Captures logcat output from the :game process to a file.
+ * Streams this process's logcat into a file under BepInEx/.
  *
- * This is started in BootstrapActivity's :game process so that
- * logcat is captured in the same process where the crash occurs.
- * MainActivity then reads this file in the crash recovery dialog.
+ * MainActivity cannot reliably read the :game process logcat on modern Android,
+ * so capture has to run inside :game and flush on every error line.
  *
- * Captures logcat output for the running game.
+ * Ported from the PVZRH launcher.
  */
 object GameLogcatCapture {
 
-    private const val TAG = "GameLogcatCapture"
-    private const val BUFFER_SIZE = 8192
-    private const val MAX_LINES = 10_000
+    private const val MAX_CHUNK_BYTES = 4L * 1024L * 1024L
 
-    private var captureJob: Job? = null
-    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    private val processRef = AtomicReference<Process?>(null)
+    private val threadRef = AtomicReference<Thread?>(null)
 
-    /**
-     * Starts capturing logcat for the given package.
-     * Writes to {BepInExConfigPath}/logs/game_crash.log
-     */
     fun start(packageName: String) {
-        if (captureJob?.isActive == true) {
-            BepInExLog.i("$TAG: Already capturing")
-            return
-        }
+        stop()
+        val outFile = BepInExPaths.getLogcatCaptureFile(packageName)
+        outFile.parentFile?.mkdirs()
+        preservePreviousRun(outFile, BepInExPaths.getPreviousLogcatCaptureFile(packageName))
+        prepareJavaCrashCapture(packageName)
+        outFile.writeText("=== game logcat session ${Date()} pid=${android.os.Process.myPid()} ===\n")
 
-        val logDir = File(BepInExPaths.getBepInExDir(packageName), "logs")
-        logDir.mkdirs()
-        val logFile = File(logDir, "game_crash.log")
-
-        // Clear previous log
-        logFile.writeText("")
-
-        captureJob = scope.launch {
+        val thread = Thread({
+            val proc = try {
+                Runtime.getRuntime().exec(
+                    arrayOf(
+                        "logcat",
+                        "-v", "threadtime",
+                        "-T", "1",
+                        "Unity:V",
+                        "BepInEx:V",
+                        "AndroidRuntime:V",
+                        "DEBUG:V",
+                        "libc:V",
+                        "crash_dump64:V",
+                        "tombstoned:V",
+                        "ActivityManager:I",
+                        "*:S"
+                    )
+                )
+            } catch (error: Exception) {
+                outFile.appendText("logcat start failed: ${error.stackTraceToString()}\n")
+                return@Thread
+            }
+            processRef.set(proc)
             try {
-                captureLogcat(logFile)
-            } catch (e: CancellationException) {
-                // Normal shutdown
-            } catch (e: Exception) {
-                BepInExLog.w("$TAG: Capture error: ${e.message}")
-            }
-        }
-
-        BepInExLog.i("$TAG: Started capturing logcat to ${logFile.absolutePath}")
-    }
-
-    /**
-     * Stops the current capture session.
-     */
-    fun stop() {
-        captureJob?.cancel()
-        captureJob = null
-        BepInExLog.i("$TAG: Stopped capturing logcat")
-    }
-
-    /**
-     * Returns the log file for the given package, or null if it doesn't exist.
-     */
-    fun getLogFile(packageName: String): File? {
-        val logFile = File(BepInExPaths.getBepInExDir(packageName), "logs/game_crash.log")
-        return if (logFile.exists() && logFile.length() > 0) logFile else null
-    }
-
-    private suspend fun captureLogcat(logFile: File) = withContext(Dispatchers.IO) {
-        val process = Runtime.getRuntime().exec(arrayOf(
-            "logcat",
-            "-v", "time",
-            "--pid", android.os.Process.myPid().toString()
-        ))
-
-        var lineCount = 0
-        try {
-            BufferedReader(InputStreamReader(process.inputStream), BUFFER_SIZE).use { reader ->
-                logFile.bufferedWriter().use { writer ->
-                    var line: String?
-                    while (reader.readLine().also { line = it } != null) {
-                        if (lineCount >= MAX_LINES) {
-                            writer.write("... (log truncated at $MAX_LINES lines)\n")
-                            break
+                var output = FileOutputStream(outFile, true)
+                try {
+                    proc.inputStream.bufferedReader().forEachLine { line ->
+                        val bytes = (line + "\n").toByteArray(Charsets.UTF_8)
+                        if (outFile.length() + bytes.size > MAX_CHUNK_BYTES) {
+                            output.close()
+                            rotateChunk(packageName, outFile)
+                            output = FileOutputStream(outFile, true)
+                            output.write("=== continued game logcat ${Date()} ===\n".toByteArray())
                         }
-                        writer.write(line)
-                        writer.newLine()
-                        lineCount++
+                        // The tag filter already limits the stream. Keep every emitted line so
+                        // exception causes, Java frames and native backtraces remain intact.
+                        output.write(bytes)
+                        if (isRelevant(line)) {
+                            output.flush()
+                            try { output.fd.sync() } catch (_: Exception) { }
+                        }
                     }
+                } finally {
+                    output.close()
                 }
+                val errors = proc.errorStream.bufferedReader().use { it.readText() }
+                if (errors.isNotBlank()) outFile.appendText("\n[logcat stderr]\n$errors")
+            } catch (error: Exception) {
+                try { outFile.appendText("\nlogcat capture failed: ${error.stackTraceToString()}\n") } catch (_: Exception) { }
+            } finally {
+                proc.destroy()
+                processRef.compareAndSet(proc, null)
             }
-        } finally {
-            process.destroy()
+        }, "GameLogcatCapture")
+        thread.isDaemon = true
+        threadRef.set(thread)
+        thread.start()
+    }
+
+    fun stop() {
+        processRef.getAndSet(null)?.destroy()
+        threadRef.getAndSet(null)?.interrupt()
+    }
+
+    fun isRelevant(line: String): Boolean {
+        val lower = line.lowercase()
+        if (lower.contains("fatal exception")) return true
+        if (lower.contains("[error") || lower.contains("[fatal")) return true
+        if (lower.contains("notsupportedexception")) return true
+        if (lower.contains("il2cppinterop") &&
+            (lower.contains("error") || lower.contains("exception"))
+        ) {
+            return true
+        }
+        if (lower.contains("signal") &&
+            (lower.contains("sigsegv") || lower.contains("sigabrt") ||
+                lower.contains("sigbus") || lower.contains("sigfpe"))
+        ) {
+            return true
+        }
+        return Regex("\\sE\\s+Unity\\b").containsMatchIn(line)
+    }
+
+    private fun rotateChunk(packageName: String, current: File) {
+        val archive = BepInExPaths.getLogcatCaptureArchiveFile(packageName)
+        archive.delete()
+        if (!current.renameTo(archive)) {
+            current.copyTo(archive, overwrite = true)
+            current.delete()
+        }
+    }
+
+    private fun preservePreviousRun(current: File, previous: File) {
+        previous.delete()
+        if (!current.isFile || current.length() == 0L) return
+        if (!current.renameTo(previous)) {
+            current.copyTo(previous, overwrite = true)
+            current.delete()
+        }
+    }
+
+    private fun prepareJavaCrashCapture(packageName: String) {
+        val crashFile = BepInExPaths.getJavaCrashFile(packageName)
+        preservePreviousRun(crashFile, BepInExPaths.getPreviousJavaCrashFile(packageName))
+        val delegate = Thread.getDefaultUncaughtExceptionHandler()
+        Thread.setDefaultUncaughtExceptionHandler { thread, error ->
+            try {
+                crashFile.parentFile?.mkdirs()
+                FileOutputStream(crashFile, true).use { output ->
+                    output.write(buildString {
+                        appendLine("time=${Date()}")
+                        appendLine("process=${android.os.Process.myPid()}")
+                        appendLine("thread=${thread.name} (${thread.id})")
+                        appendLine()
+                        append(error.stackTraceToString())
+                        appendLine()
+                    }.toByteArray(Charsets.UTF_8))
+                    output.flush()
+                    try { output.fd.sync() } catch (_: Exception) { }
+                }
+            } catch (_: Throwable) { }
+            delegate?.uncaughtException(thread, error)
         }
     }
 }
