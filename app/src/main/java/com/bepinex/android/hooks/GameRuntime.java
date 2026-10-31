@@ -192,7 +192,6 @@ public final class GameRuntime {
             original.callActivityOnCreate(activity, state, persistentState);
         }
         @Override public void callActivityOnResume(Activity activity) {
-            if (gameActivities.contains(activity)) InstrumentationHooks.applyTargetOrientation(activity);
             original.callActivityOnResume(activity);
         }
         @Override public void callActivityOnNewIntent(Activity activity, Intent intent) {
