@@ -47,6 +47,17 @@ public class CustomContextWrapper extends ContextWrapper {
         return fusionContext;
     }
 
+    /**
+     * System services use the operation package for UID/permission checks.
+     * The wrapped context must still expose the game's package name to game
+     * code, but Toast and similar services must identify the launcher process
+     * because this code runs under the launcher's UID.
+     */
+    @Override
+    public String getOpPackageName() {
+        return fusionContext.getOpPackageName();
+    }
+
 //    @Override
 //    public Resources getResources() {
 //        return this.appContext.getResources();
