@@ -1,4 +1,4 @@
-# BepInEx Android Launcher （Not Stable, Recommend using FusionCore）
+# BepInEx Android Launcher
 
 [English](README.md) | [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md) | [Português (BR)](README.pt-BR.md) | [Русский](README.ru.md) | [日本語](README.ja.md)
 
